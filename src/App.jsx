@@ -8,22 +8,26 @@ import LoginPage from './assets/Components/Login/Login';
 import Home from './assets/Components/home/home';
 import JournalsPublicationsPage from './assets/Journals/Journals';
 import { Download, Search, Filter, Calendar, User, Eye, BookOpen, ChevronRight } from "lucide-react";
-
+import Contactus from './assets/Components/contactus';
 
 const App = () => {
   return (
     <>
-      <Navbar />
+    
+      <div className='bg-gray-100 min-h-screen'>
+        <Navbar />
       <Routes>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/journals" element={<JournalsPublicationsPage />} />
+        <Route path="/contact" element={<Contactus />} />  
         {/*<Route path="/submit" element={<SubmitManuscript />} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/contact" element={<Contact />} />*/}
+        */}
       </Routes>
+      </div>
       </>
   );
 };
