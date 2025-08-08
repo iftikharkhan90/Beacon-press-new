@@ -28,12 +28,14 @@ const Home = ({ setCurrentPage }) => {
           >
             Browse Journals
           </button>
+          <Link to="/submit">
           <button
             onClick={() => setCurrentPage('submit')}
             className="bg-transparent text-blue-400 border-2 border-blue-400 px-8 py-3 rounded font-bold hover:bg-blue-400 hover:text-white transition-all duration-300"
           >
             Submit Your Manuscript
           </button>
+          </Link>
         </div>
       </div>
     </section>

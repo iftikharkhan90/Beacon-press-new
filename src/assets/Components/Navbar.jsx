@@ -14,13 +14,13 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="bg-slate-800 text-white p-4 sticky top-0 z-50 shadow-lg">
+    <header className="bg-slate-800 text-white py-4 sticky top-0 z-50 shadow-lg">
       <div className="container mx-auto max-w-6xl">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="logo">
-            <h1 className="text-2xl font-bold cursor-pointer">
-              Beacons Press
+            <h1 className="text-3xl font-bold cursor-pointer">
+              <spam className="text-blue-500 text-4xl">  Beacons </spam> Press
             </h1>
           </div>
 
