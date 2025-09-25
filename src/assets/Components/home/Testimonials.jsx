@@ -15,7 +15,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-16 bg-white text-center">
+    <section className="py-16 bg-gray-100 text-center">
       <div className="container mx-auto max-w-6xl px-4">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-slate-800">
           What Our Authors Say
@@ -24,7 +24,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-gray-100 rounded-lg p-6 shadow-lg"
+              className="bg-white rounded-lg p-6 shadow-lg"
             >
               <p className="italic text-gray-600 mb-4">"{testimonial.quote}"</p>
               <p className="font-bold text-slate-800">– {testimonial.author}</p>

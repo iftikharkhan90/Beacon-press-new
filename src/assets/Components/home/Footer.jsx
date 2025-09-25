@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { 
+  FaFacebook, 
+  FaTwitter, 
+  FaLinkedin, 
+  FaEnvelope, 
+  FaPhone, 
+  FaMapMarkerAlt,
+  FaHome,
+  FaBook,
+  FaUpload,
+  FaInfoCircle,
+  FaTools,
+  FaAddressBook,
+  FaEnvelopeOpenText
+} from "react-icons/fa";
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubscribe = () => {
     if (email) {
       alert(`Thank you for subscribing with email: ${email}`);
-      setEmail('');
+      setEmail("");
     }
   };
 
@@ -20,12 +35,36 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              <li><Link to="/home" className="hover:text-blue-400 transition-colors">Home</Link></li>
-              <li><Link to="/journals" className="hover:text-blue-400 transition-colors">Journals</Link></li>
-              <li><Link to="/submit" className="hover:text-blue-400 transition-colors">Submit Manuscript</Link></li>
-              <li><Link to="/about" className="hover:text-blue-400 transition-colors">About Us</Link></li>
-              <li><Link to="/resources" className="hover:text-blue-400 transition-colors">Resources</Link></li>
-              <li><Link to="/contact" className="hover:text-blue-400 transition-colors">Contact</Link></li>
+              <li>
+                <Link to="/home" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaHome className="text-blue-400" /> Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/journals" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaBook className="text-purple-400" /> Journals
+                </Link>
+              </li>
+              <li>
+                <Link to="/submit" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaUpload className="text-green-400" /> Submit Manuscript
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaInfoCircle className="text-yellow-400" /> About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/resources" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaTools className="text-pink-400" /> Resources
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <FaAddressBook className="text-red-400" /> Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -33,19 +72,46 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Contact Us</h3>
             <div className="space-y-2">
-              <p>Email: info@beaconspress.com</p>
-              <p>Phone: +1-234-567-890</p>
-              <p>Address: 123 Research Lane, Knowledge City, Science Nation</p>
+              <p className="flex items-center gap-2">
+                <FaEnvelope className="text-red-400" /> info@beaconspress.com
+              </p>
+              <p className="flex items-center gap-2">
+                <FaPhone className="text-green-400" /> +1-234-567-890
+              </p>
+              <p className="flex items-center gap-2">
+                <FaMapMarkerAlt className="text-yellow-400" /> 123 Research Lane, Knowledge City, Science Nation
+              </p>
             </div>
           </div>
 
           {/* Social Media */}
           <div>
             <h3 className="text-lg font-bold mb-6">Follow Us</h3>
-            <div className="space-y-3">
-              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-400">LinkedIn</a>
-              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-400">Twitter</a>
-              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-400">Facebook</a>
+            <div className="flex flex-col space-y-3">
+              <a 
+                href="https://www.linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 hover:text-blue-400"
+              >
+                <FaLinkedin className="text-blue-600" /> LinkedIn
+              </a>
+              <a 
+                href="https://www.twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 hover:text-blue-400"
+              >
+                <FaTwitter className="text-sky-400" /> Twitter
+              </a>
+              <a 
+                href="https://www.facebook.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 hover:text-blue-400"
+              >
+                <FaFacebook className="text-blue-700" /> Facebook
+              </a>
             </div>
           </div>
 
@@ -64,9 +130,9 @@ const Footer = () => {
               <button
                 type="button"
                 onClick={handleSubscribe}
-                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-blue-500 cursor-pointer text-white p-2 rounded hover:bg-blue-600 transition-colors"
               >
-                Subscribe
+                <FaEnvelopeOpenText className="text-white" /> Subscribe
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-const AboutUs = () => {
+const About = () => {
   return (
     <div className="bg-gray-100 text-black">
       {/* Hero Section */}
@@ -101,4 +101,4 @@ const AboutUs = () => {
   );
 }
  
-export default AboutUs
+export default About

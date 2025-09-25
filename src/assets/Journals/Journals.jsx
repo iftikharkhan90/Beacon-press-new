@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Download, Filter, Eye, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Filter, Eye, X, Menu, ChevronDown } from 'lucide-react';
 
 const JournalsPublicationsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -7,6 +7,8 @@ const JournalsPublicationsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClassification, setSelectedClassification] = useState('all');
   const [selectedJournal, setSelectedJournal] = useState(null);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [isMobileReferencesOpen, setIsMobileReferencesOpen] = useState(false);
 
   // Sample data
   const journals = [
@@ -176,147 +178,320 @@ const JournalsPublicationsPage = () => {
     alert(`Downloading "${journal.title}"`);
   };
 
+  // Close mobile filters when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileFiltersOpen && !event.target.closest('.mobile-filters')) {
+        setIsMobileFiltersOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileFiltersOpen]);
+
   const JournalCard = ({ journal }) => (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl overflow-hidden group">
-      <img src={journal.image} alt={journal.title} className="w-full h-48 object-cover" />
-      <div className="p-6">
-        <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
+      <img 
+        src={journal.image} 
+        alt={journal.title} 
+        className="w-full h-32 sm:h-40 lg:h-48 object-cover"
+      />
+      <div className="p-4 sm:p-6">
+        <span className="inline-block px-2 sm:px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
           {journal.category}
         </span>
-        <h3 className="text-xl font-bold mt-3 mb-3">{journal.title}</h3>
-        <p className="text-sm text-gray-600">{journal.abstract}</p>
-        <div className="flex mt-4 space-x-3">
-          <button onClick={() => setSelectedJournal(journal)} className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg">
+        <h3 className="text-lg sm:text-xl font-bold mt-2 sm:mt-3 mb-2 sm:mb-3 line-clamp-2">
+          {journal.title}
+        </h3>
+        <p className="text-sm text-gray-600 line-clamp-3">{journal.abstract}</p>
+        <div className="flex flex-col sm:flex-row mt-4 space-y-2 sm:space-y-0 sm:space-x-3">
+          <button 
+            onClick={() => setSelectedJournal(journal)} 
+            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+          >
             <Eye size={16} className="inline-block mr-2" /> View Details
           </button>
-          <button onClick={() => handleDownload(journal)} className="bg-green-600 text-white py-2 px-4 rounded-lg">
-            <Download size={16} />
+          <button 
+            onClick={() => handleDownload(journal)} 
+            className="bg-green-600 text-white py-2 px-4 rounded-lg text-sm hover:bg-green-700 transition-colors"
+          >
+            <Download size={16} className="inline-block sm:inline mr-2 sm:mr-0" />
+            <span className="sm:hidden">Download</span>
           </button>
         </div>
       </div>
     </div>
   );
 
-  return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 to-blue-50">
-      
-      {/* Left Sidebar */}
-      <div className="w-80 bg-white shadow-xl min-h-screen overflow-y-auto">
-        
-        {/* Search */}
-        <div className="p-6 border-b">
-          <input
-            type="text"
-            placeholder="Search journals..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 border rounded-lg"
-          />
-        </div>
+  const FilterSection = ({ className = "" }) => (
+    <div className={className}>
+      {/* Search */}
+      <div className="p-4 sm:p-6 border-b">
+        <input
+          type="text"
+          placeholder="Search journals..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        {/* Year Filter */}
-        <div className="p-6 border-b">
-          <h3 className="mb-2 font-semibold">Publication Year</h3>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="w-full p-3 border rounded-lg"
+      {/* Year Filter */}
+      <div className="p-4 sm:p-6 border-b">
+        <h3 className="mb-2 font-semibold text-sm sm:text-base">Publication Year</h3>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          {years.map(year => (
+            <option key={year} value={year}>
+              {year === 'all' ? 'All Years' : year}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Categories */}
+      <div className="p-4 sm:p-6 border-b">
+        <h3 className="mb-3 font-semibold flex items-center text-sm sm:text-base">
+          <Filter size={16} className="mr-2" /> Categories
+        </h3>
+        {categories.map(category => (
+          <button
+            key={category.id}
+            onClick={() => setSelectedCategory(category.id)}
+            className={`block w-full text-left px-4 py-2 rounded-lg mb-1 text-sm transition-colors ${
+              selectedCategory === category.id ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
+            }`}
           >
-            {years.map(year => (
-              <option key={year} value={year}>
-                {year === 'all' ? 'All Years' : year}
-              </option>
-            ))}
-          </select>
-        </div>
+            {category.name} ({category.count})
+          </button>
+        ))}
+      </div>
 
-        {/* Categories */}
-        <div className="p-6 border-b">
-          <h3 className="mb-3 font-semibold flex items-center"><Filter size={16} className="mr-2" /> Categories</h3>
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`block w-full text-left px-4 py-2 rounded-lg mb-1 ${
-                selectedCategory === category.id ? 'bg-blue-100' : 'hover:bg-gray-100'
-              }`}
-            >
-              {category.name} ({category.count})
-            </button>
-          ))}
-        </div>
+      {/* Classification */}
+      <div className="p-4 sm:p-6">
+        <h3 className="mb-3 font-semibold flex items-center text-sm sm:text-base">
+          <Filter size={16} className="mr-2" /> Classification
+        </h3>
+        {classifications.map(c => (
+          <button
+            key={c.id}
+            onClick={() => setSelectedClassification(c.id)}
+            className={`block w-full text-left px-4 py-2 rounded-lg mb-1 text-sm transition-colors ${
+              selectedClassification === c.id ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'
+            }`}
+          >
+            {c.name} ({c.count})
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
-        {/* Classification */}
-        <div className="p-6">
-          <h3 className="mb-3 font-semibold flex items-center"><Filter size={16} className="mr-2" /> Classification</h3>
-          {classifications.map(c => (
-            <button
-              key={c.id}
-              onClick={() => setSelectedClassification(c.id)}
-              className={`block w-full text-left px-4 py-2 rounded-lg mb-1 ${
-                selectedClassification === c.id ? 'bg-green-100' : 'hover:bg-gray-100'
-              }`}
-            >
-              {c.name} ({c.count})
-            </button>
-          ))}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden bg-white shadow-sm border-b p-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-bold">Journals & Publications</h1>
+          <button
+            onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+          >
+            <Filter size={16} className="mr-2" />
+            Filters
+          </button>
+        </div>
+        
+        {/* Results count */}
+        <div className="mt-2 text-sm text-gray-600">
+          Showing {filteredJournals.length} of {journals.length} publications
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8">
-        {!selectedJournal ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filteredJournals.map(journal => (
-              <JournalCard key={journal.id} journal={journal} />
-            ))}
-          </div>
-        ) : (
-          <div>
-            {/* Detail View */}
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-3xl font-bold">{selectedJournal.title}</h2>
-              <button onClick={() => setSelectedJournal(null)}><X size={24} /></button>
+      <div className="flex min-h-screen">
+        
+        {/* Desktop Left Sidebar */}
+        <div className="hidden lg:block w-80 bg-white shadow-xl min-h-screen overflow-y-auto">
+          <FilterSection />
+        </div>
+
+        {/* Mobile Filters Overlay */}
+        {isMobileFiltersOpen && (
+          <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+            <div className="mobile-filters bg-white w-80 max-w-[90vw] h-full overflow-y-auto">
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-lg font-bold">Filters</h2>
+                <button
+                  onClick={() => setIsMobileFiltersOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <FilterSection />
             </div>
+          </div>
+        )}
 
-            <img
-              src={selectedJournal.image}
-              alt={selectedJournal.title}
-              className="w-full h-64 object-cover rounded-lg mb-4"
-            />
+        {/* Main Content */}
+        <div className="flex-1 p-4 sm:p-6 lg:p-8">
+          {!selectedJournal ? (
+            <>
+              {/* Desktop Results Header */}
+              <div className="hidden lg:block mb-6">
+                <h1 className="text-2xl xl:text-3xl font-bold mb-2">Journals & Publications</h1>
+                <p className="text-gray-600">
+                  Showing {filteredJournals.length} of {journals.length} publications
+                </p>
+              </div>
 
-            <p className="text-gray-600 mb-4">{selectedJournal.abstract}</p>
-            <p><strong>Authors:</strong> {selectedJournal.authors.join(', ')}</p>
-            <p><strong>Journal:</strong> {selectedJournal.journal}</p>
-            {selectedJournal.volume && <p><strong>Volume:</strong> {selectedJournal.volume}</p>}
-            <p><strong>Year:</strong> {selectedJournal.year}</p>
-            <p><strong>Pages:</strong> {selectedJournal.pages}</p>
-            {selectedJournal.classification && <p><strong>Classification:</strong> {selectedJournal.classification}</p>}
-            <p><strong>DOI:</strong> {selectedJournal.doi}</p>
-            <p><strong>Views:</strong> {selectedJournal.views}</p>
-            <p><strong>Downloads:</strong> {selectedJournal.downloads}</p>
+              {/* Journal Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                {filteredJournals.map(journal => (
+                  <JournalCard key={journal.id} journal={journal} />
+                ))}
+              </div>
 
-            <button
-              onClick={() => handleDownload(selectedJournal)}
-              className="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg flex items-center"
-            >
-              <Download size={16} className="mr-2" /> Download PDF
-            </button>
+              {/* No results message */}
+              {filteredJournals.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">No publications found matching your criteria.</p>
+                  <button
+                    onClick={() => {
+                      setSelectedCategory('all');
+                      setSelectedClassification('all');
+                      setSelectedYear('all');
+                      setSearchTerm('');
+                    }}
+                    className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            /* Detail View */
+            <div className="max-w-4xl mx-auto">
+              {/* Detail Header */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-0 pr-4">
+                  {selectedJournal.title}
+                </h2>
+                <button 
+                  onClick={() => {
+                    setSelectedJournal(null);
+                    setIsMobileReferencesOpen(false);
+                  }}
+                  className="self-start p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <img
+                src={selectedJournal.image}
+                alt={selectedJournal.title}
+                className="w-full h-48 sm:h-64 lg:h-80 object-cover rounded-lg mb-4 sm:mb-6"
+              />
+
+              <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6">
+                <p className="text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                  {selectedJournal.abstract}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="mb-2">
+                      <strong className="text-gray-800">Authors:</strong> {selectedJournal.authors.join(', ')}
+                    </p>
+                    <p className="mb-2">
+                      <strong className="text-gray-800">Journal:</strong> {selectedJournal.journal}
+                    </p>
+                    {selectedJournal.volume && (
+                      <p className="mb-2">
+                        <strong className="text-gray-800">Volume:</strong> {selectedJournal.volume}
+                      </p>
+                    )}
+                    <p className="mb-2">
+                      <strong className="text-gray-800">Year:</strong> {selectedJournal.year}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-2">
+                      <strong className="text-gray-800">Pages:</strong> {selectedJournal.pages}
+                    </p>
+                    {selectedJournal.classification && (
+                      <p className="mb-2">
+                        <strong className="text-gray-800">Classification:</strong> {selectedJournal.classification}
+                      </p>
+                    )}
+                    <p className="mb-2">
+                      <strong className="text-gray-800">DOI:</strong> {selectedJournal.doi}
+                    </p>
+                    <div className="flex gap-4">
+                      <p><strong className="text-gray-800">Views:</strong> {selectedJournal.views}</p>
+                      <p><strong className="text-gray-800">Downloads:</strong> {selectedJournal.downloads}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                  <button
+                    onClick={() => handleDownload(selectedJournal)}
+                    className="bg-green-600 text-white py-3 px-6 rounded-lg flex items-center justify-center hover:bg-green-700 transition-colors"
+                  >
+                    <Download size={16} className="mr-2" /> Download PDF
+                  </button>
+
+                  {/* Mobile References Toggle */}
+                  {selectedJournal.references && (
+                    <button
+                      onClick={() => setIsMobileReferencesOpen(!isMobileReferencesOpen)}
+                      className="lg:hidden bg-gray-600 text-white py-3 px-6 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors"
+                    >
+                      References
+                      <ChevronDown 
+                        size={16} 
+                        className={`ml-2 transition-transform ${isMobileReferencesOpen ? 'rotate-180' : ''}`} 
+                      />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile References */}
+              {selectedJournal.references && isMobileReferencesOpen && (
+                <div className="lg:hidden bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold mb-4">References</h3>
+                  <ul className="list-disc list-inside space-y-2">
+                    {selectedJournal.references.map((ref, idx) => (
+                      <li key={idx} className="text-gray-700 text-sm leading-relaxed">{ref}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Right Sidebar - References */}
+        {selectedJournal && selectedJournal.references && (
+          <div className="hidden lg:block w-80 xl:w-96 bg-white shadow-xl p-6 border-l overflow-y-auto">
+            <h3 className="text-xl font-bold mb-4">References</h3>
+            <ul className="list-disc list-inside space-y-3">
+              {selectedJournal.references.map((ref, idx) => (
+                <li key={idx} className="text-gray-700 text-sm leading-relaxed">{ref}</li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
-
-      {/* Right Sidebar - References */}
-      {selectedJournal && selectedJournal.references && (
-        <div className="w-80 bg-white shadow-xl p-6 border-l overflow-y-auto">
-          <h3 className="text-xl font-bold mb-4">References</h3>
-          <ul className="list-disc list-inside space-y-2">
-            {selectedJournal.references.map((ref, idx) => (
-              <li key={idx} className="text-gray-700">{ref}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
