@@ -1,30 +1,36 @@
-import { FaBook, FaFlask, FaFileAlt, FaProjectDiagram } from "react-icons/fa";
+import { FaBook, FaFlask, FaFileAlt, FaUniversity, FaScroll } from "react-icons/fa";
 
 const WhatCanWePublish = () => {
   const items = [
     {
-      title: "Research Articles",
+      title: "Journals",
       description:
-        "We accept high-quality original research articles across all scientific disciplines.",
-      icon: <FaFlask className="text-indigo-500 text-4xl mb-4 mx-auto" />,
+        "We publish peer-reviewed journals across multiple academic disciplines to promote high-impact scholarly communication.",
+      icon: <FaFileAlt className="text-indigo-500 text-4xl mb-4 mx-auto" />,
     },
     {
       title: "Books",
       description:
-        "We publish academic and professional books to help authors share extensive knowledge with the global community.",
+        "We publish academic and professional books authored by scholars and experts to share in-depth knowledge globally.",
       icon: <FaBook className="text-green-500 text-4xl mb-4 mx-auto" />,
     },
     {
-      title: "Review Papers",
+      title: "Laboratory Manuals",
       description:
-        "Comprehensive review papers that summarize and evaluate existing research in your field.",
-      icon: <FaFileAlt className="text-orange-500 text-4xl mb-4 mx-auto" />,
+        "Comprehensive laboratory manuals designed to support experimental learning and scientific education.",
+      icon: <FaFlask className="text-pink-500 text-4xl mb-4 mx-auto" />,
     },
     {
-      title: "Case Studies",
+      title: "Conference Proceedings",
       description:
-        "Detailed case reports and studies highlighting unique insights and practical applications.",
-      icon: <FaProjectDiagram className="text-pink-500 text-4xl mb-4 mx-auto" />,
+        "We publish proceedings from academic conferences to preserve and disseminate research presented at scholarly events.",
+      icon: <FaUniversity className="text-orange-500 text-4xl mb-4 mx-auto" />,
+    },
+    {
+      title: "Monographs",
+      description:
+        "Detailed monographs offering focused research and in-depth analysis on specialized academic topics.",
+      icon: <FaScroll className="text-violet-500 text-4xl mb-4 mx-auto" />,
     },
   ];
 
@@ -34,7 +40,7 @@ const WhatCanWePublish = () => {
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-slate-800">
           Our Publishing Services
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {items.map((item, index) => (
             <div
               key={index}

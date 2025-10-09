@@ -7,13 +7,14 @@ import SignupPage from "./assets/Components/Login/Signup";
 import LoginPage from "./assets/Components/Login/Login";
 import EditUser from "./assets/Components/Login/Update";
 import Home from "./assets/Components/home/home";
-import JournalsPublicationsPage from "./assets/Journals/Journals";
 import Contactus from "./assets/Components/Contactus";
 import About from "./assets/Components/About";
 import BeaconPressResources from "./assets/Components/Login/Resourses";
 import SubmissionDashboard from "./assets/Components/Submission/Submit";
 import { AuthProvider } from "./assets/Components/context/authContext";
 import Resetpassword from "./assets/Components/Login/Resetpassword";
+import AcademicJournalNav from "./assets/Journals/JournalNavbar";
+import JournalsPublicationsPage from "./assets/Journals/Journals";
 
 const App = () => {
   return (
@@ -28,7 +29,8 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
             <Route path="/reset-password" element={<Resetpassword />} />
-            <Route path="/journals" element={<JournalsPublicationsPage />} />
+            <Route path="/journals" element={<AcademicJournalNav />} />
+            <Route path="/journal" element={<JournalsPublicationsPage />} />
             <Route path="/submit" element={<SubmissionDashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/resources" element={<BeaconPressResources />} />

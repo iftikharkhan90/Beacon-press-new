@@ -17,7 +17,7 @@ const Navbar = () => {
     { id: "submit", label: "Submit Manuscript" },
     { id: "about", label: "About Us" },
     { id: "resources", label: "Resources" },
-    { id: "contact", label: "Contact" },
+    { id: "contact", label: "Contact Us" },
   ];
 
   const handleLogout = () => {

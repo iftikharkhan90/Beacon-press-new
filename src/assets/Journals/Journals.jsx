@@ -293,7 +293,6 @@ const JournalsPublicationsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      
       {/* Mobile Filter Button */}
       <div className="lg:hidden bg-white shadow-sm border-b p-4">
         <div className="flex items-center justify-between">
@@ -492,7 +491,7 @@ const JournalsPublicationsPage = () => {
           </div>
         )}
       </div>
-    </div>
+      </div>
   );
 };
 
