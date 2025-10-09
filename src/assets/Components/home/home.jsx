@@ -5,6 +5,8 @@ import WhyChooseUs from './WhyChooseUs';
 import Testimonials from './Testimonials';
 import LatestPublications from './LatestPublications';
 import Footer from './Footer';
+import { Sliders } from 'lucide-react';
+import WhatCanWePublish from './Whatcanwepublish';
 
 
 
@@ -24,25 +26,29 @@ const Home = ({ setCurrentPage }) => {
         <div className="flex flex-col sm:flex-row justify-center gap-5">
           <button
             onClick={() => setCurrentPage('journals')}
-            className="bg-blue-500 text-white px-8 py-3 rounded font-bold hover:bg-blue-600 transition-all duration-300"
+            className="bg-blue-500 text-white px-8 py-3 rounded font-bold hover:bg-blue-600 transition-all duration-300 cursor-pointer"
           >
             Browse Journals
           </button>
+          <Link to="/submit">
           <button
             onClick={() => setCurrentPage('submit')}
-            className="bg-transparent text-blue-400 border-2 border-blue-400 px-8 py-3 rounded font-bold hover:bg-blue-400 hover:text-white transition-all duration-300"
+            className="bg-transparent text-blue-400 border-2 border-blue-400 px-8 py-3 rounded font-bold hover:bg-blue-400 hover:text-white transition-all duration-300 cursor-pointer"
           >
             Submit Your Manuscript
           </button>
+          </Link>
         </div>
       </div>
     </section>
+      {/* <Sliders/> */}
       <FeaturedJournals/>
+      <WhatCanWePublish/>
       <WhyChooseUs/>
       <Testimonials/>
       <LatestPublications/>
       <Footer/>
-
+      
     </div>
 
   );

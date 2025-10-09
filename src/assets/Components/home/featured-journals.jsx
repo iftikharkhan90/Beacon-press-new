@@ -34,7 +34,7 @@ const FeaturedJournals = () => {
           {journals.map((journal) => (
             <div
               key={journal.id}
-              className="bg-white border border-gray-200 rounded-lg p-6 shadow-lg hover:transform hover:-translate-y-2 transition-all duration-300"
+              className="bg-gray-100 border border-gray-200 rounded-lg p-6 shadow-lg hover:transform hover:-translate-y-2 transition-all duration-300"
             >
               <div className="text-6xl mb-4">{journal.image}</div>
               <h3 className="text-xl font-bold mb-3 text-slate-800">{journal.title}</h3>
@@ -42,7 +42,7 @@ const FeaturedJournals = () => {
               <p className="text-sm font-bold text-slate-800 mb-4">
                 <strong>Impact Factor:</strong> {journal.impactFactor}
               </p>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded font-bold hover:bg-blue-600 transition-all duration-300">
+              <button className="bg-blue-500 text-white px-6 py-2 rounded font-bold hover:bg-blue-600 transition-all duration-300 cursor-pointer">
                 Learn More
               </button>
             </div>

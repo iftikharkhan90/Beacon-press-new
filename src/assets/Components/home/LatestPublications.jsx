@@ -18,7 +18,7 @@ const LatestPublications = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-100 text-center">
+    <section className="py-16 bg-white text-center">
       <div className="container mx-auto max-w-6xl px-4">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-slate-800">
           Recent Highlights
@@ -27,7 +27,7 @@ const LatestPublications = () => {
           {publications.map((publication, index) => (
             <div
               key={index}
-              className="bg-white border border-gray-200 rounded-lg p-6 shadow-lg"
+              className="bg-gray-100 border border-gray-200 rounded-lg p-6 shadow-lg"
             >
               <h3 className="text-lg font-bold mb-3 text-slate-800">{publication.title}</h3>
               <p className="text-sm text-gray-600 mb-2">
@@ -36,7 +36,7 @@ const LatestPublications = () => {
               <p className="text-sm text-gray-600 mb-4">
                 <strong>Authors:</strong> {publication.authors}
               </p>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded font-bold hover:bg-blue-600 transition-all duration-300">
+              <button className="bg-blue-500 text-white px-6 py-2 rounded font-bold hover:bg-blue-600 transition-all duration-300 cursor-pointer">
                 Read Paper
               </button>
             </div>

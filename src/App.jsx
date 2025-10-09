@@ -1,5 +1,5 @@
-// src/App.jsx
-import React from 'react';
+//src/App.jsx
+import React from "react";
 import { useState } from "react";
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './assets/Components/Navbar';
@@ -13,22 +13,26 @@ import Contactus from './assets/Components/contact';
 const App = () => {
   return (
     <>
-    
-      <div className='bg-gray-100 min-h-screen'>
-        <Navbar />
-      <Routes>
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/journals" element={<JournalsPublicationsPage />} />
-        <Route path="/contact" element={<Contactus />} />  
-        {/*<Route path="/submit" element={<SubmitManuscript />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/resources" element={<Resources />} />
-        */}
-      </Routes>
+      <div className="bg-gray-100 min-h-screen">
+        <AuthProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/edituser/:id" element={<EditUser />} />
+            <Route path="/reset-password" element={<Resetpassword />} />
+            <Route path="/journals" element={<AcademicJournalNav />} />
+            <Route path="/journal" element={<JournalsPublicationsPage />} />
+            <Route path="/submit" element={<SubmissionDashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/resources" element={<BeaconPressResources />} />
+            <Route path="/contact" element={<Contactus />} />
+          </Routes>
+        </AuthProvider>
       </div>
-      </>
+    </>
   );
 };
 
