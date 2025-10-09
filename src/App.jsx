@@ -8,7 +8,7 @@ import LoginPage from './assets/Components/Login/Login';
 import Home from './assets/Components/home/home';
 import JournalsPublicationsPage from './assets/Journals/Journals';
 import { Download, Search, Filter, Calendar, User, Eye, BookOpen, ChevronRight } from "lucide-react";
-import Contactus from './assets/Components/contactus';
+import Contactus from './assets/Components/contact';
 
 const App = () => {
   return (
