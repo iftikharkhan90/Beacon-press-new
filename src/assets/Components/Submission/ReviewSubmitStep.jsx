@@ -141,7 +141,7 @@ const ReviewSubmitStep = ({
       formData.append("conflictDescription", activeConflictDescription || "");
       formData.append("dataAvailability", activeDataAvailability || "");
       const res = await axios.post(
-        "http://localhost:4000/api/scripts/upload",
+        "https://beacon-press-backend.vercel.app/api/scripts/upload",
         formData,
         { headers: { "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
