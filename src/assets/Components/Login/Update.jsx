@@ -4,7 +4,7 @@ import { COUNTRIES } from "../Submission/utils";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import config from "../../../common/config/index"
+import config from "../../../common/config/index";
 
 const EditUser = ({ setCurrentPage }) => {
   const navigate = useNavigate();
@@ -37,32 +37,31 @@ const EditUser = ({ setCurrentPage }) => {
   };
 
   // Load user on mount
- useEffect(() => {
-  const loadUser = async () => {
-    try {
-      let userId = id; // from URL
-      if (!userId) {
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        userId = storedUser?._id;   // 👈 fallback to logged-in user
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        let userId = id; // from URL
+        if (!userId) {
+          const storedUser = JSON.parse(localStorage.getItem("user"));
+          userId = storedUser?._id; // 👈 fallback to logged-in user
+        }
+
+        const result = await axios.get(`${config.USER_API_URL}/get`, {
+          Authorization: `Bearer ${token}`,
+        });
+        setUser({
+          ...result.data.data,
+          password: "",
+          confirmPassword: "",
+        });
+      } catch (err) {
+        console.error("Error loading user:", err);
+        Swal.fire("❌ Error", "Failed to load user data", "error");
       }
+    };
 
-      const result = await axios.get(
-        `${config.USER_API_URL}/${id}`
-      );
-      setUser({
-        ...result.data.data,
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (err) {
-      console.error("Error loading user:", err);
-      Swal.fire("❌ Error", "Failed to load user data", "error");
-    }
-  };
-
-  loadUser();
-}, [id]);
-
+    loadUser();
+  }, [id]);
 
   // Submit handler
   const handleSubmit = async (e) => {
@@ -86,10 +85,9 @@ const EditUser = ({ setCurrentPage }) => {
     delete submitData.confirmPassword;
 
     try {
-      const response = await axios.put(
-        `${config.USER_API_URL}/${id}`,
-        submitData
-      );
+      const response = await axios.patch(`${config.USER_API_URL}/patch`, {
+        Authorization: `Bearer ${token}`,
+      });
 
       if (response.data.success) {
         Swal.fire({
@@ -102,7 +100,11 @@ const EditUser = ({ setCurrentPage }) => {
           navigate("/submit");
         });
       } else {
-        Swal.fire("⚠️ Error", response.data.message || "Update failed", "error");
+        Swal.fire(
+          "⚠️ Error",
+          response.data.message || "Update failed",
+          "error"
+        );
       }
     } catch (err) {
       console.error("Error updating user:", err);
@@ -344,7 +346,10 @@ const EditUser = ({ setCurrentPage }) => {
           </button>
 
           <div className="text-center mt-4">
-            <Link to="/home" className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">
+            <Link
+              to="/home"
+              className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+            >
               Back to Home
             </Link>
           </div>
