@@ -11,6 +11,13 @@ import { Download, Search, Filter, Calendar, User, Eye, BookOpen, ChevronRight }
 import Contactus from './assets/Components/contact';
 import { AuthProvider } from "./assets/Components/context/authContext";
 import EditUser from "./assets/Components/Login/Update";
+import Resetpassword from "./assets/Components/Login/Resetpassword";
+import About from "./assets/Components/About";
+import SubmissionDashboard from "./assets/Components/Submission/Submit";
+import BeaconPressResources from "./assets/Components/Login/Resourses";
+import AcademicJournalNav from "./assets/Journals/JournalNavbar";
+
+
 
 const App = () => {
   return (
@@ -24,7 +31,7 @@ const App = () => {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
-            <Route path="/reset-password" element={<Resetpassword />} />
+            <Route path="/reset-password" element={<Resetpassword/>} />
             <Route path="/journals" element={<AcademicJournalNav />} />
             <Route path="/journal" element={<JournalsPublicationsPage />} />
             <Route path="/submit" element={<SubmissionDashboard />} />
