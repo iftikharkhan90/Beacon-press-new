@@ -9,6 +9,7 @@ import Home from './assets/Components/home/home';
 import JournalsPublicationsPage from './assets/Journals/Journals';
 import { Download, Search, Filter, Calendar, User, Eye, BookOpen, ChevronRight } from "lucide-react";
 import Contactus from './assets/Components/contact';
+import { AuthProvider } from "./assets/Components/context/authContext";
 
 const App = () => {
   return (
