@@ -4,7 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/authContext";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import config from "../../../common/config/index";
+import config from "../../../common/config/index"
 
 const LoginPage = ({ setCurrentPage }) => {
   const { user, login } = useAuth();
@@ -13,7 +13,6 @@ const LoginPage = ({ setCurrentPage }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "user", // Default role
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -25,12 +24,9 @@ const LoginPage = ({ setCurrentPage }) => {
     setSavedAccounts(accounts);
 
     if (accounts.length > 0) {
+      // Default: load last used account
       const lastAccount = accounts[accounts.length - 1];
-      setFormData({
-        email: lastAccount.email,
-        password: lastAccount.password,
-        role: lastAccount.role || "user",
-      });
+      setFormData({ email: lastAccount.email, password: lastAccount.password });
     }
   }, []);
 
@@ -45,11 +41,7 @@ const LoginPage = ({ setCurrentPage }) => {
     const selectedEmail = e.target.value;
     const account = savedAccounts.find((acc) => acc.email === selectedEmail);
     if (account) {
-      setFormData({
-        email: account.email,
-        password: account.password,
-        role: account.role || "user",
-      });
+      setFormData({ email: account.email, password: account.password });
     }
   };
 
@@ -62,18 +54,14 @@ const LoginPage = ({ setCurrentPage }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint =
-        formData.role === "admin"
-          ? `${config.USER_API_URL}/admin/login`
-          : `${config.USER_API_URL}/users/login`;
-
-      const res = await axios.post(endpoint, formData);
+      const res = await axios.post(`${config.USER_API_URL}/users/login`, formData);
 
       if (res.data.success) {
         const token = res.data.token;
         const rememberMe = document.getElementById("remember-me").checked;
 
         if (rememberMe) {
+
           let updatedAccounts =
             JSON.parse(localStorage.getItem("savedAccounts")) || [];
 
@@ -82,14 +70,19 @@ const LoginPage = ({ setCurrentPage }) => {
           );
 
           if (existingIndex !== -1) {
-            updatedAccounts[existingIndex] = formData;
+            updatedAccounts[existingIndex].password = formData.password;
           } else {
-            updatedAccounts.push(formData);
+            updatedAccounts.push({
+              email: formData.email,
+              password: formData.password,
+            });
+            localStorage.setItem("savedAccounts", JSON.stringify(updatedAccounts));
           }
 
-          localStorage.setItem("savedAccounts", JSON.stringify(updatedAccounts));
-          setSavedAccounts(updatedAccounts);
+         
+          setSavedAccounts(updatedAccounts);  
         } else {
+          
           sessionStorage.setItem("token", token);
         }
 
@@ -98,12 +91,11 @@ const LoginPage = ({ setCurrentPage }) => {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: `${formData.role === "admin" ? "Admin" : "User"} Login Successful`,
+          title: "Login Successful",
           showConfirmButton: false,
           timer: 1500,
         });
-
-        navigate(formData.role === "admin" ? "/admin/dashboard" : "/submit");
+        navigate("/submit");
       } else {
         Swal.fire({
           icon: "error",
@@ -184,7 +176,7 @@ const LoginPage = ({ setCurrentPage }) => {
             >
               {savedAccounts.map((acc, idx) => (
                 <option key={idx} value={acc.email}>
-                  {acc.email} ({acc.role})
+                  {acc.email}
                 </option>
               ))}
             </select>
@@ -192,53 +184,43 @@ const LoginPage = ({ setCurrentPage }) => {
         )}
 
         <form className="mt-6 space-y-6" onSubmit={onSubmit}>
-          {/* Role Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Login as
-            </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm focus:outline-none"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {/* Email input */}
-          <input
-            name="email"
-            type="email"
-            required
-            className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            placeholder="Email address"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-
-          {/* Password input */}
-          <div className="relative">
+          <div className="rounded-md shadow-sm -space-y-px">
+            {/* Email input */}
             <input
-              name="password"
-              type={showPassword ? "text" : "password"}
+              name="email"
+              type="email"
               required
-              className="relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Password"
-              value={formData.password}
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Email address"
+              value={formData.email}
               onChange={handleInputChange}
             />
-            <span
-              className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaRegEyeSlash size={18} /> : <FaRegEye size={18} />}
-            </span>
+
+            {/* Password input with toggle */}
+            <div className="relative">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                className="relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+              <span
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <FaRegEyeSlash size={18} />
+                ) : (
+                  <FaRegEye size={18} />
+                )}
+              </span>
+            </div>
           </div>
 
-          {/* Remember me & Forgot password */}
+          {/* Remember + Forgot password */}
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
