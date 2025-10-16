@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Search, Target, Users, Layers, Clock, Mail, Send, FileText, Scale, CreditCard, Copyright, ClipboardCheck, UserPlus, Wrench, LogIn, Calendar, Archive, File, TrendingUp, Quote, Newspaper, Edit, Mic, } from 'lucide-react';
+import { Menu, X, Search, Target, Users, Send, FileText, Scale, CreditCard, Copyright, ClipboardCheck, UserPlus, LogIn, Calendar, Archive, TrendingUp, Newspaper, Edit , Microscope, PartyPopper } from 'lucide-react';
 import { Link } from "react-router-dom";
 
 
@@ -14,11 +14,8 @@ const AcademicJournalNav = () => {
       href: '#about',
       dropdown: [
         { name: 'Aims & Scope', href: '#aims-scope', icon: Target },
-        { name: 'Editorial Team', href: '#editorial-team', icon: Users },
-        { name: 'Editorial Board', href: '#editorial-board', icon: Layers },
-        { name: 'History', href: '#history', icon: Clock },
-        { name: 'Contact', href: '#contact', icon: Mail }
-      ]
+        { name: 'Editorial Board', href: '#editorial-team', icon: Users },
+    ]
     },
     {
       name: 'For Authors',
@@ -37,8 +34,7 @@ const AcademicJournalNav = () => {
       dropdown: [
         { name: 'Reviewer Guidelines', href: '#reviewer-guidelines', icon: ClipboardCheck },
         { name: 'Become a Reviewer', href: '#become-reviewer', icon: UserPlus },
-        { name: 'Resources', href: '#resources', icon: Wrench },
-        { name: 'Login to Review', href: '#login-review', icon: LogIn }
+        { name: 'Reviewer Login', href: '#login-review', icon: LogIn }
       ]
     },
     {
@@ -47,18 +43,17 @@ const AcademicJournalNav = () => {
       dropdown: [
         { name: 'Current Issue', href: '#current-issue', icon: Calendar },
         { name: 'All Issues', href: '#all-issues', icon: Archive },
-        { name: 'Articles', href: '#articles', icon: File },
         { name: 'Most Read', href: '#most-read', icon: TrendingUp },
-        { name: 'Most Cited', href: '#most-cited', icon: Quote }
+        { name: 'Most Cited', href: '#most-cited', icon: PartyPopper }
       ]
     },
     {
-      name: 'News',
+      name: 'Special Issues',
       href: '#news',
       dropdown: [
-        { name: 'Announcements', href: '#announcements', icon: Newspaper },
-        { name: 'Call for Papers', href: '#call-papers', icon: Edit },
-        { name: 'Conference News', href: '#conference', icon: Mic }
+        { name: 'Special Issues', href: '#announcements', icon: Newspaper },
+        { name: 'Research Topics', href: '#call-papers', icon: Microscope },
+        { name: 'Propose a Research Topic', href: '#conference', icon: Edit }
       ]
     }
   ];
@@ -72,7 +67,6 @@ const AcademicJournalNav = () => {
       {/* Top Publisher Bar */}
       <div className="bg-violet-800 text-white px-6 py-2">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
-          {/* <div className="font-medium">Apex Publishers - Academic Publishing Excellence</div> */}
           <div className="flex gap-5 mt-2 sm:mt-0">
             <Link to="/journal" className="hover:opacity-80 transition-opacity">Our Journals</Link>
             <a href="#blog" className="hover:opacity-80 transition-opacity">Books</a>
@@ -138,12 +132,7 @@ const AcademicJournalNav = () => {
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-800 focus:border-transparent w-64"
                 />
               </div>
-              <a href="#login" className="px-5 py-2 border border-slate-800 text-slate-800 font-medium rounded hover:bg-gray-50 transition-colors">
-                Login
-              </a>
-              <a href="#register" className="px-5 py-2 bg-slate-800 text-white font-medium rounded hover:bg-slate-900 transition-colors">
-                Register
-              </a>
+              
             </div>
 
             {/* Mobile Menu Button */}
@@ -204,15 +193,10 @@ const AcademicJournalNav = () => {
                   <input
                     type="text"
                     placeholder="Search articles..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-800"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
-                <a href="#login" className="block text-center px-5 py-2 border border-slate-800 text-slate-800 font-medium rounded hover:bg-gray-50">
-                  Login
-                </a>
-                <a href="#register" className="block text-center px-5 py-2 bg-slate-800 text-white font-medium rounded hover:bg-slate-900">
-                  Register
-                </a>
+                
               </div>
             </div>
           )}

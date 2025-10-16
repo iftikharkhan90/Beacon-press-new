@@ -38,79 +38,86 @@ const EditUser = ({ setCurrentPage }) => {
 
   // Load user on mount
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        let userId = id; // from URL
-        if (!userId) {
-          const storedUser = JSON.parse(localStorage.getItem("user"));
-          userId = storedUser?._id; // 👈 fallback to logged-in user
-        }
+  const loadUser = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("authToken");
 
-        const result = await axios.get(`${config.USER_API_URL}/get`, {
-          Authorization: `Bearer ${token}`,
-        });
-        setUser({
-          ...result.data.data,
-          password: "",
-          confirmPassword: "",
-        });
-      } catch (err) {
-        console.error("Error loading user:", err);
-        Swal.fire("❌ Error", "Failed to load user data", "error");
+      const userId = id || storedUser?.id;
+      if (!userId || !token) {
+        Swal.fire("⚠️ Error", "User not logged in.", "warning");
+        return;
       }
-    };
 
-    loadUser();
-  }, [id]);
+      const result = await axios.get(`${config.USER_API_URL}/users/get`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUser({
+        ...result.data.data,
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      console.error("Error loading user:", err);
+      Swal.fire("❌ Error", "Failed to load user data", "error");
+    }
+  };
+
+  loadUser();
+}, [id]);
+
 
   // Submit handler
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    let submitData = { ...user };
+  let submitData = { ...user };
+  const token = localStorage.getItem("authToken");
 
-    // If password is not changed → remove it
-    if (!user.password) {
-      delete submitData.password;
-      delete submitData.confirmPassword;
-    } else {
-      // Password updated → must match confirm password
-      if (user.password !== user.confirmPassword) {
-        Swal.fire("⚠️ Warning", "Passwords do not match!", "warning");
-        return;
-      }
-    }
+  if (!token) {
+    Swal.fire("⚠️ Error", "You are not logged in!", "warning");
+    return;
+  }
 
-    // confirmPassword is frontend-only → remove before sending
+  if (!user.password) {
+    delete submitData.password;
     delete submitData.confirmPassword;
+  } else if (user.password !== user.confirmPassword) {
+    Swal.fire("⚠️ Warning", "Passwords do not match!", "warning");
+    return;
+  }
 
-    try {
-      const response = await axios.patch(`${config.USER_API_URL}/patch`, {
-        Authorization: `Bearer ${token}`,
-      });
+  delete submitData.confirmPassword;
 
-      if (response.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Profile Updated",
-          text: "Your profile has been updated successfully!",
-          timer: 2000,
-          showConfirmButton: false,
-        }).then(() => {
-          navigate("/submit");
-        });
-      } else {
-        Swal.fire(
-          "⚠️ Error",
-          response.data.message || "Update failed",
-          "error"
-        );
+  try {
+    const response = await axios.patch(
+      `${config.USER_API_URL}/users/patch`,
+      submitData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
-    } catch (err) {
-      console.error("Error updating user:", err);
-      Swal.fire("❌ Error", "Failed to update profile", "error");
+    );
+
+    if (response.data.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Profile Updated",
+        text: "Your profile has been updated successfully!",
+        timer: 2000,
+        showConfirmButton: false,
+      }).then(() => {
+        localStorage.setItem("user", JSON.stringify(response.data.data)); // ✅ update localStorage user
+        navigate("/home");
+      });
+    } else {
+      Swal.fire("⚠️ Error", response.data.message || "Update failed", "error");
     }
-  };
+  } catch (err) {
+    console.error("Error updating user:", err);
+    Swal.fire("❌ Error", "Failed to update profile", "error");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">

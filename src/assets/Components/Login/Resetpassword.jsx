@@ -67,7 +67,7 @@ const Resetpassword = () => {
     if (validateForm()) {
       try {
         const res = await axios.post(
-          `${config.USER_API_URL}/reset-password`,
+          `${config.USER_API_URL}/users/reset-password`,
           {
             token: resetToken,
             password: formData.password,

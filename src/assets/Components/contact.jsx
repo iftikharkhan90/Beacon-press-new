@@ -27,7 +27,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
   try {
-    await axios.post(`${config.CONTACT_API_URL}`, formData);
+    await axios.post(`${config.CONTACT_API_URL}/contact`, formData);
     Swal.fire({ icon: "success", title: "Message Sent" });
     setFormData({ fullName: "", emailAddress: "", message: "" });
   } catch (err) {console.log("err", err)
