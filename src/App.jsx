@@ -16,6 +16,7 @@ import About from "./assets/Components/About";
 import SubmissionDashboard from "./assets/Components/Submission/Submit";
 import BeaconPressResources from "./assets/Components/Login/Resourses";
 import AcademicJournalNav from "./assets/Journals/JournalNavbar";
+import AdminLoginPage from "./assets/Components/Login/Admin-Login";
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/Admin/login" element={<AdminLoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
             <Route path="/reset-password" element={<Resetpassword/>} />
             <Route path="/journals" element={<AcademicJournalNav />} />
