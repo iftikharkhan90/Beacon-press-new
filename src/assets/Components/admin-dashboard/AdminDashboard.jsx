@@ -1,18 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import sunshine from "../../images/sunshine.jpg";
-import { MdOutlineCancelPresentation } from "react-icons/md";
-import axios from "axios"; // <-- install axios
+import { MdOutlineCancelPresentation, MdAddCircleOutline, MdCloudUpload } from "react-icons/md";
+import axios from "axios";
 import config from "../../../common/config";
+import Swal from "sweetalert2";
 
 const AdminDashboard = () => {
   const [editpopup, seteditpopup] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [journals, setJournals] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
 
+  // 🔹 Fetch all journals (with token)
+  const fetchJournals = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const res = await axios.get(`${config.BASE_API_URL}/journals/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Fetched journals:", res.data);
+
+      // ✅ Fix here — use "journal" instead of "data"
+      setJournals(res.data.journal || []);
+    } catch (error) {
+      console.error("Error fetching journals:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Fetch Journals",
+        text: error.response?.data?.message || "Token may be missing or invalid.",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchJournals();
+  }, []);
+
+  // 🔹 Create journal
   const handleSubmit = async () => {
     if (!title || !description || !image) {
-      alert("Please fill all fields");
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please fill all fields before submitting",
+        confirmButtonColor: "#2563eb",
+      });
       return;
     }
 
@@ -23,7 +62,6 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      console.log(token);
 
       const res = await axios.post(
         `${config.BASE_API_URL}/journals/create`,
@@ -35,105 +73,231 @@ const AdminDashboard = () => {
         }
       );
 
-      alert(res.data.message);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: res.data.message,
+        confirmButtonColor: "#2563eb",
+      });
       seteditpopup(false);
       setTitle("");
       setDescription("");
       setImage(null);
+      setImagePreview(null);
+      fetchJournals();
     } catch (error) {
       console.error(error);
-      alert(
-        error.response?.data?.message ||
-          "Upload failed. Token may be missing or invalid."
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text: error.response?.data?.message || "Token may be missing or invalid.",
+        confirmButtonColor: "#2563eb",
+      });
     }
   };
-  return (
-    <div className="p-6">
-      <div className="justify-end flex px-10 pb-5">
-        <button
-          onClick={() => seteditpopup(true)}
-          className="bg-blue-600 border border-blue-900 rounded-xl hover:bg-blue-700 text-xl p-2 text-white"
-        >
-          Add journals
-        </button>
-      </div>
 
-      {/* Example Journal Card */}
-      <div className="flex gap-6">
-        <div className="bg-blue-200 h-auto border border-gray-600 w-2/5 p-4 rounded-lg">
-          <img
-            className="h-20 w-full object-cover rounded"
-            src={sunshine}
-            alt="example"
-          />
-          <div className="text-xl mt-2">Description: Example description</div>
-          <div className="text-xl mt-1">Title: Example Title</div>
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
+              <p className="text-gray-600">Manage your journals and content</p>
+            </div>
+            <button
+              onClick={() => seteditpopup(true)}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 font-semibold"
+            >
+              <MdAddCircleOutline className="text-2xl" />
+              Add Journal
+            </button>
+          </div>
+        </div>
+
+        {/* Journals Display */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {journals.length > 0 ? (
+            journals.map((journal, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+              >
+                <div className="relative overflow-hidden h-48">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    src={journal.image?.trim() || sunshine}
+                    alt={journal.title}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                    {journal.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-3">
+                    {journal.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
+              <div className="text-gray-400 text-6xl mb-4">📚</div>
+              <p className="text-gray-500 text-xl font-medium">No journals found</p>
+              <p className="text-gray-400 text-sm mt-2">Click "Add Journal" to create your first entry</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Popup Modal */}
+      {/* Enhanced Popup Modal */}
       {editpopup && (
-        <div className="bg-black/50 fixed inset-0 z-10 flex justify-center items-center">
-          <div className="bg-slate-100 rounded-sm w-[30%]">
-            <div className="flex justify-end p-2">
-              <MdOutlineCancelPresentation
-                className="text-red-600 hover:bg-red-600 hover:text-white text-2xl cursor-pointer"
-                onClick={() => seteditpopup(false)}
-              />
+        <div className="bg-black/60 backdrop-blur-sm fixed inset-0 z-50 flex justify-center items-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Add New Journal
+              </h1>
+              <button
+                onClick={() => {
+                  seteditpopup(false);
+                  setImagePreview(null);
+                }}
+                className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-all duration-200"
+              >
+                <MdOutlineCancelPresentation className="text-3xl" />
+              </button>
             </div>
 
-            <h1 className="text-blue-800 text-2xl font-bold text-center mb-4">
-              Add Journal
-            </h1>
-
-            <div className="px-4 pb-4 space-y-3">
-              {/* Upload Image */}
+            <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+              {/* Image Upload Section */}
               <div>
-                <label className="text-lg font-semibold">Upload Image:</label>
-                <input
-                  className="border w-full rounded-sm px-2 border-black mt-1"
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Upload Image
+                </label>
+                <div className="relative">
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="image-upload"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={handleImageChange}
+                  />
+                  <label
+                    htmlFor="image-upload"
+                    className="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
+                  >
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-40 object-cover rounded-lg"
+                      />
+                    ) : (
+                      <>
+                        <MdCloudUpload className="text-5xl text-gray-400 mb-2" />
+                        <p className="text-gray-600 font-medium">Click to upload image</p>
+                        <p className="text-gray-400 text-xs mt-1">JPG, JPEG or PNG</p>
+                      </>
+                    )}
+                  </label>
+                </div>
               </div>
 
-              {/* Description */}
+              {/* Title Input */}
               <div>
-                <label className="text-lg font-semibold">Description:</label>
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Title
+                </label>
                 <input
-                  className="border w-full rounded-sm h-8 text-xl p-1 border-black mt-1"
+                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-4 py-3 text-gray-800 transition-all duration-200 outline-none"
                   type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="text-lg font-semibold">Title:</label>
-                <input
-                  className="border w-full rounded-sm h-8 text-xl p-1 border-black mt-1"
-                  type="text"
+                  placeholder="Enter journal title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
 
-              {/* Submit */}
-              <div className="flex justify-end">
-                <button
-                  onClick={handleSubmit}
-                  className="text-white text-xl px-5 py-1 hover:bg-blue-900 border border-blue-800 bg-blue-800 rounded-sm"
-                >
-                  Save Journal
-                </button>
+              {/* Description Input */}
+              <div>
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Description
+                </label>
+                <textarea
+                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-4 py-3 text-gray-800 transition-all duration-200 outline-none resize-none"
+                  rows="4"
+                  placeholder="Enter journal description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+              <button
+                onClick={() => {
+                  seteditpopup(false);
+                  setImagePreview(null);
+                }}
+                className="px-6 py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Save Journal
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+
+        .animate-slideUp {
+          animation: slideUp 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
