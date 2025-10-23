@@ -54,7 +54,7 @@ const LoginPage = ({ setCurrentPage }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${config.USER_API_URL}/users/login`, formData);
+      const res = await axios.post(`${config.BASE_API_URL}/users/login`, formData);
 
       if (res.data.success) {
         const token = res.data.token;

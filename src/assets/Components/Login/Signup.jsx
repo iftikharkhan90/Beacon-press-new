@@ -79,7 +79,7 @@ const SignupPage = ({ setCurrentPage }) => {
 
     try {
       const res = await axios.post(
-        `${config.USER_API_URL}`,
+        `${config.BASE_API_URL}/users/`,
         formData
       );
       Swal.fire({

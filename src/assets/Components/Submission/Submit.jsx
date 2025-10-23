@@ -32,7 +32,7 @@ const SubmissionDashboard = () => {
     runningTitle: "",
     subject: "",
     abstract: "",
-    code: "",
+    keyword: "",
     correspondingName: "",
     correspondingEmail: "",
   });
@@ -172,7 +172,7 @@ const SubmissionDashboard = () => {
       errors.runningTitle = "Running Title is required";
     if (!manuscript.subject) errors.subject = "Subject is required";
     if (!manuscript.abstract.trim()) errors.abstract = "Abstract is required";
-    if (!manuscript.code.trim()) errors.code = "Code is required";
+    if (!manuscript.keyword.trim()) errors.keyword = "keyword is required";
     if (!manuscript.correspondingName.trim())
       errors.correspondingName = "Name is required";
     if (!manuscript.correspondingEmail.trim())
@@ -231,7 +231,7 @@ const SubmissionDashboard = () => {
       manuscript.runningTitle.trim() &&
       manuscript.subject &&
       manuscript.abstract.trim() &&
-      manuscript.code.trim() &&
+      manuscript.keyword.trim() &&
       manuscript.correspondingName.trim() &&
       manuscript.correspondingEmail.trim() &&
       modalAuthor.length > 0 &&
@@ -297,7 +297,7 @@ const SubmissionDashboard = () => {
       runningTitle: "",
       subject: "",
       abstract: "",
-      code: "",
+      keyword: "",
       correspondingName: "",
       correspondingEmail: "",
     });
