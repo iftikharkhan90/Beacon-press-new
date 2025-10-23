@@ -10,46 +10,44 @@ const AdminDashboard = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
- const handleSubmit = async () => {
-  if (!title || !description || !image) {
-    alert("Please fill all fields");
-    return;
-  }
+  const handleSubmit = async () => {
+    if (!title || !description || !image) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("description", description);
-  formData.append("image", image);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("image", image);
 
-  try {
-    
-    const token = localStorage.getItem("token");
-    console.log(token, 'token');
-    
-    const res = await axios.post(
-      `${config.Journal_API_URL}/api/journals/create`,
-      formData,
-      {
-         headers: {
-                Authorization: `Bearer ${token}`,
-              },
-      }
-    );
-    
+    try {
+      const token = localStorage.getItem("authToken");
+      console.log(token);
 
-    alert(res.data.message);
-    seteditpopup(false);
-    setTitle("");
-    setDescription("");
-    setImage(null);
-  } catch (error) {
-    console.error(error);
-    alert(
-      error.response?.data?.message ||
-      "Upload failed. Token may be missing or invalid."
-    );
-  }
-};
+      const res = await axios.post(
+        `${config.BASE_API_URL}/journals/create`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(res.data.message);
+      seteditpopup(false);
+      setTitle("");
+      setDescription("");
+      setImage(null);
+    } catch (error) {
+      console.error(error);
+      alert(
+        error.response?.data?.message ||
+          "Upload failed. Token may be missing or invalid."
+      );
+    }
+  };
   return (
     <div className="p-6">
       <div className="justify-end flex px-10 pb-5">
@@ -64,7 +62,11 @@ const AdminDashboard = () => {
       {/* Example Journal Card */}
       <div className="flex gap-6">
         <div className="bg-blue-200 h-auto border border-gray-600 w-2/5 p-4 rounded-lg">
-          <img className="h-20 w-full object-cover rounded" src={sunshine} alt="example" />
+          <img
+            className="h-20 w-full object-cover rounded"
+            src={sunshine}
+            alt="example"
+          />
           <div className="text-xl mt-2">Description: Example description</div>
           <div className="text-xl mt-1">Title: Example Title</div>
         </div>

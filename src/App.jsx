@@ -26,6 +26,7 @@ import SubmissionDashboard from "./assets/Components/Submission/Submit";
 import BeaconPressResources from "./assets/Components/Login/Resourses";
 import AcademicJournalNav from "./assets/Journals/JournalNavbar";
 import AdminLoginPage from "./assets/Components/Login/Admin-Login";
+import Sidebar from "./assets/Components/admin-dashboard/Sidebar"
 
 
 
