@@ -61,7 +61,7 @@ const ReviewSubmitStep = ({
       !activeManuscript?.type ||
       !activeManuscript?.subject ||
       !activeManuscript?.runningTitle ||
-      !activeManuscript?.code ||
+      !activeManuscript?.keyword ||
       !activeManuscript?.correspondingName ||
       !activeManuscript?.correspondingEmail ||
       !activeManuscript?.abstract
@@ -141,7 +141,7 @@ const ReviewSubmitStep = ({
       formData.append("conflictDescription", activeConflictDescription || "");
       formData.append("dataAvailability", activeDataAvailability || "");
       const res = await axios.post(
-        `${config.SCRIPT_API_URL}/scripts/upload`,
+        `${config.BASE_API_URL}/scripts/upload`,
         formData,
         { headers: { "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -229,7 +229,7 @@ const ReviewSubmitStep = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
             <div>
-              <strong>Code:</strong> {activeManuscript.code || "—"}
+              <strong>keyword:</strong> {activeManuscript.keyword || "—"}
             </div>
             <div>
               <strong>Corresponding Author:</strong>{" "}

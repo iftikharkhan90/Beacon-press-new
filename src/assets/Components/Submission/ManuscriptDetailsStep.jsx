@@ -86,15 +86,15 @@ const ManuscriptDetailsStep = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-medium">Code <span className={hasContent(manuscript.code) ? "text-green-600" : "text-red-600"}>*</span></label>
+              <label className="block font-medium">keyword <span className={hasContent(manuscript.keyword) ? "text-green-600" : "text-red-600"}>*</span></label>
               <input
                 type="text"
-                value={manuscript.code}
-                onChange={(e) => updateManuscript("code", e.target.value)}
-                className={`w-full border p-2 border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 ${step2Errors.code ? "border-red-500" : ""}`}
-                placeholder="Please give a Code here"
+                value={manuscript.keyword}
+                onChange={(e) => updateManuscript("keyword", e.target.value)}
+                className={`w-full border p-2 border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 ${step2Errors.keyword ? "border-red-500" : ""}`}
+                placeholder="Please give a keyword here"
               />
-              {step2Errors.code && <div className="text-red-500 text-sm mt-1">{step2Errors.code}</div>}
+              {step2Errors.keyword && <div className="text-red-500 text-sm mt-1">{step2Errors.keyword}</div>}
             </div>
             <div>
               <label className="block font-medium">Corresponding Author Name <span className={hasContent(manuscript.correspondingName) ? "text-green-600" : "text-red-600"}>*</span></label>
@@ -168,7 +168,7 @@ const ManuscriptDetailsStep = ({
           </div>
           <div><strong>Subject:</strong> {activeManuscript.subject || "—"}</div>
           <div><strong>Abstract:</strong><div className="mt-1 text-sm text-gray-800">{activeManuscript.abstract || "—"}</div></div>
-          <div><strong>Code:</strong><div className="mt-1 text-sm text-gray-800">{activeManuscript.code || "—"}</div></div>
+          <div><strong>keyword:</strong><div className="mt-1 text-sm text-gray-800">{activeManuscript.keyword || "—"}</div></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div><strong>Corresponding:</strong> {activeManuscript.correspondingName || "—"}</div>
             <div><strong>Email:</strong> {activeManuscript.correspondingEmail || "—"}</div>

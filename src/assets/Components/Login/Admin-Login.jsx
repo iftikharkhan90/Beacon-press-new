@@ -6,8 +6,8 @@ import { useAuth } from "../context/authContext";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import config from "../../../common/config/index"
 
-const LoginPage = ({ setCurrentPage }) => {
-  const { user, login } = useAuth();
+const AdminLoginPage = ({ setCurrentPage }) => {
+  const { admin, login } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -46,15 +46,15 @@ const LoginPage = ({ setCurrentPage }) => {
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/submit");
+    if (admin) {
+      navigate("/admin/dashboard");
     }
-  }, [user, navigate]);
+  }, [admin, navigate]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${config.BASE_API_URL}/users/login`, formData);
+      const res = await axios.post(`${config.BASE_API_URL}/admin/login`, formData);
 
       if (res.data.success) {
         const token = res.data.token;
@@ -113,38 +113,38 @@ const LoginPage = ({ setCurrentPage }) => {
     }
   };
 
-  const handleForgotPassword = async () => {
-    const { value: email } = await Swal.fire({
-      title: "Reset Password",
-      input: "email",
-      inputLabel: "Enter your registered email address",
-      inputPlaceholder: "example@email.com",
-      showCancelButton: true,
-      confirmButtonText: "Send Reset Link",
-    });
+//   const handleForgotPassword = async () => {
+//     const { value: email } = await Swal.fire({
+//       title: "Reset Password",
+//       input: "email",
+//       inputLabel: "Enter your registered email address",
+//       inputPlaceholder: "example@email.com",
+//       showCancelButton: true,
+//       confirmButtonText: "Send Reset Link",
+//     });
 
-    if (email) {
-      try {
-        const res = await axios.post(
-          `${config.USER_API_URL}/users/forgot-password`,
-          { email }
-        );
+//     if (email) {
+//       try {
+//         const res = await axios.post(
+//           `${config.USER_API_URL}/users/forgot-password`,
+//           { email }
+//         );
 
-        if (res.data.success) {
-          Swal.fire(
-            "Email Sent!",
-            "Password reset link has been sent to your email.",
-            "success"
-          );
-        } else {
-          Swal.fire("Error", "Email not found in our records.", "error");
-        }
-      } catch (error) {
-        Swal.fire("Error", "Failed to send reset email.", "error");
-        console.error("Forgot password error:", error);
-      }
-    }
-  };
+//         if (res.data.success) {
+//           Swal.fire(
+//             "Email Sent!",
+//             "Password reset link has been sent to your email.",
+//             "success"
+//           );
+//         } else {
+//           Swal.fire("Error", "Email not found in our records.", "error");
+//         }
+//       } catch (error) {
+//         Swal.fire("Error", "Failed to send reset email.", "error");
+//         console.error("Forgot password error:", error);
+//       }
+//     }
+//   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -153,20 +153,20 @@ const LoginPage = ({ setCurrentPage }) => {
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          {/* <p className="mt-2 text-center text-sm text-gray-600">
             Or{" "}
             <Link to="/signup">
               <button className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer">
                 Create a new account
               </button>
             </Link>
-          </p>
+          </p> */}
         </div>
 
-        {/* Saved Accounts Dropdown */}
-        {/* {savedAccounts.length > 0 && (
+        {/* Saved Accounts Dropdown
+        {savedAccounts.length > 0 && (
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium mt-10 text-gray-700 mb-1">
               Choose saved account
             </label>
             <select
@@ -236,7 +236,7 @@ const LoginPage = ({ setCurrentPage }) => {
                 Remember me
               </label>
             </div>
-
+{/* 
             <div className="text-sm">
               <button
                 type="button"
@@ -245,7 +245,7 @@ const LoginPage = ({ setCurrentPage }) => {
               >
                 Forgot your password?
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Sign in */}
@@ -259,8 +259,7 @@ const LoginPage = ({ setCurrentPage }) => {
           </div>
 
           {/* Back to home */}
-          <div className="grid grid-cols-2">
-          <div className="text-left">
+          <div className="text-center">
             <Link to="/home">
               <button
                 type="button"
@@ -270,20 +269,10 @@ const LoginPage = ({ setCurrentPage }) => {
               </button>
             </Link>
           </div>
-          <div className="text-right">
-            <Link to="/Admin/login">
-              <button
-                type="button"
-                className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer"
-              >
-                Admin Login
-              </button>
-            </Link>
-          </div></div>
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage
