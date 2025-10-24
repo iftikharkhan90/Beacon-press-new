@@ -49,7 +49,7 @@ const EditUser = ({ setCurrentPage }) => {
         return;
       }
 
-      const result = await axios.get(`${config.USER_API_URL}/users/get`, {
+      const result = await axios.get(`${config.BASE_API_URL}/users/get`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -92,7 +92,7 @@ const EditUser = ({ setCurrentPage }) => {
 
   try {
     const response = await axios.patch(
-      `${config.USER_API_URL}/users/patch`,
+      `${config.BASE_API_URL}/users/patch`,
       submitData,
       {
         headers: { Authorization: `Bearer ${token}` },
