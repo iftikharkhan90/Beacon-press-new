@@ -58,18 +58,7 @@ const SubmissionDashboard = () => {
   const [step4Error, setStep4Error] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
-
-    useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
-
-  if (!user) {
-    return null; 
-  }
-
-
+ 
   // Track completed steps
   useEffect(() => {
     const newCompletedSteps = [];
@@ -136,6 +125,7 @@ const SubmissionDashboard = () => {
   ]);
 
   const updateManuscript = (field, value) => {
+    console.log(field, value, 'hello')
     setManuscript((prev) => ({
       ...prev,
       [field]: value,
@@ -160,12 +150,14 @@ const SubmissionDashboard = () => {
   const removeReviewer = (idx) => {
     if (reviewers.length > 1) {
       setReviewers((prev) => prev.filter((_, i) => i !== idx));
+
     }
   };
 
   // Validation functions
   const validateStep2 = () => {
     const errors = {};
+    if (!manuscript.journalsId) errors.journalsId = "Please select a journal";
     if (!manuscript.title.trim()) errors.title = "Title is required";
     if (!manuscript.type) errors.type = "Type is required";
     if (!manuscript.runningTitle.trim())
@@ -226,21 +218,22 @@ const SubmissionDashboard = () => {
 
   const isStep2Valid = () => {
     return (
-      manuscript.title.trim() &&
-      manuscript.type &&
+      manuscript?.journalsId?.trim() &&
+      manuscript?.title?.trim() &&
+      manuscript?.type &&
       manuscript.runningTitle.trim() &&
-      manuscript.subject &&
-      manuscript.abstract.trim() &&
-      manuscript.keyword.trim() &&
-      manuscript.correspondingName.trim() &&
-      manuscript.correspondingEmail.trim() &&
-      modalAuthor.length > 0 &&
+      manuscript?.subject &&
+      manuscript?.abstract?.trim() &&
+      manuscript?.keyword?.trim() &&
+      manuscript?.correspondingName?.trim() &&
+      manuscript?.correspondingEmail?.trim() &&
+      modalAuthor?.length > 0 &&
       modalAuthor.every(
         (a) =>
-          a.fullName.trim() &&
-          a.email.trim() &&
-          a.affiliation.trim() &&
-          a.country.trim()
+          a.fullName?.trim() &&
+          a.email?.trim() &&
+          a.affiliation?.trim() &&
+          a.country?.trim()
       )
     );
   };

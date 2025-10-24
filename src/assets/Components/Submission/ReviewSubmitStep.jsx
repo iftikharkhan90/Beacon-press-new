@@ -14,6 +14,7 @@ const ReviewSubmitStep = ({
   activeDataAvailability,
   previewSubmission,
   manuscriptFile,
+  journalsId,
   figuresFiles,
   supplementaryFiles,
   confirmationChecked,
@@ -57,6 +58,7 @@ const ReviewSubmitStep = ({
 
   const isFormComplete = useMemo(() => {
     if (
+      !activeManuscript?.journalsId ||
       !activeManuscript?.title ||
       !activeManuscript?.type ||
       !activeManuscript?.subject ||
@@ -124,6 +126,7 @@ const ReviewSubmitStep = ({
       console.log("thisiis tokenenene:::",token)
 
       const formData = new FormData();
+      formData.append("journalsId", activeManuscript.journalsId);
       formData.append("manuscript", manuscriptFile);
 
       formData.append("manuscriptDetails", JSON.stringify(activeManuscript));
@@ -147,6 +150,8 @@ const ReviewSubmitStep = ({
           Authorization: `Bearer ${token}`,
          } }
       );
+      console.log("Submitting manuscript:", res);
+
       console.log("res", res);
       Swal.fire({
         icon: "success",
@@ -201,6 +206,9 @@ const ReviewSubmitStep = ({
       <div className="border-gray-300 p-4 rounded space-y-4">
         {/* Manuscript Details Section */}
         <div className="bg-white p-4 rounded border border-gray-300">
+          {/* <div>
+              <strong>SelectJournals:</strong> {activeManuscript.journal || "—"}
+            </div> */}
           <div className="flex justify-between items-center mb-3">
             <h4 className="font-semibold text-lg">Manuscript Details</h4>
             <button
@@ -211,6 +219,7 @@ const ReviewSubmitStep = ({
             </button>
           </div>
           <div className="gap-4">
+            
             <div>
               <strong>Title:</strong> {activeManuscript.title || "—"}
             </div>

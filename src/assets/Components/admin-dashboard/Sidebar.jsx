@@ -6,7 +6,7 @@ const Sidebar = () => {
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sidebar */}
-      <div className="relative bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 w-1/5 shadow-2xl text-white p-6 flex flex-col items-center before:absolute before:inset-0 before:bg-black before:opacity-5">
+      <div className="relative bg-gradient-to-b from-blue-300 via-blue-400 to-blue-500 w-1/5 shadow-2xl text-white p-6 flex flex-col items-center before:absolute before:inset-0 before:bg-black before:opacity-5">
         <div className="relative z-10 w-full">
           {/* Logo Section */}
           <div className="mb-8 flex flex-col items-center">
@@ -27,7 +27,7 @@ const Sidebar = () => {
             <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-300 to-transparent"></div>
           </div>
           
-          <button className="relative group bg-gradient-to-r from-blue-800 to-blue-900 w-full h-12 rounded-2xl border-2 border-blue-400 text-xl font-bold hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 overflow-hidden">
+          <button className="relative group bg-gradient-to-r from-blue-500 to-blue-600 w-full h-12 rounded-2xl border-2 border-blue-400 text-xl font-bold hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 overflow-hidden">
             {/* Animated gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transform -translate-x-full group-hover:translate-x-full transition-all duration-700"></div>
             

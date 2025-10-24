@@ -95,7 +95,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/submit");
+        navigate("/admin/dashboard");
       } else {
         Swal.fire({
           icon: "error",
