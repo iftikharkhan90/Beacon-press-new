@@ -1,12 +1,38 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
 import AdminDashboard from './AdminDashboard';
+import { Outlet } from 'react-router-dom';
 
 const Sidebar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed  left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
       {/* Sidebar */}
-      <div className="relative bg-gradient-to-b from-blue-300 via-blue-400 to-blue-500 w-1/5 shadow-2xl text-white p-6 flex flex-col items-center before:absolute before:inset-0 before:bg-black before:opacity-5">
+      <div className={`
+        fixed md:relative 
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        transition-transform duration-300 ease-in-out
+        bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 
+       w-2/3 md:w-1/5
+        h-full
+        shadow-2xl text-white p-6 flex flex-col items-center 
+        before:absolute before:inset-0 before:bg-black before:opacity-5
+        z-40
+      `}>
         <div className="relative z-10 w-full">
           {/* Logo Section */}
           <div className="mb-8 flex flex-col items-center">
@@ -55,9 +81,20 @@ const Sidebar = () => {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-y-auto shadow-inner">
-        <AdminDashboard />
-        <Outlet />
+      <div className="flex-1 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-y-auto shadow-inner relative z-10">
+        {/* Overlay for mobile */}
+       {isSidebarOpen && (
+  <div
+    onClick={toggleSidebar}
+    className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-[2px] z-30 transition-all duration-300"
+  ></div>
+)}
+
+        <div className="p-8">
+          <h2 className="text-3xl font-bold text-gray-800"> <AdminDashboard />
+        </h2>
+          <p className="mt-4 text-gray-600"> <Outlet /></p>
+        </div>
       </div>
     </div>
   );

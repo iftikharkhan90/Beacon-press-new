@@ -109,34 +109,34 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center">
+        <div className="mb-6 md:mb-8">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-              <p className="text-gray-600">Manage your journals and content</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
+              <p className="text-sm md:text-base text-gray-600">Manage your journals and content</p>
             </div>
             <button
               onClick={() => seteditpopup(true)}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 font-semibold"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 font-semibold w-full md:w-auto"
             >
-              <MdAddCircleOutline className="text-2xl" />
-              Add Journal
+              <MdAddCircleOutline className="text-xl md:text-2xl" />
+              <span className="text-sm md:text-base">Add Journal</span>
             </button>
           </div>
         </div>
 
         {/* Journals Display */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {journals.length > 0 ? (
             journals.map((journal, index) => (
               <div
                 key={index}
                 className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group"
               >
-                <div className="relative overflow-hidden h-48">
+                <div className="relative overflow-hidden h-40 md:h-48">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     src={journal.image?.trim() || sunshine}
@@ -144,21 +144,21 @@ const AdminDashboard = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                <div className="p-4 md:p-5">
+                  <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                     {journal.title}
                   </h3>
-                  <p className="text-gray-600 text-sm line-clamp-3">
+                  <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                     {journal.description}
                   </p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-full flex flex-col items-center justify-center py-16">
-              <div className="text-gray-400 text-6xl mb-4">📚</div>
-              <p className="text-gray-500 text-xl font-medium">No journals found</p>
-              <p className="text-gray-400 text-sm mt-2">Click "Add Journal" to create your first entry</p>
+            <div className="col-span-full flex flex-col items-center justify-center py-12 md:py-16">
+              <div className="text-gray-400 text-4xl md:text-6xl mb-4">📚</div>
+              <p className="text-gray-500 text-lg md:text-xl font-medium">No journals found</p>
+              <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">Click "Add Journal" to create your first entry</p>
             </div>
           )}
         </div>
@@ -167,9 +167,9 @@ const AdminDashboard = () => {
       {/* Enhanced Popup Modal */}
       {editpopup && (
         <div className="bg-black/60 backdrop-blur-sm fixed inset-0 z-50 flex justify-center items-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200">
+              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Add New Journal
               </h1>
               <button
@@ -179,14 +179,14 @@ const AdminDashboard = () => {
                 }}
                 className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-all duration-200"
               >
-                <MdOutlineCancelPresentation className="text-3xl" />
+                <MdOutlineCancelPresentation className="text-2xl md:text-3xl" />
               </button>
             </div>
 
-            <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+            <div className="p-4 md:p-6 space-y-4 md:space-y-5 overflow-y-auto">
               {/* Image Upload Section */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
                   Upload Image
                 </label>
                 <div className="relative">
@@ -199,18 +199,18 @@ const AdminDashboard = () => {
                   />
                   <label
                     htmlFor="image-upload"
-                    className="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
+                    className="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
                   >
                     {imagePreview ? (
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full h-40 object-cover rounded-lg"
+                        className="w-full h-32 md:h-40 object-cover rounded-lg"
                       />
                     ) : (
                       <>
-                        <MdCloudUpload className="text-5xl text-gray-400 mb-2" />
-                        <p className="text-gray-600 font-medium">Click to upload image</p>
+                        <MdCloudUpload className="text-4xl md:text-5xl text-gray-400 mb-2" />
+                        <p className="text-sm md:text-base text-gray-600 font-medium">Click to upload image</p>
                         <p className="text-gray-400 text-xs mt-1">JPG, JPEG or PNG</p>
                       </>
                     )}
@@ -220,11 +220,11 @@ const AdminDashboard = () => {
 
               {/* Title Input */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
                   Title
                 </label>
                 <input
-                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-4 py-3 text-gray-800 transition-all duration-200 outline-none"
+                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none"
                   type="text"
                   placeholder="Enter journal title"
                   value={title}
@@ -234,11 +234,11 @@ const AdminDashboard = () => {
 
               {/* Description Input */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
                   Description
                 </label>
                 <textarea
-                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-4 py-3 text-gray-800 transition-all duration-200 outline-none resize-none"
+                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none resize-none"
                   rows="4"
                   placeholder="Enter journal description"
                   value={description}
@@ -248,19 +248,19 @@ const AdminDashboard = () => {
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 md:gap-3 p-4 md:p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
               <button
                 onClick={() => {
                   seteditpopup(false);
                   setImagePreview(null);
                 }}
-                className="px-6 py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-200"
+                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 text-sm md:text-base font-semibold hover:bg-gray-100 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm md:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Save Journal
               </button>
