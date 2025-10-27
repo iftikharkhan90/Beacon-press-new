@@ -90,15 +90,11 @@ const ReviewSubmitStep = ({
       }
     }
 
-    if (!manuscriptFile) return false;
-
     return true;
   }, [
     activeManuscript,
     activeAuthors,
     activeReviewers,
-    manuscriptFile,
-    figuresFiles,
     supplementaryFiles,
   ]);
 
