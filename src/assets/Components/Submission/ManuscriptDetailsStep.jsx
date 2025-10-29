@@ -29,8 +29,12 @@ const ManuscriptDetailsStep = ({
       ? "text-green-600"
       : "text-red-600";
 
-  // All data complete = parent validation (already checks authors array too)
-  const isAllDataComplete = () => !!isStep2Valid();
+const isAllDataComplete = () => {
+  return (
+    hasContent(manuscript.journal) && 
+    isStep2Valid()
+  );
+};
 
   const { user } = useAuth();
   const [journals, setJournals] = useState([]);
