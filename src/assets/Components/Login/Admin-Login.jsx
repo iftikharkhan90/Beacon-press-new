@@ -58,6 +58,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
 
       if (res.data.success) {
         const token = res.data.token;
+         localStorage.setItem("isAdmin", "true");
         const rememberMe = document.getElementById("remember-me").checked;
 
         if (rememberMe) {
@@ -83,7 +84,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
           setSavedAccounts(updatedAccounts);  
         } else {
           
-          sessionStorage.setItem("token", token);
+          localStorage.setItem("token", token);
         }
 
         login(token);

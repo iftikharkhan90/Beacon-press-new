@@ -4,6 +4,7 @@ import { MdOutlineCancelPresentation, MdAddCircleOutline, MdCloudUpload } from "
 import axios from "axios";
 import config from "../../../common/config";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [editpopup, seteditpopup] = useState(false);
@@ -12,6 +13,17 @@ const AdminDashboard = () => {
   const [image, setImage] = useState(null);
   const [journals, setJournals] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
+  const navigate = useNavigate();
+
+useEffect(() => {
+  const token = localStorage.getItem("authToken");
+  const isAdmin = localStorage.getItem("isAdmin");
+
+  // If no token OR not admin → redirect
+  if (!token || isAdmin !== "true") {
+    navigate("/Admin/login");
+  }
+}, []);
 
   // 🔹 Fetch all journals (with token)
   const fetchJournals = async () => {
@@ -167,7 +179,7 @@ const AdminDashboard = () => {
       {/* Enhanced Popup Modal */}
       {editpopup && (
         <div className="bg-black/60 backdrop-blur-sm fixed inset-0 z-50 flex justify-center items-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp max-h-[90vh] overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp max-h-[90vh] overflow-hidden flex flex-col mt-15">
             <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200">
               <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Add New Journal
@@ -179,7 +191,7 @@ const AdminDashboard = () => {
                 }}
                 className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-all duration-200"
               >
-                <MdOutlineCancelPresentation className="text-2xl md:text-3xl" />
+                <MdOutlineCancelPresentation className="text-2xl md:text-3xl " />
               </button>
             </div>
 
