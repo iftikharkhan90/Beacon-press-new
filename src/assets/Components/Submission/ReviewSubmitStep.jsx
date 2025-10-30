@@ -138,7 +138,7 @@ const ReviewSubmitStep = ({
         JSON.stringify(activeConflictOfInterest)
       );
       formData.append("conflictDescription", activeConflictDescription || "");
-      formData.append("dataAvailability", activeDataAvailability || "");
+     formData.append("dataAvailability", activeDataAvailability || "Not provided");
       const res = await axios.post(
         `${config.BASE_API_URL}/scripts/upload`,
         formData,
