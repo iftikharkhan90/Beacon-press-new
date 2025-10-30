@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import sunshine from "../../images/sunshine.jpg";
-import { MdOutlineCancelPresentation, MdAddCircleOutline, MdCloudUpload } from "react-icons/md";
+import {
+  MdOutlineCancelPresentation,
+  MdAddCircleOutline,
+  MdCloudUpload,
+} from "react-icons/md";
 import axios from "axios";
 import config from "../../../common/config";
 import Swal from "sweetalert2";
@@ -8,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [editpopup, seteditpopup] = useState(false);
+  const [editingJournal, setEditingJournal] = useState(null); // store journal to edit
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -15,15 +20,58 @@ const AdminDashboard = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
 
-useEffect(() => {
-  const token = localStorage.getItem("authToken");
-  const isAdmin = localStorage.getItem("isAdmin");
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const isAdmin = localStorage.getItem("isAdmin");
 
-  // If no token OR not admin → redirect
-  if (!token || isAdmin !== "true") {
-    navigate("/Admin/login");
-  }
-}, []);
+    // If no token OR not admin → redirect
+    if (!token || isAdmin !== "true") {
+      navigate("/Admin/login");
+    }
+  }, []);
+
+  const handleDelete = async (journalId) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the journal.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const token = localStorage.getItem("authToken");
+
+      await axios.delete(
+        `${config.BASE_API_URL}/journals/delete/${journalId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // ✅ Remove deleted journal from UI instantly
+      setJournals((prev) => prev.filter((j) => j._id !== journalId));
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "The journal has been deleted successfully.",
+        confirmButtonColor: "#2563eb",
+      });
+    } catch (error) {
+      console.error("Error deleting journal:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Delete",
+        text: error.response?.data?.message || "Something went wrong.",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+  };
 
   // 🔹 Fetch all journals (with token)
   const fetchJournals = async () => {
@@ -39,31 +87,80 @@ useEffect(() => {
       console.log("Fetched journals:", res.data);
 
       // ✅ Fix here — use "journal" instead of "data"
-      setJournals(res.data.journal || []);
+      setJournals(res.data.journal || res.data.data || res.data.journals || []);
     } catch (error) {
       console.error("Error fetching journals:", error);
       Swal.fire({
         icon: "error",
         title: "Failed to Fetch Journals",
-        text: error.response?.data?.message || "Token may be missing or invalid.",
+        text:
+          error.response?.data?.message || "Token may be missing or invalid.",
         confirmButtonColor: "#2563eb",
       });
     }
   };
+  //   const handleEdit = (journal) => {
+  //   setEditingJournal(journal);
+  //   setjounaldata({
+  //     title: journal.title,
+  //     description: journal.description
+  //   });
+  //   openPopup(); // so form opens with data
+  // };
 
   useEffect(() => {
     fetchJournals();
   }, []);
 
   // 🔹 Create journal
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // ✅ If editing → UPDATE journal
+    if (editingJournal) {
+      try {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        if (image) formData.append("image", image);
+
+        const token = localStorage.getItem("authToken");
+
+        const res = await axios.patch(
+          `${config.BASE_API_URL}/journals/patch/${editingJournal._id}`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        // ✅ update journal in UI
+        setJournals((prev) =>
+          prev.map((j) =>
+            j._id === editingJournal._id ? res.data.journal || res.data : j
+          )
+        );
+
+        // ✅ reset form
+        setEditingJournal(null);
+        setTitle("");
+        setDescription("");
+        setImage(null);
+        setImagePreview(null);
+        seteditpopup(false);
+
+        Swal.fire("Journal Updated!");
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error Updating Journal");
+      }
+
+      return; // ✅ STOP so it won't run create logic
+    }
+
+    // ✅ If adding → CREATE journal
     if (!title || !description || !image) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Information",
-        text: "Please fill all fields before submitting",
-        confirmButtonColor: "#2563eb",
-      });
+      Swal.fire("Please fill all fields");
       return;
     }
 
@@ -78,19 +175,11 @@ useEffect(() => {
       const res = await axios.post(
         `${config.BASE_API_URL}/journals/create`,
         formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: res.data.message,
-        confirmButtonColor: "#2563eb",
-      });
+      Swal.fire("Journal Added!");
+
       seteditpopup(false);
       setTitle("");
       setDescription("");
@@ -99,12 +188,7 @@ useEffect(() => {
       fetchJournals();
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        icon: "error",
-        title: "Upload Failed",
-        text: error.response?.data?.message || "Token may be missing or invalid.",
-        confirmButtonColor: "#2563eb",
-      });
+      Swal.fire("Upload Failed");
     }
   };
 
@@ -127,15 +211,31 @@ useEffect(() => {
         <div className="mb-6 md:mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>
-              <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-              <p className="text-sm md:text-base text-gray-600">Manage your journals and content</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">
+                Admin Dashboard
+              </h1>
+              <p className="text-sm md:text-base text-gray-600">
+                Manage your journals and content
+              </p>
             </div>
             <button
-              onClick={() => seteditpopup(true)}
+              onClick={() => {
+                // ✅ Important for Add mode
+                setEditingJournal(null);
+                setTitle("");
+                setDescription("");
+                setImage(null);
+                setImagePreview(null);
+
+                // ✅ Still open popup
+                seteditpopup(true);
+              }}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 font-semibold w-full md:w-auto"
             >
               <MdAddCircleOutline className="text-xl md:text-2xl" />
-              <span className="text-sm md:text-base">Add Journal</span>
+              <span className="text-sm md:text-base">
+                {editingJournal ? "Edit Journal" : "Add New Journal"}
+              </span>
             </button>
           </div>
         </div>
@@ -163,14 +263,47 @@ useEffect(() => {
                   <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                     {journal.description}
                   </p>
+                  <div>
+                    <div className="flex gap-2">
+  <button
+    onClick={() => {
+      setEditingJournal(journal);
+      setTitle(journal.title);
+      setDescription(journal.description);
+      setImage(null);
+      setImagePreview(journal.image);
+      seteditpopup(true);
+    }}
+    className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-sm hover:shadow-md"
+  >
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    </svg>
+    Edit
+  </button>
+  <button
+    onClick={() => handleDelete(journal._id)}
+    className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-sm hover:shadow-md"
+  >
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    </svg>
+    Delete
+  </button>
+</div>
+                  </div>
                 </div>
               </div>
             ))
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center py-12 md:py-16">
               <div className="text-gray-400 text-4xl md:text-6xl mb-4">📚</div>
-              <p className="text-gray-500 text-lg md:text-xl font-medium">No journals found</p>
-              <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">Click "Add Journal" to create your first entry</p>
+              <p className="text-gray-500 text-lg md:text-xl font-medium">
+                No journals found
+              </p>
+              <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">
+                Click "Add Journal" to create your first entry
+              </p>
             </div>
           )}
         </div>
@@ -182,7 +315,7 @@ useEffect(() => {
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all animate-slideUp max-h-[90vh] overflow-hidden flex flex-col mt-15">
             <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200">
               <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Add New Journal
+                {editingJournal ? "Edit Journal" : "Add New Journal"}
               </h1>
               <button
                 onClick={() => {
@@ -222,8 +355,12 @@ useEffect(() => {
                     ) : (
                       <>
                         <MdCloudUpload className="text-4xl md:text-5xl text-gray-400 mb-2" />
-                        <p className="text-sm md:text-base text-gray-600 font-medium">Click to upload image</p>
-                        <p className="text-gray-400 text-xs mt-1">JPG, JPEG or PNG</p>
+                        <p className="text-sm md:text-base text-gray-600 font-medium">
+                          Click to upload image
+                        </p>
+                        <p className="text-gray-400 text-xs mt-1">
+                          JPG, JPEG or PNG
+                        </p>
                       </>
                     )}
                   </label>
@@ -274,7 +411,7 @@ useEffect(() => {
                 onClick={handleSubmit}
                 className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm md:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                Save Journal
+                {editingJournal ? "Update Journal" : "Save Journal"}
               </button>
             </div>
           </div>
