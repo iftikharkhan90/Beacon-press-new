@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import mountainPlaceholder from "../../../../public/mountainPlaceholder.png"
+import sunshine from "../../images/sunshine.jpg";
 import {
   MdOutlineCancelPresentation,
   MdAddCircleOutline,
@@ -62,12 +62,9 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(
-        `${config.BASE_API_URL}/journals/delete/${journalId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`${config.BASE_API_URL}/journals/delete/${journalId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setJournals((prev) => prev.filter((j) => j._id !== journalId));
 
@@ -100,8 +97,7 @@ const AdminDashboard = () => {
       Swal.fire({
         icon: "error",
         title: "Failed to Fetch Journals",
-        text:
-          error.response?.data?.message || "Token may be missing or invalid.",
+        text: error.response?.data?.message || "Token may be missing or invalid.",
         confirmButtonColor: "#2563eb",
       });
     }
@@ -129,9 +125,7 @@ const AdminDashboard = () => {
         );
 
         setJournals((prev) =>
-          prev.map((j) =>
-            j._id === editingJournal._id ? res.data.journal || res.data : j
-          )
+          prev.map((j) => (j._id === editingJournal._id ? res.data.journal || res.data : j))
         );
 
         closeModal();
@@ -143,7 +137,7 @@ const AdminDashboard = () => {
       return;
     }
 
-    if (!title || !description ) {
+    if (!title || !description || !image) {
       Swal.fire({ icon: "warning", title: "Please fill all fields" });
       return;
     }
@@ -156,8 +150,8 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("authToken");
       await axios.post(`${config.BASE_API_URL}/journals/create`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        headers: { Authorization: `Bearer ${token}` } },
+      );
 
       closeModal();
       fetchJournals();
@@ -239,30 +233,17 @@ const AdminDashboard = () => {
                   className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group"
                 >
                   <div className="relative overflow-hidden h-40 md:h-48">
-                   <img
-  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-  src={journal.image?.trim()  // user image
-        ? journal.image.trim()
-        : mountainPlaceholder            // fallback
-  }
-  alt={journal.title}
-/>
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      src={journal.image?.trim() || sunshine}
+                      alt={journal.title}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-4 md:p-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
-                        {journal.title}
-                      </h3>
-                      <button
-                        onClick={() =>
-                          navigate(`/admin/dashboard/manage-editorial/:id`)
-                        }
-                        className="text-blue-600 hover:text-blue-800 text-sm font-semibold underline"
-                      >
-                        Editorial
-                      </button>
-                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                      {journal.title}
+                    </h3>
                     <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                       {journal.description}
                     </p>
@@ -271,18 +252,8 @@ const AdminDashboard = () => {
                         onClick={() => openEditModal(journal)}
                         className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                         Edit
                       </button>
@@ -290,18 +261,8 @@ const AdminDashboard = () => {
                         onClick={() => handleDelete(journal._id)}
                         className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         Delete
                       </button>
@@ -311,12 +272,8 @@ const AdminDashboard = () => {
               ))
             ) : (
               <div className="col-span-full flex flex-col items-center justify-center py-12 md:py-16">
-                <div className="text-gray-400 text-4xl md:text-6xl mb-4">
-                  Book Icon
-                </div>
-                <p className="text-gray-500 text-lg md:text-xl font-medium">
-                  No journals found
-                </p>
+                <div className="text-gray-400 text-4xl md:text-6xl mb-4">Book Icon</div>
+                <p className="text-gray-500 text-lg md:text-xl font-medium">No journals found</p>
                 <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">
                   Click "Add Journal" to create your first entry
                 </p>
@@ -374,9 +331,7 @@ const AdminDashboard = () => {
                         <p className="text-sm md:text-base text-gray-600 font-medium">
                           Click to upload image
                         </p>
-                        <p className="text-gray-400 text-xs mt-1">
-                          JPG, JPEG or PNG
-                        </p>
+                        <p className="text-gray-400 text-xs mt-1">JPG, JPEG or PNG</p>
                       </>
                     )}
                   </label>
@@ -385,9 +340,7 @@ const AdminDashboard = () => {
 
               {/* Title */}
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
-                  Title
-                </label>
+                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">Title</label>
                 <input
                   className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none"
                   type="text"
@@ -399,9 +352,7 @@ const AdminDashboard = () => {
 
               {/* Description */}
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
-                  Description
-                </label>
+                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">Description</label>
                 <textarea
                   className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none resize-none"
                   rows="4"
@@ -433,9 +384,7 @@ const AdminDashboard = () => {
 
       {/* Global: Prevent page scroll */}
       <style jsx global>{`
-        html,
-        body,
-        #root {
+        html, body, #root {
           height: 100%;
           overflow: hidden !important;
         }
