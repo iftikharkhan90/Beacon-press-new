@@ -253,7 +253,7 @@ const AdminDashboard = () => {
                       </h3>
                       <button
                         onClick={() =>
-                          navigate(`/admin/dashboard/manage-editorial/${journal._id}`)
+                          navigate(`/admin/dashboard/manage-editorial/:id`)
                         }
                         className="text-blue-600 hover:text-blue-800 text-sm font-semibold underline"
                       >
