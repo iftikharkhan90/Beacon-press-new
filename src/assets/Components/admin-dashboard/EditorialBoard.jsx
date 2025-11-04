@@ -21,8 +21,12 @@ const Editorialboard = () => {
   // ✅ Fetch all users from API
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${config.BASE_API_URL}/users/get`, {
-        
+
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("authToken");
+
+      const res = await axios.get(`${config.BASE_API_URL}/users/getuser`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data.users || []);
     } catch (error) {
