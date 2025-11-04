@@ -142,7 +142,7 @@ const isAllDataComplete = () => {
                 type="text"
                 value={manuscript.title}
                 onChange={(e) => updateManuscript("title", e.target.value)}
-                className={`w-full p-2 rounded bg-blue-100 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 ${
                   step2Errors.title ? "border-red-500" : ""
                 }`}
               />

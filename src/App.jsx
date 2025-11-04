@@ -27,6 +27,7 @@ import BeaconPressResources from "./assets/Components/Login/Resourses";
 import AcademicJournalNav from "./assets/Journals/JournalNavbar";
 import AdminLoginPage from "./assets/Components/Login/Admin-Login";
 import Sidebar from "./assets/Components/admin-dashboard/Sidebar"
+import EditorialSidebar from "./assets/Components/admin-dashboard/EditorialSidebar";
 
 
 
@@ -50,7 +51,8 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/resources" element={<BeaconPressResources />} />
             <Route path="/contact" element={<Contactus />} />
-            <Route path="/admin/dashboard" element={<Sidebar />}>
+            <Route path="/admin/dashboard" element={<Sidebar />}/>
+            <Route path="/admin/dashboard/manage-editorial/:id" element={<EditorialSidebar />}>
             {/* <Route index element={<AdminDashboard />} /> */}
             </Route>
           </Routes>
