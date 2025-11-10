@@ -260,7 +260,7 @@ const AdminDashboard = () => {
                         }
                         className="text-blue-600 hover:text-blue-800 text-sm font-semibold underline"
                       >
-                        Editorial
+                        Editorial Board
                       </button>
                     </div>
                     <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
