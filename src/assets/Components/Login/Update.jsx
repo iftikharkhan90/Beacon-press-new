@@ -49,7 +49,7 @@ const EditUser = ({ setCurrentPage }) => {
         return;
       }
 
-      const result = await axios.get(`${config.BASE_API_URL}/users/get`, {
+      const result = await axios.get(`${config.BASE_API_URL}/users/getById`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
