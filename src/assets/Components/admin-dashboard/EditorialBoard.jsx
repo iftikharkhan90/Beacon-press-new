@@ -17,6 +17,18 @@ const Editorialboard = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [role, setRole] = useState("");
   const [userName, setUserName] = useState("");
+  const [journalsId, setJournalsId] = useState(localStorage.getItem("journalId") || "");
+  const cleanJournalId = journalsId.toString().trim();
+
+  useEffect(() => {
+    // If you need to fetch or confirm journalsId here:
+    const savedId = localStorage.getItem("journalId");
+    if (savedId) {
+      setJournalsId(savedId);
+    } else {
+      console.warn("No journalId found in localStorage");
+    }
+  }, []);
 
   /* ------------------- BACKGROUND & SCROLL ------------------- */
   useEffect(() => {
@@ -106,11 +118,25 @@ const Editorialboard = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      await axios.put(
-        `${config.BASE_API_URL}/admin/user/update/${editingUser._id}`,
-        { role },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+       const journalsId = localStorage.getItem("journalId");
+
+    if (!journalsId) {
+      Swal.fire("Error", "No journalId found. Please open a journal first.", "error");
+      return;
+    }
+  
+    await axios.post(
+  `${config.BASE_API_URL}/journalsUserRole/create`,
+   {
+        roleId: role,                  
+        userId: editingUser._id,       
+        journalsId,        
+        isAssigned: true,              
+      },
+  {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+);
 
       Swal.fire("Success", "Role assigned successfully!", "success");
       closeModal();

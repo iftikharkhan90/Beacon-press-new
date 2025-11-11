@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import mountainPlaceholder from "../../../../public/mountainPlaceholder.png"
+import mountainPlaceholder from "../../../../public/mountainPlaceholder.png";
 import {
   MdOutlineCancelPresentation,
   MdAddCircleOutline,
@@ -143,7 +143,7 @@ const AdminDashboard = () => {
       return;
     }
 
-    if (!title || !description ) {
+    if (!title || !description) {
       Swal.fire({ icon: "warning", title: "Please fill all fields" });
       return;
     }
@@ -239,14 +239,15 @@ const AdminDashboard = () => {
                   className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group"
                 >
                   <div className="relative overflow-hidden h-40 md:h-48">
-                   <img
-  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-  src={journal.image?.trim()  // user image
-        ? journal.image.trim()
-        : mountainPlaceholder            // fallback
-  }
-  alt={journal.title}
-/>
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      src={
+                        journal.image?.trim() // user image
+                          ? journal.image.trim()
+                          : mountainPlaceholder // fallback
+                      }
+                      alt={journal.title}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-4 md:p-5">
@@ -255,9 +256,12 @@ const AdminDashboard = () => {
                         {journal.title}
                       </h3>
                       <button
-                        onClick={() =>
-                          navigate(`/admin/dashboard/manage-editorial/:id`)
-                        }
+                        onClick={() => {
+                          localStorage.setItem("journalId", journal._id);
+                          navigate(
+                            `/admin/dashboard/manage-editorial/${journal._id}`
+                          );
+                        }}
                         className="text-blue-600 hover:text-blue-800 text-sm font-semibold underline"
                       >
                         Editorial Board
