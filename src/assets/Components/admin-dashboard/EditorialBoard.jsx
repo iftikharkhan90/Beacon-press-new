@@ -17,6 +17,23 @@ const Editorialboard = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [role, setRole] = useState("");
   const [userName, setUserName] = useState("");
+  const [journalId, setjournalId] = useState(localStorage.getItem("journalId") || "");
+  const cleanJournalId = journalId.toString().trim();
+  const roleObj = roleList.find((r) => r._id === role);
+  const roleName = roleObj ? roleObj.title || roleObj.name : "No role";
+  const [selectedLoaded, setSelectedLoaded] = useState(false);
+
+
+  useEffect(() => {
+    // If you need to fetch or confirm journalId here:
+    const savedId = localStorage.getItem("journalId");
+    if (savedId) {
+      setjournalId(savedId);
+    } else {
+      console.warn("No journalId found in localStorage");
+    }
+  }, []);
+  
 
   /* ------------------- BACKGROUND & SCROLL ------------------- */
   useEffect(() => {
@@ -58,7 +75,7 @@ const Editorialboard = () => {
           const matchRole = roles.find((r) => r._id === u.role);
           return {
             ...u,
-            roleName: matchRole ? matchRole.name : u.role || "No role assigned",
+             roleName: matchRole ? (r.title || r.name) : "No role assigned",
           };
         });
 
@@ -73,14 +90,63 @@ const Editorialboard = () => {
     loadData();
   }, []);
 
-  /* ------------------- CHECKBOX ------------------- */
-  const handleCheckboxChange = (user) => {
-    setSelectedUsers((prev) =>
-      prev.some((u) => u._id === user._id)
-        ? prev.filter((u) => u._id !== user._id)
-        : [...prev, user]
-    );
+ useEffect(() => {
+  const loadSelectedUsers = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token || !journalId) return;
+
+    try {
+      const res = await axios.get(`${config.BASE_API_URL}/journalsUserRole/get`, {
+        params: { journalId },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Get journalUser", res.data);
+
+      // Always treat response as array
+      const assigned = Array.isArray(res.data) ? res.data : [res.data];
+
+      // Extract actual userId._id from nested objects
+      const assignedUserIds = assigned.map((a) => a.userId._id);
+
+      const matched = userList
+        .filter((u) => assignedUserIds.includes(u._id))
+        .map((u) => {
+          const roleEntry = assigned.find((a) => a.userId._id === u._id);
+
+          // Extract role _id correctly
+          const roleId = roleEntry?.roleId?._id;
+
+          const roleObj = roleList.find((r) => r._id === roleId);
+
+          return {
+            ...u,
+            role: roleId,
+            roleName: roleObj ? (roleObj.title || roleObj.name) : "No role",
+          };
+        });
+
+      setSelectedUsers(matched);
+      setSelectedLoaded(true);
+
+    } catch (err) {
+      console.error("Failed to load selected users:", err);
+    }
   };
+
+  loadSelectedUsers();
+}, [journalId, userList, roleList]);
+
+  /* ------------------- CHECKBOX ------------------- */
+ const handleCheckboxChange = (user) => {
+  const alreadySelected = selectedUsers.some((u) => u._id === user._id);
+
+  if (alreadySelected) {
+    setSelectedUsers((prev) => prev.filter((u) => u._id !== user._id));
+  } else {
+    openEditModal(user);
+  }
+};
 
   /* ------------------- MODAL ------------------- */
   const openEditModal = (user) => {
@@ -106,11 +172,27 @@ const Editorialboard = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      await axios.put(
-        `${config.BASE_API_URL}/admin/user/update/${editingUser._id}`,
-        { role },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+       const journalId = localStorage.getItem("journalId");
+
+    if (!journalId) {
+      Swal.fire("Error", "No journalId found. Please open a journal first.", "error");
+      return;
+    }
+  
+    await axios.post(
+  `${config.BASE_API_URL}/journalsUserRole/create`,
+   {
+        roleId: role,                  
+        userId: editingUser._id,       
+        journalId,        
+        isAssigned: true,              
+      },
+  {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+);
+
+
 
       Swal.fire("Success", "Role assigned successfully!", "success");
       closeModal();
@@ -130,23 +212,28 @@ const Editorialboard = () => {
         };
       });
 
-      setUserList(merged);
-      setSelectedUsers((prev) =>
-        prev.map((u) =>
-          u._id === editingUser._id
-            ? {
-                ...u,
-                role,
-                roleName: merged.find((m) => m._id === u._id)?.roleName,
-              }
-            : u
-        )
-      );
-    } catch (err) {
-      console.error("Error updating role:", err);
-      Swal.fire("Error", "Failed to update user role", "error");
-    }
-  };
+      setUserList((prev) =>
+      prev.map((u) =>
+        u._id === editingUser._id ? { ...u, role, roleName } : u
+      )
+    );
+
+    setSelectedUsers((prev) => {
+      const isAlready = prev.some((u) => u._id === editingUser._id);
+      const updatedUser = { ...editingUser, role, roleName };
+      return isAlready
+        ? prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
+        : [...prev, updatedUser];
+    });
+
+    Swal.fire("Success", "Role assigned successfully!", "success");
+    closeModal();
+  } catch (err) {
+    console.error("Error updating role:", err);
+    Swal.fire("Error", "Failed to update user role", "error");
+  }
+};
+
 
   /* ------------------- RENDER ------------------- */
   return (
@@ -206,21 +293,13 @@ const Editorialboard = () => {
                         alt="User"
                         className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-2 right-2">
-                        <button
-                          onClick={() => handleCheckboxChange(user)}
-                          className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 rounded-full shadow-lg transition-colors"
-                          style={{ fontSize: '12px' }}
-                        >
-                          Remove
-                        </button>
-                      </div>
+                    
                     </div>
-                    <div className="p-5">
+           <div className="p-5 md:grid-cols-3">
                       <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">
                         {`${user.firstName || ""} ${user.lastName || ""}`.trim() || "Unnamed User"}
                       </h3>
-                      <div className="space-y-2 mb-4">
+                      <div className="space-y-2 mb-4 md:grid-cols-3">
                         <p className="text-sm text-gray-600 flex items-center gap-2">
                           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -234,16 +313,15 @@ const Editorialboard = () => {
                           <span className="font-semibold text-indigo-600">
                             {user.roleName || "No role assigned"}
                           </span>
+                          <button onClick={() => openEditModal(user)} className="text-blue-600 hover:text-blue-800 p-1 transition cursor-pointer" title="Edit User Role">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                          </button>
+                          <button onClick={() => handleCheckboxChange(user)} className="text-red-600 hover:text-red-800 p-1 transition cursor-pointer" title="Remove User">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                          </button>
                         </p>
-                      </div>
-                      <button
-                        onClick={() => openEditModal(user)}
-                        className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all shadow-md"
-                        style={{ fontSize: '12px' }}
-                      >
-                        Assign Role
-                      </button>
-                    </div>
+                        </div>
+                        </div>
                   </div>
                 ))}
               </div>
@@ -268,14 +346,7 @@ const Editorialboard = () => {
                         alt="User"
                         className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-3 right-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedUsers.some((u) => u._id === user._id)}
-                          onChange={() => handleCheckboxChange(user)}
-                          className="w-5 h-5 accent-indigo-500 cursor-pointer rounded border-2 border-white shadow-lg"
-                        />
-                      </div>
+                      
                     </div>
                     <div className="p-5">
                       <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">
@@ -288,23 +359,17 @@ const Editorialboard = () => {
                           </svg>
                           <span className="truncate">{user.email || "N/A"}</span>
                         </p>
-                        <p className="text-sm flex items-start gap-2">
-                          <svg className="w-4 h-4 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
-                          <span className="font-semibold text-indigo-600">
-                            {user.roleName || "No role assigned"}
-                          </span>
-                        </p>
+                       <div>
+                        <input
+                          type="checkbox"
+                          checked={selectedUsers.some((u) => u._id === user._id)}
+                          onChange={() => handleCheckboxChange(user)}
+                          className="w-4 h-4 accent-indigo-500 cursor-pointer rounded border-2 border-white shadow-lg"
+                        />
+                        <label className="text-sm ml-2">Assign Role</label>
                       </div>
-                      <button
-                        onClick={() => openEditModal(user)}
-                        className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all shadow-md"
-                        style={{ fontSize: '12px' }}
-                      >
-                        Assign Role
-                      </button>
-                    </div>
+                      </div>
+                      </div>
                   </div>
                 ))
               ) : (
