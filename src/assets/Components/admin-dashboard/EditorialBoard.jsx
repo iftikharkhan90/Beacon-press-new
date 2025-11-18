@@ -234,6 +234,75 @@ const Editorialboard = () => {
   }
 };
 
+const handleDelete = async (user) => {
+  const confirm = await Swal.fire({
+    title: "Are you sure?",
+    text: "This will remove this user from the editorial board.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, remove!",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    const token = localStorage.getItem("authToken");
+    const journalId = localStorage.getItem("journalId");
+
+    if (!journalId) {
+      Swal.fire("Error", "journalId missing", "error");
+      return;
+    }
+
+    // ✅ Mark as unassigned
+    await axios.post(
+      `${config.BASE_API_URL}/journalsUserRole/create`,
+      {
+        roleId: user.role,   
+        userId: user._id,
+        journalId,
+        isAssigned: false,   
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // Remove from selectedUsers in UI
+    setSelectedUsers((prev) => prev.filter((u) => u._id !== user._id));
+
+    Swal.fire({
+      icon: "success",
+      title: "Removed!",
+      text: "User removed from editorial board.",
+      confirmButtonColor: "#2563eb",
+    });
+  } catch (error) {
+    console.error("Error removing user:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Failed to Remove",
+      text: error.response?.data?.message || "Something went wrong.",
+      confirmButtonColor: "#2563eb",
+    });
+  }
+};
+
+const updateJournalUserRole = async (journalUserId, payload) => {
+  try {
+    const response = await axios.put(
+      `${config.API_URL}/journaluser/update/${journalUserId}`,
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating journal user role:", error);
+    throw error.response ? error.response.data : error;
+  }
+};
+
 
   /* ------------------- RENDER ------------------- */
   return (
@@ -313,10 +382,10 @@ const Editorialboard = () => {
                           <span className="font-semibold text-indigo-600">
                             {user.roleName || "No role assigned"}
                           </span>
-                          <button onClick={() => openEditModal(user)} className="text-blue-600 hover:text-blue-800 p-1 transition cursor-pointer" title="Edit User Role">
+                          <button onClick={() => openEditModal(user)} className="text-blue-500 hover:text-blue-600 p-1 transition cursor-pointer" title="Edit User Role">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                           </button>
-                          <button onClick={() => handleCheckboxChange(user)} className="text-red-600 hover:text-red-800 p-1 transition cursor-pointer" title="Remove User">
+                          <button onClick={() => handleDelete(user)} className="text-red-500 hover:text-red-600 p-1 transition cursor-pointer" title="Remove User">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                           </button>
                         </p>
