@@ -1,12 +1,12 @@
 //src/App.jsx
 import React from "react";
-import { useState } from "react";
+import { useState, Navigate } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./assets/Components/Navbar";
 import SignupPage from "./assets/Components/Login/Signup";
 import LoginPage from "./assets/Components/Login/Login";
 import Home from "./assets/Components/home/home";
-import JournalsPublicationsPage from "./assets/Journals/Journals";
+// import JournalsPublicationsPage from "./assets/Journals/Journals";
 import {
   Download,
   Search,
@@ -26,11 +26,12 @@ import SubmissionDashboard from "./assets/Components/Submission/Submit";
 import BeaconPressResources from "./assets/Components/Login/Resourses";
 import AcademicJournalNav from "./assets/Journals/JournalNavbar";
 import AdminLoginPage from "./assets/Components/Login/Admin-Login";
-import Sidebar from "./assets/Components/admin-dashboard/Sidebar"
+import Sidebar from "./assets/Components/admin-dashboard/Sidebar";
 import EditorialSidebar from "./assets/Components/admin-dashboard/EditorialSidebar";
 import AimScope from "./assets/Journals/Aim&Scope";
-
-
+import Author from "./assets/Journals/Author-Guide";
+import Publications from "./assets/Journals/Publication-Ehics";
+import Article from "./assets/Journals/Article-Charges";
 
 const App = () => {
   return (
@@ -46,16 +47,22 @@ const App = () => {
             <Route path="/Admin/login" element={<AdminLoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
             <Route path="/reset-password" element={<Resetpassword />} />
-            <Route path="/journals" element={<AcademicJournalNav />} />
-            <Route path="/journal" element={<JournalsPublicationsPage />} />
+            {/* <Route path="/journal" element={<JournalsPublicationsPage />} /> */}
             <Route path="/submit" element={<SubmissionDashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/resources" element={<BeaconPressResources />} />
             <Route path="/contact" element={<Contactus />} />
-            <Route path="/aims-scope" element={<AimScope />} />
-            <Route path="/admin/dashboard" element={<Sidebar />}/>
-            <Route path="/admin/dashboard/manage-editorial/:id" element={<EditorialSidebar />}>
-            {/* <Route index element={<AdminDashboard />} /> */}
+            <Route path="/admin/dashboard" element={<Sidebar />} />
+            <Route
+              path="/admin/dashboard/manage-editorial/:id"
+              element={<EditorialSidebar />}
+            >
+            </Route>
+            <Route path="/journals" element={<AcademicJournalNav />}>
+              <Route path="aims-scope" element={<AimScope />} />
+              <Route path="author" element={<Author />} />
+              <Route path="publication" element={<Publications />} />
+              <Route path="article" element={<Article />} />
             </Route>
           </Routes>
         </AuthProvider>

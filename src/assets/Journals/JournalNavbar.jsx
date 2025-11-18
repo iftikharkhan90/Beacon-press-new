@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+
 import {
   Menu,
   X,
@@ -29,12 +31,12 @@ const AcademicJournalNav = () => {
   const [openSubContent, setOpenSubContent] = useState(null);
 
   const navItems = [
-    { name: "Home", href: "#home" },
+    { name: "Home", href: "/journals" },
     {
       name: "About",
       href: "#about",
       dropdown: [
-        { name: "Aims & Scope", href: "/aims-scope", icon: Target },
+        { name: "Aims & Scope", href: "/journals/aims-scope", icon: Target },
         { name: "Editorial Board", href: "#editorial-team", icon: Users },
       ],
     },
@@ -42,12 +44,12 @@ const AcademicJournalNav = () => {
       name: "For Authors",
       href: "#authors",
       dropdown: [
-        { name: "Submit Manuscript", href: "#submit", icon: Send },
-        { name: "Author Guidelines", href: "#guidelines", icon: FileText },
-        { name: "Publication Ethics", href: "#ethics", icon: Scale },
+        { name: "Submit Manuscript", href: "/journals/submit", icon: Send },
+        { name: "Author Guidelines", href: "/journals/Author", icon: FileText },
+        { name: "Publication Ethics", href: "/journals/publication", icon: Scale },
         {
           name: "Article Processing Charges",
-          href: "#charges",
+          href: "/journals/article",
           icon: CreditCard,
         },
         { name: "Copyright & Licensing", href: "#copyright", icon: Copyright },
@@ -259,6 +261,7 @@ const AcademicJournalNav = () => {
           are functional and will navigate to their respective sections.
         </p>
       </div>
+      <Outlet />   
     </div>
   );
 };

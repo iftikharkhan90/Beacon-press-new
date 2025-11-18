@@ -262,7 +262,7 @@ const AdminDashboard = () => {
                             `/admin/dashboard/manage-editorial/${journal._id}`
                           );
                         }}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-semibold underline"
+                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
                       >
                         Editorial Board
                       </button>
@@ -273,7 +273,7 @@ const AdminDashboard = () => {
                     <div className="flex gap-2 mt-3">
                       <button
                         onClick={() => openEditModal(journal)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
                         <svg
                           className="w-4 h-4"
@@ -292,7 +292,7 @@ const AdminDashboard = () => {
                       </button>
                       <button
                         onClick={() => handleDelete(journal._id)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
                         <svg
                           className="w-4 h-4"
