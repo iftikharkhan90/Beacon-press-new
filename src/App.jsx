@@ -49,7 +49,7 @@ const App = () => {
             <Route path="/Admin/login" element={<AdminLoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
             <Route path="/reset-password" element={<Resetpassword />} />
-            {/* <Route path="/journal" element={<JournalsPublicationsPage />} /> */}
+            {/* <Route path="/journalold" element={<JournalsPublicationsPage />} /> */}
             <Route path="/submit" element={<SubmissionDashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/resources" element={<BeaconPressResources />} />
