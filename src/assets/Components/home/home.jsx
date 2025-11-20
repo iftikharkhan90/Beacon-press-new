@@ -7,6 +7,7 @@ import LatestPublications from './LatestPublications';
 import Footer from './Footer';
 import { Sliders } from 'lucide-react';
 import WhatCanWePublish from './Whatcanwepublish';
+import Journals from './Journals';
 
 
 
@@ -47,6 +48,7 @@ const Home = ({ setCurrentPage }) => {
       <WhyChooseUs/>
       <Testimonials/>
       <LatestPublications/>
+      <Journals/>
       <Footer/>
       
     </div>
