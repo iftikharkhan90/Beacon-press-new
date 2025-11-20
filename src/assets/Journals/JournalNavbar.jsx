@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-// import Journals from '../assets/Components/home/Journals';
+
 
 import {
   Menu,
@@ -32,7 +32,7 @@ const AcademicJournalNav = () => {
   const [openSubContent, setOpenSubContent] = useState(null);
 
   const navItems = [
-    { name: "Home", href: "/journals" },
+    { name: "Home", href: "/journals/journalhome" },
     {
       name: "About",
       href: "#about",
@@ -263,7 +263,7 @@ const AcademicJournalNav = () => {
         </p>
       </div> */}
 
-      {/* <Journals/> */}
+      
       <Outlet />   
     </div>
   );
