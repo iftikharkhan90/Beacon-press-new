@@ -215,7 +215,7 @@ const Journals = () => {
         </h2>
 
           {/* Journals Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mr-60 ml-60 gap-4 md:gap-6">
             {journals.length > 0 ? (
               journals.map((journal, index) => (
                 <div

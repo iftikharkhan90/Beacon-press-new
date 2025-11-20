@@ -34,6 +34,7 @@ import Publications from "./assets/Journals/Publication-Ehics";
 import Article from "./assets/Journals/Article-Charges";
 import Copywrite from "./assets/Components/admin-dashboard/Copywrite";
 import ReviewerGuide from "./assets/Journals/Reviewer-Guide";
+import Journalhome from "./assets/Journals/Homej";
 
 const App = () => {
   return (
@@ -61,6 +62,7 @@ const App = () => {
             >
             </Route>
             <Route path="/journals" element={<AcademicJournalNav />}>
+              <Route path="journalhome" element={<Journalhome />}/>
               <Route path="aims-scope" element={<AimScope />} />
               <Route path="author" element={<Author />} />
               <Route path="publication" element={<Publications />} />
