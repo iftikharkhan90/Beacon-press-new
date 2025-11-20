@@ -32,6 +32,8 @@ import AimScope from "./assets/Journals/Aim&Scope";
 import Author from "./assets/Journals/Author-Guide";
 import Publications from "./assets/Journals/Publication-Ehics";
 import Article from "./assets/Journals/Article-Charges";
+import Copywrite from "./assets/Components/admin-dashboard/Copywrite";
+import ReviewerGuide from "./assets/Journals/Reviewer-Guide";
 
 const App = () => {
   return (
@@ -47,7 +49,7 @@ const App = () => {
             <Route path="/Admin/login" element={<AdminLoginPage />} />
             <Route path="/edituser/:id" element={<EditUser />} />
             <Route path="/reset-password" element={<Resetpassword />} />
-            {/* <Route path="/journal" element={<JournalsPublicationsPage />} /> */}
+            {/* <Route path="/journalold" element={<JournalsPublicationsPage />} /> */}
             <Route path="/submit" element={<SubmissionDashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/resources" element={<BeaconPressResources />} />
@@ -63,6 +65,8 @@ const App = () => {
               <Route path="author" element={<Author />} />
               <Route path="publication" element={<Publications />} />
               <Route path="article" element={<Article />} />
+              <Route path="copywrite" element={<Copywrite />} />
+              <Route path="reviewer" element={<ReviewerGuide />} />
             </Route>
           </Routes>
         </AuthProvider>

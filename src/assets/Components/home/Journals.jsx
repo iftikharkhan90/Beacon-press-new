@@ -10,7 +10,7 @@ import config from "../../../common/config";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const AdminDashboard = () => {
+const Journals = () => {
   const [editpopup, seteditpopup] = useState(false);
   const [editingJournal, setEditingJournal] = useState(null);
   const [title, setTitle] = useState("");
@@ -210,28 +210,12 @@ const AdminDashboard = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-6 md:mb-8">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <div>
-                <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">
-                  Admin Dashboard
-                </h1>
-                <p className="text-sm md:text-base text-gray-600">
-                  Manage your journals and content
-                </p>
-              </div>
-              <button
-                onClick={openAddModal}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 font-semibold w-full md:w-auto"
-              >
-                <MdAddCircleOutline className="text-xl md:text-2xl" />
-                <span className="text-sm md:text-base">Add New Journal</span>
-              </button>
-            </div>
-          </div>
+           <h2 className="text-3xl text-center md:text-4xl font-bold mb-12 text-slate-800">
+          Our Rececent Journals
+        </h2>
 
           {/* Journals Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
             {journals.length > 0 ? (
               journals.map((journal, index) => (
                 <div
@@ -242,9 +226,9 @@ const AdminDashboard = () => {
                     <img
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       src={
-                        journal.image?.trim() // user image
+                        journal.image?.trim()
                           ? journal.image.trim()
-                          : mountainPlaceholder // fallback
+                          : mountainPlaceholder
                       }
                       alt={journal.title}
                     />
@@ -255,61 +239,10 @@ const AdminDashboard = () => {
                       <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                         {journal.title}
                       </h3>
-                      <button
-                        onClick={() => {
-                          localStorage.setItem("journalId", journal._id);
-                          navigate(
-                            `/admin/dashboard/manage-editorial/${journal._id}`
-                          );
-                        }}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
-                      >
-                        Editorial Board
-                      </button>
                     </div>
                     <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                       {journal.description}
                     </p>
-                    <div className="flex gap-2 mt-3">
-                      <button
-                        onClick={() => openEditModal(journal)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(journal._id)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                        Delete
-                      </button>
-                    </div>
                   </div>
                 </div>
               ))
@@ -434,18 +367,8 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-
-      {/* Global: Prevent page scroll */}
-      <style jsx global>{`
-        html,
-        body,
-        #root {
-          height: 100%;
-          overflow: hidden !important;
-        }
-      `}</style>
     </>
   );
 };
 
-export default AdminDashboard;
+export default Journals;

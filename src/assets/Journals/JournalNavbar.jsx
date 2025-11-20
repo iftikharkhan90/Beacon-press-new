@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
+// import Journals from '../assets/Components/home/Journals';
 
 import {
   Menu,
@@ -52,7 +53,7 @@ const AcademicJournalNav = () => {
           href: "/journals/article",
           icon: CreditCard,
         },
-        { name: "Copyright & Licensing", href: "#copyright", icon: Copyright },
+        { name: "Copyright & Licensing", href: "/journals/copywrite", icon: Copyright },
       ],
     },
     {
@@ -61,11 +62,11 @@ const AcademicJournalNav = () => {
       dropdown: [
         {
           name: "Reviewer Guidelines",
-          href: "#reviewer-guidelines",
+          href: "/journals/reviewer",
           icon: ClipboardCheck,
         },
-        { name: "Become a Reviewer", href: "#become-reviewer", icon: UserPlus },
-        { name: "Reviewer Login", href: "#login-review", icon: LogIn },
+        { name: "Become a Reviewer", href: "/edituser/:id", icon: UserPlus },
+        { name: "Reviewer Login", href: "/login", icon: LogIn },
       ],
     },
     {
@@ -118,14 +119,14 @@ const AcademicJournalNav = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <a href="#home" className="flex items-center py-4">
+            {/* <a href="#home" className="flex items-center py-4">
               <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mr-3">
                 <div className="text-white text-2xl font-bold">A</div>
               </div>
               <div className="text-xl font-bold text-slate-800">
                 Journal of Advanced Research
               </div>
-            </a>
+            </a> */}
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
@@ -245,7 +246,7 @@ const AcademicJournalNav = () => {
       </nav>
 
       {/* Demo Content */}
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      {/* <div className="max-w-4xl mx-auto px-6 py-12">
         <h1 className="text-4xl font-bold text-slate-800 mb-6">
           Journal of Advanced Research
         </h1>
@@ -260,7 +261,9 @@ const AcademicJournalNav = () => {
           fully responsive and will adapt to different screen sizes. All links
           are functional and will navigate to their respective sections.
         </p>
-      </div>
+      </div> */}
+
+      {/* <Journals/> */}
       <Outlet />   
     </div>
   );
