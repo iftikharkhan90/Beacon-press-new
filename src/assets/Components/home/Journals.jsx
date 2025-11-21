@@ -11,33 +11,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const Journals = () => {
-  const [editpopup, seteditpopup] = useState(false);
-  const [editingJournal, setEditingJournal] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
   const [journals, setJournals] = useState([]);
-  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (editpopup) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-      document.body.style.height = "100vh";
-    } else {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      document.body.style.height = "";
-    }
-
-    return () => {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      document.body.style.height = "";
-    };
-  }, [editpopup]);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -46,47 +21,6 @@ const Journals = () => {
       navigate("/Admin/login");
     }
   }, [navigate]);
-
-  const handleDelete = async (journalId) => {
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "This will permanently delete the journal.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.delete(
-        `${config.BASE_API_URL}/journals/delete/${journalId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setJournals((prev) => prev.filter((j) => j._id !== journalId));
-
-      Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: "The journal has been deleted successfully.",
-        confirmButtonColor: "#2563eb",
-      });
-    } catch (error) {
-      console.error("Error deleting journal:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Failed to Delete",
-        text: error.response?.data?.message || "Something went wrong.",
-        confirmButtonColor: "#2563eb",
-      });
-    }
-  };
 
   const fetchJournals = async () => {
     try {
@@ -111,108 +45,14 @@ const Journals = () => {
     fetchJournals();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (editingJournal) {
-      try {
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
-        if (image) formData.append("image", image);
-
-        const token = localStorage.getItem("authToken");
-        const res = await axios.patch(
-          `${config.BASE_API_URL}/journals/patch/${editingJournal._id}`,
-          formData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        setJournals((prev) =>
-          prev.map((j) =>
-            j._id === editingJournal._id ? res.data.journal || res.data : j
-          )
-        );
-
-        closeModal();
-        Swal.fire({ icon: "success", title: "Journal Updated!" });
-      } catch (err) {
-        console.error(err);
-        Swal.fire({ icon: "error", title: "Error Updating Journal" });
-      }
-      return;
-    }
-
-    if (!title || !description) {
-      Swal.fire({ icon: "warning", title: "Please fill all fields" });
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("image", image);
-
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.post(`${config.BASE_API_URL}/journals/create`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      closeModal();
-      fetchJournals();
-      Swal.fire({ icon: "success", title: "Journal Added!" });
-    } catch (error) {
-      console.error(error);
-      Swal.fire({ icon: "error", title: "Upload Failed" });
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const openAddModal = () => {
-    setEditingJournal(null);
-    setTitle("");
-    setDescription("");
-    setImage(null);
-    setImagePreview(null);
-    seteditpopup(true);
-  };
-
-  const openEditModal = (journal) => {
-    setEditingJournal(journal);
-    setTitle(journal.title);
-    setDescription(journal.description);
-    setImage(null);
-    setImagePreview(journal.image);
-    seteditpopup(true);
-  };
-
-  const closeModal = () => {
-    seteditpopup(false);
-    setTitle("");
-    setDescription("");
-    setImage(null);
-    setImagePreview(null);
-    setEditingJournal(null);
-  };
-
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-           <h2 className="text-3xl text-center md:text-4xl font-bold mb-12 text-slate-800">
-          Our Rececent Journals
-        </h2>
+          <h2 className="text-3xl text-center md:text-4xl font-bold mb-12 text-slate-800">
+            Our Rececent Journals
+          </h2>
 
           {/* Journals Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mr-60 ml-60 gap-4 md:gap-6">
@@ -220,6 +60,7 @@ const Journals = () => {
               journals.map((journal, index) => (
                 <div
                   key={journal._id || index}
+                  onClick={() => navigate(`/journals/${journal._id}`)}
                   className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group"
                 >
                   <div className="relative overflow-hidden h-40 md:h-48">
@@ -254,119 +95,11 @@ const Journals = () => {
                 <p className="text-gray-500 text-lg md:text-xl font-medium">
                   No journals found
                 </p>
-                <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">
-                  Click "Add Journal" to create your first entry
-                </p>
               </div>
             )}
           </div>
         </div>
       </div>
-
-      {/* MODAL – ONLY CONTENT SCROLLS */}
-      {editpopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200">
-              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                {editingJournal ? "Edit Journal" : "Add New Journal"}
-              </h1>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-all duration-200"
-              >
-                <MdOutlineCancelPresentation className="text-2xl md:text-3xl" />
-              </button>
-            </div>
-
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-5">
-              {/* Image */}
-              <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
-                  Upload Image
-                </label>
-                <div className="relative">
-                  <input
-                    className="hidden"
-                    type="file"
-                    id="image-upload"
-                    accept=".jpg,.jpeg,.png"
-                    onChange={handleImageChange}
-                  />
-                  <label
-                    htmlFor="image-upload"
-                    className="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
-                  >
-                    {imagePreview ? (
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-full h-32 md:h-40 object-cover rounded-lg"
-                      />
-                    ) : (
-                      <>
-                        <MdCloudUpload className="text-4xl md:text-5xl text-gray-400 mb-2" />
-                        <p className="text-sm md:text-base text-gray-600 font-medium">
-                          Click to upload image
-                        </p>
-                        <p className="text-gray-400 text-xs mt-1">
-                          JPG, JPEG or PNG
-                        </p>
-                      </>
-                    )}
-                  </label>
-                </div>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
-                  Title
-                </label>
-                <input
-                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none"
-                  type="text"
-                  placeholder="Enter journal title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
-                  Description
-                </label>
-                <textarea
-                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none resize-none"
-                  rows="4"
-                  placeholder="Enter journal description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 md:gap-3 p-4 md:p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-              <button
-                onClick={closeModal}
-                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 text-sm md:text-base font-semibold hover:bg-gray-100 transition-all duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm md:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                {editingJournal ? "Update Journal" : "Save Journal"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

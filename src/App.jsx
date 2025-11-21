@@ -35,6 +35,7 @@ import Article from "./assets/Journals/Article-Charges";
 import Copywrite from "./assets/Components/admin-dashboard/Copywrite";
 import ReviewerGuide from "./assets/Journals/Reviewer-Guide";
 import Journalhome from "./assets/Journals/Homej";
+import SingleJournalPage from "./assets/Components/home/Singlejournal";
 
 const App = () => {
   return (
@@ -56,6 +57,8 @@ const App = () => {
             <Route path="/resources" element={<BeaconPressResources />} />
             <Route path="/contact" element={<Contactus />} />
             <Route path="/admin/dashboard" element={<Sidebar />} />
+            <Route path="/journals/:id" element={<SingleJournalPage />} />
+
             <Route
               path="/admin/dashboard/manage-editorial/:id"
               element={<EditorialSidebar />}

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 
-
 import {
   Menu,
   X,
@@ -32,7 +31,7 @@ const AcademicJournalNav = () => {
   const [openSubContent, setOpenSubContent] = useState(null);
 
   const navItems = [
-    { name: "Home", href: "/journals/journalhome" },
+    { name: "Home", href: "" },
     {
       name: "About",
       href: "#about",
@@ -47,13 +46,21 @@ const AcademicJournalNav = () => {
       dropdown: [
         { name: "Submit Manuscript", href: "/journals/submit", icon: Send },
         { name: "Author Guidelines", href: "/journals/Author", icon: FileText },
-        { name: "Publication Ethics", href: "/journals/publication", icon: Scale },
+        {
+          name: "Publication Ethics",
+          href: "/journals/publication",
+          icon: Scale,
+        },
         {
           name: "Article Processing Charges",
           href: "/journals/article",
           icon: CreditCard,
         },
-        { name: "Copyright & Licensing", href: "/journals/copywrite", icon: Copyright },
+        {
+          name: "Copyright & Licensing",
+          href: "/journals/copywrite",
+          icon: Copyright,
+        },
       ],
     },
     {
@@ -98,7 +105,7 @@ const AcademicJournalNav = () => {
     setOpenSubContent(openSubContent === name ? null : name);
   };
 
-    return (
+  return (
     <div className="w-full">
       {/* Top Publisher Bar */}
       {/* <div className="bg-violet-800 text-white px-6 py-2">
@@ -263,8 +270,7 @@ const AcademicJournalNav = () => {
         </p>
       </div> */}
 
-      
-      <Outlet />   
+      <Outlet />
     </div>
   );
 };
