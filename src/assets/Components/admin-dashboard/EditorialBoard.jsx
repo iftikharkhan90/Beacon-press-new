@@ -323,7 +323,7 @@ const matched = userList
               </div>
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
                 <p className="text-sm font-medium opacity-90">Total Users</p>
-                <p className="text-3xl font-bold">{userList.length}</p>
+                <p className="text-3xl text-center font-bold">{userList.length}</p>
               </div>
             </div>
           </div>
