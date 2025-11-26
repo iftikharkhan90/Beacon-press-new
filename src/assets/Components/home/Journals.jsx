@@ -80,6 +80,12 @@ const Journals = () => {
                       <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                         {journal.title}
                       </h3>
+                      <div> 
+                        <h4>
+                          View Detail
+                        </h4>
+                      </div>
+
                     </div>
                     <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                       {journal.description}

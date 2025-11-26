@@ -36,6 +36,7 @@ import Copywrite from "./assets/Components/admin-dashboard/Copywrite";
 import ReviewerGuide from "./assets/Journals/Reviewer-Guide";
 import Journalhome from "./assets/Journals/Homej";
 import SingleJournalPage from "./assets/Components/home/Singlejournal";
+import Editorialmembers from "./assets/Journals/Editorial-Members";
 
 const App = () => {
   return (
@@ -44,36 +45,40 @@ const App = () => {
         <AuthProvider>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/Admin/login" element={<AdminLoginPage />} />
-            <Route path="/edituser/:id" element={<EditUser />} />
-            <Route path="/reset-password" element={<Resetpassword />} />
-            {/* <Route path="/journalold" element={<JournalsPublicationsPage />} /> */}
-            <Route path="/submit" element={<SubmissionDashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/resources" element={<BeaconPressResources />} />
-            <Route path="/contact" element={<Contactus />} />
-            <Route path="/admin/dashboard" element={<Sidebar />} />
-            <Route path="/journals/:id" element={<SingleJournalPage />} />
+  {/* Public Pages */}
+  <Route path="/" element={<Home />} />
+  <Route path="/home" element={<Home />} />
+  <Route path="/signup" element={<SignupPage />} />
+  <Route path="/login" element={<LoginPage />} />
+  <Route path="/Admin/login" element={<AdminLoginPage />} />
+  <Route path="/edituser/:id" element={<EditUser />} />
+  <Route path="/reset-password" element={<Resetpassword />} />
+  <Route path="/submit" element={<SubmissionDashboard />} />
+  <Route path="/about" element={<About />} />
+  <Route path="/resources" element={<BeaconPressResources />} />
+  <Route path="/contact" element={<Contactus />} />
 
-            <Route
-              path="/admin/dashboard/manage-editorial/:id"
-              element={<EditorialSidebar />}
-            >
-            </Route>
-            <Route path="/journals" element={<AcademicJournalNav />}>
-              <Route path="journalhome" element={<Journalhome />}/>
-              <Route path="aims-scope" element={<AimScope />} />
-              <Route path="author" element={<Author />} />
-              <Route path="publication" element={<Publications />} />
-              <Route path="article" element={<Article />} />
-              <Route path="copywrite" element={<Copywrite />} />
-              <Route path="reviewer" element={<ReviewerGuide />} />
-            </Route>
-          </Routes>
+  {/* Admin */}
+  <Route path="/admin/dashboard" element={<Sidebar />} />
+  <Route
+    path="/admin/dashboard/manage-editorial/:id"
+    element={<EditorialSidebar />}
+  />
+<Route path="/journals" element={<AcademicJournalNav />} />
+
+<Route path="/journals/:id" element={<SingleJournalPage />}>
+  <Route path="journalhome" element={<Journalhome />} />
+  <Route path="aims-scope" element={<AimScope />} />
+  <Route path="Editorialmembers" element={<Editorialmembers/>} />
+  <Route path="author" element={<Author />} />
+  <Route path="publication" element={<Publications />} />
+  <Route path="article" element={<Article />} />
+  <Route path="copywrite" element={<Copywrite />} />
+  <Route path="reviewer" element={<ReviewerGuide />} />
+</Route>
+
+</Routes>
+
         </AuthProvider>
       </div>
     </>
