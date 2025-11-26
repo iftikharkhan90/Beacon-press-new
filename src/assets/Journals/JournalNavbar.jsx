@@ -87,7 +87,7 @@ const AcademicJournalNav = () => {
                        <button
                         onClick={() => {localStorage.setItem("journalId", journal._id)
                      navigate(`/journals/${journal._id}`)}}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
+                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline cursor-pointer"
                       >
                         View Details
                       </button>
