@@ -116,12 +116,12 @@ const Navbar = () => {
               </div>
             ) : (
               <>
-                <Link
+                {/* <Link
                   to="/submit"
                   className="bg-blue-500 ml-1 xl:ml-2 text-white px-3 xl:px-5 py-1.5 xl:py-2 rounded font-bold text-xs xl:text-sm hover:bg-blue-600 transition-all duration-300 whitespace-nowrap"
                 >
                   Submit
-                </Link>
+                </Link> */}
                 <Link
                   to="/login"
                   className="bg-transparent text-blue-400 border-2 border-blue-400 px-3 xl:px-5 py-1.5 xl:py-2 rounded font-bold text-xs xl:text-sm hover:bg-blue-400 hover:text-white transition-all duration-300"
