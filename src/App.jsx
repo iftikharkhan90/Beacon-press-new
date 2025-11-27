@@ -2,6 +2,7 @@
 import React from "react";
 import { useState, Navigate } from "react";
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./Protected";
 import Navbar from "./assets/Components/Navbar";
 import SignupPage from "./assets/Components/Login/Signup";
 import LoginPage from "./assets/Components/Login/Login";
@@ -53,7 +54,7 @@ const App = () => {
   <Route path="/Admin/login" element={<AdminLoginPage />} />
   <Route path="/edituser/:id" element={<EditUser />} />
   <Route path="/reset-password" element={<Resetpassword />} />
-  <Route path="/submit" element={<SubmissionDashboard />} />
+  <Route path="/submit" element={ <ProtectedRoute><SubmissionDashboard/></ProtectedRoute> } />
   <Route path="/about" element={<About />} />
   <Route path="/resources" element={<BeaconPressResources />} />
   <Route path="/contact" element={<Contactus />} />

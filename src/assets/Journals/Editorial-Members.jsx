@@ -177,7 +177,7 @@ const Editorialmembers = () => {
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
                 <p className="text-sm font-medium opacity-90">Total Members</p>
                 <p className="text-3xl text-center font-bold">
-                  {userList.length}
+                  {selectedUsers.length}
                 </p>
               </div>
             </div>
