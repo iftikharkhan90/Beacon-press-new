@@ -38,6 +38,7 @@ import ReviewerGuide from "./assets/Journals/Reviewer-Guide";
 import Journalhome from "./assets/Journals/Homej";
 import SingleJournalPage from "./assets/Components/home/Singlejournal";
 import Editorialmembers from "./assets/Journals/Editorial-Members";
+import PaperSidebar from "./assets/Components/admin-dashboard/PaperSidebar";
 
 const App = () => {
   return (
@@ -65,6 +66,7 @@ const App = () => {
     path="/admin/dashboard/manage-editorial/:id"
     element={<EditorialSidebar />}
   />
+  <Route path="/admin/dashboard/Assign-papers/:id" element={<PaperSidebar/>} />
 <Route path="/journals" element={<AcademicJournalNav />} />
 
 <Route path="/journals/:id" element={<SingleJournalPage />}>

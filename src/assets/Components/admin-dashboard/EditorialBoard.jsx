@@ -296,7 +296,7 @@ const matched = userList
               <div>
                 <button
                   onClick={() => navigate("/admin/dashboard")}
-                  className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium mb-3 transition-colors"
+                  className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium mb-3 transition-colors cursor-pointer"
                   style={{ fontSize: "12px" }}
                 >
                   <svg
@@ -318,7 +318,7 @@ const matched = userList
                   Editorial Board
                 </h1>
                 <p className="text-sm text-gray-600">
-                  Manage and assign roles to editorial members
+                  Manage and assign roles for Editorial Board
                 </p>
               </div>
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
