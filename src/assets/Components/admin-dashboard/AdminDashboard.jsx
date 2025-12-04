@@ -251,22 +251,34 @@ const AdminDashboard = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-4 md:p-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
-                        {journal.title}
-                      </h3>
-                      <button
-                        onClick={() => {
-                          localStorage.setItem("journalId", journal._id);
-                          navigate(
-                            `/admin/dashboard/manage-editorial/${journal._id}`
-                          );
-                        }}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
-                      >
-                        Editorial Board
-                      </button>
-                    </div>
+                   <div className="flex items-center justify-between mb-2">
+  <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+    {journal.title}
+  </h3>
+
+  <div className="flex flex-col items-end gap-1">
+    <button
+      onClick={() => {
+        localStorage.setItem("journalId", journal._id);
+        navigate(`/admin/dashboard/manage-editorial/${journal._id}`);
+      }}
+      className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
+    >
+      Editorial Board
+    </button>
+
+    <button
+      onClick={() => {
+        localStorage.setItem("journalId", journal._id);
+        navigate(`/admin/dashboard/Assign-papers/${journal._id}`);
+      }}
+      className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
+    >
+      Papers
+    </button>
+  </div>
+</div>
+
                     <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
                       {journal.description}
                     </p>

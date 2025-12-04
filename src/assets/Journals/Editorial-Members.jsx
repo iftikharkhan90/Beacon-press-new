@@ -33,17 +33,14 @@ const Editorialmembers = () => {
     const loadData = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        if (!token) {
-          Swal.fire("Warning", "User not logged in.", "warning");
-          return;
-        }
+        
 
         const [userRes, roleRes] = await Promise.all([
           axios.get(`${config.BASE_API_URL}/admin/user/get`, {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer beaconPressSecretToken` },
           }),
           axios.get(`${config.BASE_API_URL}/role/get`, {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer beaconPressSecretToken` },
           }),
         ]);
 
@@ -77,13 +74,12 @@ const Editorialmembers = () => {
   /* ------------------- FETCH ASSIGNED USERS ------------------- */
   useEffect(() => {
     const loadSelectedUsers = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token || !journalId) return;
+      if (!journalId) return;
 
       try {
         const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
           params: { journalId },
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer beaconPressSecretToken` },
         });
 
         const assigned = Array.isArray(res.data) ? res.data : [res.data];
@@ -151,9 +147,6 @@ const Editorialmembers = () => {
           {user.affiliation}
         </p>
 
-         
-
-        {/* ❌ REMOVE ROLE DISPLAY */}
       </div>
     </div>
   </div>

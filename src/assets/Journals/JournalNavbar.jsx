@@ -16,19 +16,13 @@ const AcademicJournalNav = () => {
   const [journals, setJournals] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const isAdmin = localStorage.getItem("isAdmin");
-    if (!token || isAdmin !== "true") {
-      navigate("/Admin/login");
-    }
-  }, [navigate]);
+  
 
   const fetchJournals = async () => {
     try {
-      const token = localStorage.getItem("authToken");
+      // const token = localStorage.getItem("authToken");
       const res = await axios.get(`${config.BASE_API_URL}/journals/get`, {
-        headers: { Authorization: `Bearer ${token}` },
+        // headers: { Authorization: `Bearer ${token}` },
       });
       setJournals(res.data.journal || res.data.data || res.data.journals || []);
     } catch (error) {

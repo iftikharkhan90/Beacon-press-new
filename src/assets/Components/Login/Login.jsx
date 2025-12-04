@@ -276,7 +276,7 @@ const LoginPage = ({ setCurrentPage }) => {
                 type="button"
                 className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer"
               >
-                Admin Login
+                Managerial Login
               </button>
             </Link>
           </div></div>
