@@ -6,15 +6,15 @@ import config from "../../../common/config";
 const PaperDashboard = () => {
   const navigate = useNavigate();
   const [paperList, setPaperList] = useState([]);
-  const journalUserId = localStorage.getItem("journalUserId");
+  const journalId = "690d8f4c0de378034e392344";
 
   useEffect(() => {
     const loadPapers = async () => {
       const token = localStorage.getItem("authToken");
-      if (!token || !journalUserId) return;
+      if (!token || !journalId) return;
 
       try {
-        const url = `${config.BASE_API_URL}/paper-assigns/get?journalUserId=${journalUserId}`;
+        const url = `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`;
         console.log("Calling API:", url);
 
         const res = await axios.get(url, {
@@ -22,14 +22,14 @@ const PaperDashboard = () => {
         });
 
         console.log("API Response:", res.data);
-        setPaperList(res.data.data || []);
+        setPaperList(res.data.manuscript || []);
       } catch (err) {
         console.error("Failed to load Papers:", err.response?.data || err);
       }
     };
 
     loadPapers();
-  }, [journalUserId]);
+  }, [journalId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/90 via-indigo-50/90 to-purple-50/90 py-8 px-4 sm:px-6 lg:px-8">
@@ -55,7 +55,7 @@ const PaperDashboard = () => {
                     d="M10 19l-7-7m0 0l7-7m-7 7h18"
                   />
                 </svg>
-                Back to Dashboard
+                Back to Journals
               </button>
 
               <h1 className="text-3xl font-bold text-gray-900 mb-1">
@@ -78,30 +78,36 @@ const PaperDashboard = () => {
                     <th className="px-2 py-1 border-b">Sr</th>
                     <th className="px-2 py-1 border-b">Paper Name</th>
                     <th className="px-2 py-1 border-b">Author Name</th>
-                    <th className="px-2 py-1 border-b">Assign</th>
+                    <th className="px-2 py-1 border-b">Assigne</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {paperList.length > 0 ? (
                     paperList.map((paper, index) => (
                       <tr key={paper._id} className="text-center">
                         <td className="px-2 py-1 border-b">{index + 1}</td>
+
+                        {/* Paper Title */}
                         <td className="px-2 py-1 border-b">
-                          {paper.paperName}
+                          {paper.manuscriptDetails?.title || "No Title"}
                         </td>
+
+                        {/* Author Name */}
                         <td className="px-2 py-1 border-b">
-                          {paper.authorName}
+                          {paper.authors && paper.authors.length > 0
+                            ? paper.authors.map((a) => a.fullName).join(", ")
+                            : "No Author"}
                         </td>
-                        <td className="px-2 py-1 border-b">{paper.assign}</td>
+
+                        {/* Assignee Name */}
+                        <td className="px-2 py-1 border-b">
+                          {paper.journalsId?.fullName || "Not Assing Yet"}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td
-                        className="px-4 py-3 text-center"
-                        colSpan="4"
-                      >
+                      <td colSpan="4" className="px-4 py-3 text-center">
                         No Papers Found
                       </td>
                     </tr>
