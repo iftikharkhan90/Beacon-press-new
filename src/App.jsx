@@ -29,6 +29,7 @@ import Sidebar from "./assets/Components/admin-dashboard/Sidebar";
 import AdminDashBoard from "./assets/Components/admin-dashboard/AdminDashboard";
 import Editorialboard from "./assets/Components/admin-dashboard/EditorialBoard";
 import PaperDashboard from "./assets/Components/admin-dashboard/PaperDashboard";
+import AdminLayout from "./assets/Components/admin-dashboard/AdminLayout";
 
 const App = () => {
   return (
@@ -58,7 +59,7 @@ const App = () => {
             <Route path="/contact" element={<Contactus />} />
 
             {/* Admin Routes with Sidebar Layout */}
-            <Route path="/admin" element={<Sidebar />}>
+            <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashBoard />} />
               <Route path="dashboard/manage-editorial/:id" element={<Editorialboard />} />
