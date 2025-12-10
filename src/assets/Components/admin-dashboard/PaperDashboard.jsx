@@ -6,7 +6,7 @@ import config from "../../../common/config";
 const PaperDashboard = () => {
   const navigate = useNavigate();
   const [paperList, setPaperList] = useState([]);
-  const journalId = "690d8f4c0de378034e392344";
+  const journalId = localStorage.getItem("journalId");
 
   useEffect(() => {
     const loadPapers = async () => {
@@ -78,7 +78,10 @@ const PaperDashboard = () => {
                     <th className="px-2 py-1 border-b">Sr</th>
                     <th className="px-2 py-1 border-b">Paper Name</th>
                     <th className="px-2 py-1 border-b">Author Name</th>
+                    <th className="px-2 py-1 border-b">Submission Date</th>
+                    <th className="px-2 py-1 border-b">Status</th>
                     <th className="px-2 py-1 border-b">Assigne</th>
+                    <th className="px-2 py-1 border-b">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,9 +102,48 @@ const PaperDashboard = () => {
                             : "No Author"}
                         </td>
 
+                        {/* Submission Date */}
+                        <td className="px-2 py-1 border-b">
+                          {paper.createdAt
+                            ? new Date(paper.createdAt).toLocaleDateString()
+                            : "No Date"}
+                        </td>
+
+                        {/* Status */}
+                        <td className="px-2 py-1 border-b">
+                          {paper.journalsId?.fullName || "Panding"}
+                        </td>
+
                         {/* Assignee Name */}
                         <td className="px-2 py-1 border-b">
-                          {paper.journalsId?.fullName || "Not Assing Yet"}
+                          {paper.journalsId?.fullName || "No Assing"}
+                        </td>
+
+                        {/* Action */}
+                        <td className="px-2 py-1 border-b">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => startEditing(index)}
+                              className="text-blue-600 hover:text-blue-800 p-1 transition cursor-pointer"
+                              title="Edit Assigne"
+                            >
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </button>
+                           
+                          </div>{" "}
                         </td>
                       </tr>
                     ))

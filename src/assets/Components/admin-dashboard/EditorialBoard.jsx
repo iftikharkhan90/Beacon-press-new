@@ -26,7 +26,6 @@ const Editorialboard = () => {
   const [selectedLoaded, setSelectedLoaded] = useState(false);
   const isAlreadyAssigned = editingUser?.isAssigned;
   const updatedUser = { ...editingUser, role, roleName };
- 
 
   useEffect(() => {
     // If you need to fetch or confirm journalId here:
@@ -110,22 +109,23 @@ const Editorialboard = () => {
         const assigned = Array.isArray(res.data) ? res.data : [res.data];
 
         const assignedUserIds = assigned.map((a) => a.userId._id);
-////////////////////////////////////////////
-const matched = userList
-  .filter((u) => assignedUserIds.includes(u._id))
-  .map((u) => {
-    const roleEntry = assigned.find((a) => a.userId._id === u._id);
+        ////////////////////////////////////////////
+        const matched = userList
+          .filter((u) => assignedUserIds.includes(u._id))
+          .map((u) => {
+            const roleEntry = assigned.find((a) => a.userId._id === u._id);
 
-    const roleId = roleEntry?.roleId?._id;
+            const roleId = roleEntry?.roleId?._id;
 
-    return {
-      ...u,
-      journalUserId: roleEntry?._id, // store journal-user _id
-      role: roleId,
-      roleName: roleList.find((r) => r._id === roleId)?.title || "No role",
-    };
-  });
-////////////////////////////
+            return {
+              ...u,
+              journalUserId: roleEntry?._id,
+              role: roleId,
+              roleName:
+                roleList.find((r) => r._id === roleId)?.title || "No role",
+            };
+          });
+        ////////////////////////////
         setSelectedUsers(matched);
         setSelectedLoaded(true);
       } catch (err) {
@@ -150,8 +150,7 @@ const matched = userList
   /* ------------------- MODAL ------------------- */
   const openEditModal = (user) => {
     setEditingUser(user);
-    console.log("user:::::",user);
-    
+
     setUserName(`${user.firstName || ""} ${user.lastName || ""}`.trim());
     setRole(user.role || "");
     seteditpopup(true);
@@ -165,68 +164,67 @@ const matched = userList
   };
 
   /* ------------------- SAVE ROLE ------------------- */
- 
+
   const handleSubmit = async () => {
-  if (!role) {
-    Swal.fire("Warning", "Please select a role.", "warning");
-    return;
-  }
-
-  try {
-    const token = localStorage.getItem("authToken");
-    const journalId = localStorage.getItem("journalId");
-
-    if (!journalId) {
-      Swal.fire("Error", "No journal selected.", "error");
+    if (!role) {
+      Swal.fire("Warning", "Please select a role.", "warning");
       return;
     }
 
-    const payload = {
-      roleId: role,
-      userId: editingUser._id,
-      journalId,
-      isAssigned: true,
-    };
+    try {
+      const token = localStorage.getItem("authToken");
+      const journalId = localStorage.getItem("journalId");
 
-    if (editingUser.journalUserId) {
-      // ✅ UPDATE using JUR record ID
-      await axios.patch(
-        `${config.BASE_API_URL}/journal-user/update/${editingUser.journalUserId}`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
+      if (!journalId) {
+        Swal.fire("Error", "No journal selected.", "error");
+        return;
+      }
+
+      const payload = {
+        roleId: role,
+        userId: editingUser._id,
+        journalId,
+        isAssigned: true,
+      };
+
+      if (editingUser.journalUserId) {
+        // ✅ UPDATE using JUR record ID
+        await axios.patch(
+          `${config.BASE_API_URL}/journal-user/update/${editingUser.journalUserId}`,
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        Swal.fire("Success", "Role updated successfully!", "success");
+      } else {
+        // ✅ CREATE new role
+        await axios.post(
+          `${config.BASE_API_URL}/journal-user/create`,
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        Swal.fire("Success", "Role assigned successfully!", "success");
+      }
+
+      // Update frontend
+      const updatedUser = { ...editingUser, role, roleName };
+      setUserList((prev) =>
+        prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
       );
+      setSelectedUsers((prev) => {
+        const exists = prev.some((u) => u._id === editingUser._id);
+        return exists
+          ? prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
+          : [...prev, updatedUser];
+      });
 
-      Swal.fire("Success", "Role updated successfully!", "success");
-    } else {
-      // ✅ CREATE new role
-      await axios.post(
-        `${config.BASE_API_URL}/journal-user/create`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      Swal.fire("Success", "Role assigned successfully!", "success");
+      closeModal();
+    } catch (err) {
+      console.error("Error updating role:", err);
+      Swal.fire("Error", "Failed to save role", "error");
     }
-
-    // Update frontend
-    const updatedUser = { ...editingUser, role, roleName };
-    setUserList((prev) =>
-      prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
-    );
-    setSelectedUsers((prev) => {
-      const exists = prev.some((u) => u._id === editingUser._id);
-      return exists
-        ? prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
-        : [...prev, updatedUser];
-    });
-
-    closeModal();
-
-  } catch (err) {
-    console.error("Error updating role:", err);
-    Swal.fire("Error", "Failed to save role", "error");
-  }
-};
+  };
 
   const handleDelete = async (user) => {
     const confirm = await Swal.fire({
@@ -250,7 +248,6 @@ const matched = userList
         return;
       }
 
-      // ✅ Mark as unassigned
       await axios.post(
         `${config.BASE_API_URL}/journal-user/create`,
         {
@@ -264,7 +261,6 @@ const matched = userList
         }
       );
 
-      // Remove from selectedUsers in UI
       setSelectedUsers((prev) => prev.filter((u) => u._id !== user._id));
 
       Swal.fire({
@@ -284,7 +280,6 @@ const matched = userList
     }
   };
 
- 
   /* ------------------- RENDER ------------------- */
   return (
     <>
@@ -323,7 +318,9 @@ const matched = userList
               </div>
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
                 <p className="text-sm font-medium opacity-90">Total Users</p>
-                <p className="text-3xl text-center font-bold">{userList.length}</p>
+                <p className="text-3xl text-center font-bold">
+                  {userList.length}
+                </p>
               </div>
             </div>
           </div>
