@@ -91,8 +91,8 @@ const isAllDataComplete = () => {
           {/* Dropdown */}
           <div className="md:col-span-2">
             <select
-             value={manuscript.journalsId || ""}  // value={manuscript.journal || ""}
-              onChange={(e) => updateManuscript("journalsId", e.target.value)} //onChange={(e) => updateManuscript("journal", e.target.value)}
+             value={manuscript.journalsId || ""} 
+              onChange={(e) => updateManuscript("journalsId", e.target.value)}
               className={`w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
                 step2Errors.journal ? "border-red-500" : ""
               }`}

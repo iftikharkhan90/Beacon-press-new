@@ -456,7 +456,7 @@ function ReviewersModal({
                       <button
                         onClick={() => handleRemoveReviewer(index)}
                         className="text-red-600 hover:text-red-800 p-1 transition cursor-pointer"
-                        title="Remove Reviewer" 
+                        title="Delete Reviewer" 
                       >
                         <svg
                           className="w-5 h-5"
