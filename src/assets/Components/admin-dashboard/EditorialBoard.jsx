@@ -21,11 +21,8 @@ const Editorialboard = () => {
     localStorage.getItem("journalId") || ""
   );
   const cleanJournalId = journalId.toString().trim();
-  const roleObj = roleList.find((r) => r._id === role);
-  const roleName = roleObj ? roleObj.title || roleObj.name : "No role";
   const [selectedLoaded, setSelectedLoaded] = useState(false);
   const isAlreadyAssigned = editingUser?.isAssigned;
-  const updatedUser = { ...editingUser, role, roleName };
 
   useEffect(() => {
     // If you need to fetch or confirm journalId here:
@@ -75,12 +72,12 @@ const Editorialboard = () => {
         console.log("roles:::", roles);
 
         const merged = users.map((u) => {
-          const matchRole = roles.find((r) => r._id === u.role);
-          return {
-            ...u,
-            roleName: matchRole ? r.title || r.name : "No role assigned",
-          };
-        });
+  const matchRole = roles.find((r) => r._id === u.role);
+  return {
+    ...u,
+    roleName: matchRole ? matchRole.title || matchRole.name : "No role assigned",
+  };
+});
 
         setUserList(merged);
         setRoleList(roles);
@@ -94,9 +91,9 @@ const Editorialboard = () => {
   }, []);
 
   useEffect(() => {
-    const loadSelectedUsers = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token || !journalId) return;
+  const loadSelectedUsers = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token || !journalId || userList.length === 0 || roleList.length === 0) return;
 
       try {
         const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
@@ -106,14 +103,18 @@ const Editorialboard = () => {
 
         console.log("Get journalUser", res.data);
 
-        const assigned = Array.isArray(res.data) ? res.data : [res.data];
+        const responseData = res.data.data || res.data;
+const assigned = Array.isArray(responseData) ? responseData : [responseData];
 
-        const assignedUserIds = assigned.map((a) => a.userId._id);
+// ✅ Only get users where isAssigned is true
+const validAssigned = assigned.filter(a => a && a.userId && a.isAssigned !== false);
+
+const assignedUserIds = validAssigned.map((a) => a.userId._id);
         ////////////////////////////////////////////
         const matched = userList
-          .filter((u) => assignedUserIds.includes(u._id))
-          .map((u) => {
-            const roleEntry = assigned.find((a) => a.userId._id === u._id);
+  .filter((u) => assignedUserIds.includes(u._id))
+  .map((u) => {
+    const roleEntry = validAssigned.find((a) => a.userId._id === u._id);
 
             const roleId = roleEntry?.roleId?._id;
 
@@ -196,30 +197,45 @@ const Editorialboard = () => {
         );
 
         Swal.fire("Success", "Role updated successfully!", "success");
-      } else {
-        // ✅ CREATE new role
-        await axios.post(
-          `${config.BASE_API_URL}/journal-user/create`,
-          payload,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+      }  else {
+  // CREATE new role
+  const response = await axios.post(
+    `${config.BASE_API_URL}/journal-user/create`,
+    payload,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
-        Swal.fire("Success", "Role assigned successfully!", "success");
-      }
+  // Save the new journalUserId from response
+  editingUser.journalUserId = response.data._id || response.data.data?._id;
 
-      // Update frontend
-      const updatedUser = { ...editingUser, role, roleName };
-      setUserList((prev) =>
-        prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
-      );
-      setSelectedUsers((prev) => {
-        const exists = prev.some((u) => u._id === editingUser._id);
-        return exists
-          ? prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
-          : [...prev, updatedUser];
-      });
+  Swal.fire("Success", "Role assigned successfully!", "success");
+}
 
-      closeModal();
+// Get roleName from roleList (calculate here, not at top level)
+const roleObj = roleList.find((r) => r._id === role);
+const roleName = roleObj ? roleObj.title || roleObj.name : "No role";
+
+// Update frontend with journalUserId included
+const updatedUser = { 
+  ...editingUser, 
+  role, 
+  roleName, 
+  journalUserId: editingUser.journalUserId 
+};
+
+// ✅ ADD THESE 2 STATE UPDATES - THIS IS WHAT YOU'RE MISSING!
+setUserList((prev) =>
+  prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
+);
+
+setSelectedUsers((prev) => {
+  const exists = prev.some((u) => u._id === editingUser._id);
+  return exists
+    ? prev.map((u) => (u._id === editingUser._id ? updatedUser : u))
+    : [...prev, updatedUser];
+});
+
+closeModal();
     } catch (err) {
       console.error("Error updating role:", err);
       Swal.fire("Error", "Failed to save role", "error");
