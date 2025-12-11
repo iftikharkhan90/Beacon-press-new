@@ -71,8 +71,8 @@ const App = () => {
             
             {/* Single Journal with Nested Routes */}
             <Route path="/journals/:id" element={<SingleJournalPage />}>
-              <Route index element={<Navigate to="journalhome" replace />} />
-              <Route path="journalhome" element={<Journalhome />} />
+              {/* <Route index element={<Navigate to="journalhome" replace />} /> */}
+              {/* <Route path="journalhome" element={<Journalhome />} /> */}
               <Route path="aims-scope" element={<AimScope />} />
               <Route path="editorialmembers" element={<Editorialmembers/>} />
               <Route path="author" element={<Author />} />
