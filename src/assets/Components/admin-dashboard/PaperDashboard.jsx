@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MdOutlineCancelPresentation } from "react-icons/md"; // <- Import added
 import config from "../../../common/config";
+import Swal from "sweetalert2";
 
 const PaperDashboard = () => {
   const navigate = useNavigate();
@@ -15,27 +16,59 @@ const PaperDashboard = () => {
 
   // Load Papers
   useEffect(() => {
-    const loadPapers = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token || !journalId) return;
+  const loadData = async () => {
+    const token = localStorage.getItem("authToken");
+    const journalId = localStorage.getItem("journalId");
+    if (!token || !journalId) return;
 
-      try {
-        const url = `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`;
-        console.log("Calling API:", url);
+    try {
+      // 1) Load all papers
+      const resPapers = await axios.get(
+        `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        const res = await axios.get(url, {
+      const papers = resPapers.data.manuscript || [];
+
+      // 2) Load paper assignments
+      const resAssign = await axios.get(
+        `${config.BASE_API_URL}/paper-assigns/get`,
+        {
+          params: { journalId },
           headers: { Authorization: `Bearer ${token}` },
-        });
+        }
+      );
 
-        console.log("API Response:", res.data);
-        setPaperList(res.data.manuscript || []);
-      } catch (err) {
-        console.error("Failed to load Papers:", err.response?.data || err);
-      }
-    };
+      const assigns = resAssign.data.data || resAssign.data;
 
-    loadPapers();
-  }, [journalId]);
+      // 3) Map manuscriptId → assignedUser
+      const assignmentMap = {};
+      assigns.forEach(a => {
+        if (a.isAssigned) {
+          assignmentMap[a.manuscriptId] = {
+            _id: a.userId?._id,
+            fullName: `${a.userId?.firstName || ""} ${a.userId?.lastName || ""}`.trim(),
+          };
+        }
+      });
+
+      // 4) Merge assignment into paper list
+      const mergedPapers = papers.map(p => ({
+        ...p,
+        journalsId: assignmentMap[p._id] || null,
+      }));
+
+      // 5) Update table
+      setPaperList(mergedPapers);
+
+    } catch (err) {
+      console.error("Failed to load combined data:", err);
+    }
+  };
+
+  loadData();
+}, []);
+
 
   // Open Modal and Load Users
   const openEditModal = async (index) => {
@@ -44,6 +77,7 @@ const PaperDashboard = () => {
 
     const token = localStorage.getItem("authToken");
     const journalId = localStorage.getItem("journalId");
+    
 
     try {
       const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
@@ -53,6 +87,9 @@ const PaperDashboard = () => {
 
       // Extract assigned users only
       const assigned = res.data.data || res.data;
+      if (assigned.length > 0) {
+        localStorage.setItem("journalUserId", assigned[0]._id);
+      }
       const validUsers = assigned
         .filter((a) => a.isAssigned === true)
         .map((a) => ({
@@ -71,80 +108,70 @@ const PaperDashboard = () => {
   };
 
   // Save Assigned User (updates UI only — add API call if needed)
- const handleSaveAssign = async () => {
-  if (!selectedUser) {
-    alert("Please select a user!");
-    return;
-  }
-
-  const selectedUserObj = allUsers.find(u => u._id === selectedUser);
-  if (!selectedUserObj) return;
-
-  // Update local UI
-  const updatedPapers = [...paperList];
-  updatedPapers[editingPaperIndex] = {
-    ...updatedPapers[editingPaperIndex],
-    journalsId: {
-      fullName: selectedUserObj.fullName,
-      _id: selectedUserObj._id
+  const handleSaveAssign = async () => {
+    if (!selectedUser) {
+      Swal.fire({
+        icon: "warning",
+        title: "No User Selected",
+        text: "Please select a user to assign.",
+      });
+      return;
     }
-  };
-  setPaperList(updatedPapers);
 
-  setIsModalOpen(false);
-  setSelectedUser("");
+    const selectedUserObj = allUsers.find((u) => u._id === selectedUser);
+    if (!selectedUserObj) return;
 
-  // Persist to backend
-  try {
-    const token = localStorage.getItem("authToken");
-    const manuscriptId = updatedPapers[editingPaperIndex]._id;
+    // Update UI first
+    const updatedPapers = [...paperList];
+    updatedPapers[editingPaperIndex] = {
+      ...updatedPapers[editingPaperIndex],
+      journalsId: {
+        fullName: selectedUserObj.fullName,
+        _id: selectedUserObj._id,
+      },
+    };
+    setPaperList(updatedPapers);
 
-    await axios.put(
-      `${config.BASE_API_URL}/scripts/assign-editor`,
-      { manuscriptId, assigneeId: selectedUserObj._id },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    // Close modal
+    setIsModalOpen(false);
+    setSelectedUser("");
 
-    console.log("User assigned successfully");
-  } catch (err) {
-    console.error("Failed to assign user:", err.response?.data || err);
-  }
-};
+    
+    const journalUserId = localStorage.getItem("journalUserId") || "";
 
-useEffect(() => {
-  const loadAssignedUsers = async () => {
-    const token = localStorage.getItem("authToken");
-    const journalId = localStorage.getItem("journalId");
-    if (!token || !journalId) return;
+    if (!journalUserId) {
+      Swal.fire({
+        icon: "error",
+        title: "Missing journalUserId",
+        text: "Please make sure journalUserId is stored before assigning.",
+      });
+      return;
+    }
 
     try {
-      const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
-        params: { journalId },
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const token = localStorage.getItem("authToken");
+      const manuscriptId = updatedPapers[editingPaperIndex]._id;
 
-      const assigned = res.data.data || res.data;
+      // -----------------------------
+      // ⭐ API CALL HERE
+      // -----------------------------
+      await axios.post(
+        `${config.BASE_API_URL}/paper-assigns/create`,
+        {
+          journalUserId,
+          manuscriptId, 
+          assigneeId: selectedUserObj._id, 
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      const validUsers = assigned
-        .filter((a) => a.isAssigned === true)
-        .map((a) => ({
-          _id: a.userId?._id,
-          fullName: `${a.userId?.firstName || ""} ${a.userId?.lastName || ""}`.trim(),
-        }));
-
-      // Remove duplicates
-      const uniqueUsers = Array.from(new Map(validUsers.map(u => [u._id, u])).values());
-
-      setAllUsers(uniqueUsers);
+      console.log("User assigned successfully");
     } catch (err) {
-      console.log("Failed to load assigned users:", err);
+      console.error("Failed to assign user:", err.response?.data || err);
     }
   };
 
-  loadAssignedUsers();
-}, []);
-
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/90 via-indigo-50/90 to-purple-50/90 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -203,47 +230,65 @@ useEffect(() => {
                 <tbody>
                   {paperList.length > 0 ? (
                     paperList.map((paper, index) => (
-                      <tr key={paper._id} className="text-center">
-                        <td className="px-2 py-1 border-b">{index + 1}</td>
+                      <tr
+                        key={paper._id}
+                        className="text-center hover:bg-gray-50 transition"
+                      >
+                        {/* Sr */}
+                        <td className="px-3 py-2 border-b text-gray-700 font-medium">
+                          {index + 1}
+                        </td>
 
                         {/* Paper Title */}
-                        <td className="px-2 py-1 border-b">
+                        <td className="px-3 py-2 border-b text-gray-800 font-semibold">
                           {paper.manuscriptDetails?.title || "No Title"}
                         </td>
 
-                        {/* Author Name */}
-                        <td className="px-2 py-1 border-b">
+                        {/* Author Names */}
+                        <td className="px-3 py-2 border-b text-gray-600">
                           {paper.authors?.length > 0
                             ? paper.authors.map((a) => a.fullName).join(", ")
                             : "No Author"}
                         </td>
 
                         {/* Submission Date */}
-                        <td className="px-2 py-1 border-b">
+                        <td className="px-3 py-2 border-b text-gray-500">
                           {paper.createdAt
                             ? new Date(paper.createdAt).toLocaleDateString()
                             : "No Date"}
                         </td>
 
-                        {/* Status */}
-                        <td className="px-2 py-1 border-b">
-                          {paper.journalsId?.fullName || "Pending"}
+                        {/* Status Badge */}
+                        <td className="px-3 py-2 border-b">
+                          {paper.journalsId?.fullName ? (
+                            <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
+                              Assigned
+                            </span>
+                          ) : (
+                            <span className="inline-block px-3 py-1 text-xs font-semibold bg-red-100 text-red-600 rounded-full">
+                              Not Assigned
+                            </span>
+                          )}
                         </td>
 
-                        {/* Assignee */}
-                        <td className="px-2 py-1 border-b">
-                          {paper.journalsId?.fullName || "No Assign"}
+                        {/* Assigned User */}
+                        <td className="px-3 py-2 border-b text-gray-700 font-semibold">
+                          {paper.journalsId?.fullName || (
+                            <span className="text-gray-400 italic">
+                              Not Assigned
+                            </span>
+                          )}
                         </td>
 
-                        {/* Action */}
-                        <td className="px-2 py-1 border-b">
+                        {/* Action Button */}
+                        <td className="px-3 py-2 border-b">
                           <button
                             onClick={() => openEditModal(index)}
-                            className="text-blue-600 hover:text-blue-800 p-1 transition cursor-pointer"
-                            title="Select Assigne"
+                            className="p-2 rounded-full hover:bg-blue-50 transition"
+                            title="Assign User"
                           >
                             <svg
-                              className="w-5 h-5"
+                              className="w-5 h-5 text-blue-600"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -252,7 +297,8 @@ useEffect(() => {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a 2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 
+                2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
                             </svg>
                           </button>
@@ -261,7 +307,10 @@ useEffect(() => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7" className="px-4 py-3 text-center">
+                      <td
+                        colSpan="7"
+                        className="px-4 py-6 text-center text-gray-500 italic"
+                      >
                         No Papers Found
                       </td>
                     </tr>
@@ -317,19 +366,20 @@ useEffect(() => {
                     Select User
                   </label>
 
-                 <select
-  value={selectedUser}
-  onChange={(e) => setSelectedUser(e.target.value)}
-  className="w-full border rounded px-3 py-2"
->
-  <option value="">-- Select User --</option>
-  {Array.from(new Map(allUsers.map(u => [u._id, u])).values()).map(user => (
-    <option key={user._id} value={user._id}>
-      {user.fullName}
-    </option>
-  ))}
-</select>
-
+                  <select
+                    value={selectedUser}
+                    onChange={(e) => setSelectedUser(e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">-- Select User --</option>
+                    {Array.from(
+                      new Map(allUsers.map((u) => [u._id, u])).values()
+                    ).map((user) => (
+                      <option key={user._id} value={user._id}>
+                        {user.fullName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
