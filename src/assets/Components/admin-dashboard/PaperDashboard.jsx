@@ -15,9 +15,10 @@ const PaperDashboard = () => {
   const [editingPaperIndex, setEditingPaperIndex] = useState(null);
 
   // Load Papers
-  useEffect(() => {
+ useEffect(() => {
   const loadData = async () => {
     const token = localStorage.getItem("authToken");
+    const journalUserId = localStorage.getItem("journalUserId");
     const journalId = localStorage.getItem("journalId");
     if (!token || !journalId) return;
 
@@ -27,48 +28,52 @@ const PaperDashboard = () => {
         `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       const papers = resPapers.data.manuscript || [];
 
-      // 2) Load paper assignments
+      // 2) Load all paper assignments
       const resAssign = await axios.get(
         `${config.BASE_API_URL}/paper-assigns/get`,
         {
-          params: { journalId },
+          params: { journalUserId },
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      const assigns = resAssign.data.data || resAssign.data;
+      const assigns = Array.isArray(resAssign.data?.data)
+        ? resAssign.data.data
+        : [];
 
-      // 3) Map manuscriptId → assignedUser
+      // 3) Build assignment map: manuscriptId -> assigned user
       const assignmentMap = {};
-      assigns.forEach(a => {
-        if (a.isAssigned) {
-          assignmentMap[a.manuscriptId] = {
-            _id: a.userId?._id,
-            fullName: `${a.userId?.firstName || ""} ${a.userId?.lastName || ""}`.trim(),
+      assigns.forEach((a) => {
+        const manuscriptId = a.manuscriptId?._id?.toString();
+        // Check both possible paths for assigned user
+        const user = a.assigneeId || a.journalUserId?.userId;
+        if (manuscriptId && user) {
+          assignmentMap[manuscriptId] = {
+            _id: user._id,
+            fullName: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
           };
         }
       });
 
-      // 4) Merge assignment into paper list
-      const mergedPapers = papers.map(p => ({
+      // 4) Merge assignments into papers
+      const mergedPapers = papers.map((p) => ({
         ...p,
-        journalsId: assignmentMap[p._id] || null,
+        journalUserId: assignmentMap[p._id.toString()] || null,
       }));
 
-      // 5) Update table
+      // 5) Update state
       setPaperList(mergedPapers);
 
+      console.log("Merged Papers:", mergedPapers);
     } catch (err) {
-      console.error("Failed to load combined data:", err);
+      console.error("Failed to load papers or assignments:", err);
     }
   };
 
   loadData();
 }, []);
-
 
   // Open Modal and Load Users
   const openEditModal = async (index) => {
@@ -77,27 +82,24 @@ const PaperDashboard = () => {
 
     const token = localStorage.getItem("authToken");
     const journalId = localStorage.getItem("journalId");
-    
 
     try {
       const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
         params: { journalId },
         headers: { Authorization: `Bearer ${token}` },
       });
+      const assigned = Array.isArray(res.data.data)
+        ? res.data.data
+        : Array.isArray(res.data)
+        ? res.data
+        : [];
 
-      // Extract assigned users only
-      const assigned = res.data.data || res.data;
-      if (assigned.length > 0) {
-        localStorage.setItem("journalUserId", assigned[0]._id);
-      }
-      const validUsers = assigned
-        .filter((a) => a.isAssigned === true)
-        .map((a) => ({
-          _id: a.userId?._id,
-          fullName: `${a.userId?.firstName || ""} ${
-            a.userId?.lastName || ""
-          }`.trim(),
-        }));
+      const validUsers = assigned.map((a) => ({
+        _id: a.userId?._id,
+        fullName: `${a.userId?.firstName || ""} ${
+          a.userId?.lastName || ""
+        }`.trim(),
+      }));
 
       setAllUsers(validUsers);
     } catch (error) {
@@ -109,69 +111,73 @@ const PaperDashboard = () => {
 
   // Save Assigned User (updates UI only — add API call if needed)
   const handleSaveAssign = async () => {
-    if (!selectedUser) {
-      Swal.fire({
-        icon: "warning",
-        title: "No User Selected",
-        text: "Please select a user to assign.",
-      });
-      return;
-    }
+  if (!selectedUser) {
+    Swal.fire({
+      icon: "warning",
+      title: "Select a user",
+      text: "Please select a user before assigning.",
+    });
+    return;
+  }
 
-    const selectedUserObj = allUsers.find((u) => u._id === selectedUser);
-    if (!selectedUserObj) return;
+  const token = localStorage.getItem("authToken");
+  const journalUserId = localStorage.getItem("journalUserId");
+  const paper = paperList[editingPaperIndex];
 
-    // Update UI first
-    const updatedPapers = [...paperList];
-    updatedPapers[editingPaperIndex] = {
-      ...updatedPapers[editingPaperIndex],
-      journalsId: {
-        fullName: selectedUserObj.fullName,
-        _id: selectedUserObj._id,
-      },
+  if (!token || !journalUserId || !paper?._id) {
+    Swal.fire({
+      icon: "error",
+      title: "Missing data",
+      text: "Required data is missing.",
+    });
+    return;
+  }
+
+  const payload = {
+    journalId,
+    journalUserId,
+    manuscriptId: paper._id,
+    assigneeId: selectedUser,
+  };
+
+  try {
+    const assignRes = await axios.post(
+      `${config.BASE_API_URL}/paper-assigns/create`,
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Update UI
+    const updated = [...paperList];
+    const assignedUserObj = allUsers.find(u => u._id === selectedUser);
+
+    updated[editingPaperIndex].journalUserId = {
+      _id: assignedUserObj._id,
+      fullName: assignedUserObj.fullName,
     };
-    setPaperList(updatedPapers);
 
-    // Close modal
+    setPaperList(updated);
     setIsModalOpen(false);
     setSelectedUser("");
 
-    
-    const journalUserId = localStorage.getItem("journalUserId") || "";
+    Swal.fire({
+      icon: "success",
+      title: "Assigned",
+      text: assignRes.data.message || "User assigned successfully",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      title: "Assignment Failed",
+      text: err.response?.data?.message || "Something went wrong",
+    });
+  }
+};
 
-    if (!journalUserId) {
-      Swal.fire({
-        icon: "error",
-        title: "Missing journalUserId",
-        text: "Please make sure journalUserId is stored before assigning.",
-      });
-      return;
-    }
 
-    try {
-      const token = localStorage.getItem("authToken");
-      const manuscriptId = updatedPapers[editingPaperIndex]._id;
 
-      // -----------------------------
-      // ⭐ API CALL HERE
-      // -----------------------------
-      await axios.post(
-        `${config.BASE_API_URL}/paper-assigns/create`,
-        {
-          journalUserId,
-          manuscriptId, 
-          assigneeId: selectedUserObj._id, 
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      console.log("User assigned successfully");
-    } catch (err) {
-      console.error("Failed to assign user:", err.response?.data || err);
-    }
-  };
-
-  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/90 via-indigo-50/90 to-purple-50/90 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -260,7 +266,7 @@ const PaperDashboard = () => {
 
                         {/* Status Badge */}
                         <td className="px-3 py-2 border-b">
-                          {paper.journalsId?.fullName ? (
+                          {paper.journalUserId?.fullName ? (
                             <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
                               Assigned
                             </span>
@@ -273,7 +279,7 @@ const PaperDashboard = () => {
 
                         {/* Assigned User */}
                         <td className="px-3 py-2 border-b text-gray-700 font-semibold">
-                          {paper.journalsId?.fullName || (
+                          {paper.journalUserId?.fullName || (
                             <span className="text-gray-400 italic">
                               Not Assigned
                             </span>
