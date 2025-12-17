@@ -74,22 +74,40 @@ const Editorialmembers = () => {
   /* ------------------- FETCH ASSIGNED USERS ------------------- */
   useEffect(() => {
     const loadSelectedUsers = async () => {
-      if (!journalId) return;
+      const token = localStorage.getItem("authToken");
+      if (
+        !token ||
+        !journalId ||
+        userList.length === 0 ||
+        roleList.length === 0
+      )
+        return;
 
       try {
         const res = await axios.get(`${config.BASE_API_URL}/journal-user/get`, {
           params: { journalId },
-          headers: { Authorization: `Bearer beaconPressSecretToken` },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        const assigned = Array.isArray(res.data) ? res.data : [res.data];
+        console.log("Get journalUser", res.data);
 
-        const assignedUserIds = assigned.map((a) => a.userId._id);
+        const responseData = res.data.data || res.data;
+        const assigned = Array.isArray(responseData)
+          ? responseData
+          : [responseData];
 
+        // ✅ Only get users where isAssigned is true
+        const validAssigned = assigned.filter(
+          (a) => a && a.userId && a.isAssigned !== false
+        );
+
+        const assignedUserIds = validAssigned.map((a) => a.userId._id);
+        ////////////////////////////////////////////
         const matched = userList
           .filter((u) => assignedUserIds.includes(u._id))
           .map((u) => {
-            const roleEntry = assigned.find((a) => a.userId._id === u._id);
+            const roleEntry = validAssigned.find((a) => a.userId._id === u._id);
+
             const roleId = roleEntry?.roleId?._id;
 
             return {
@@ -98,10 +116,9 @@ const Editorialmembers = () => {
               role: roleId,
               roleName:
                 roleList.find((r) => r._id === roleId)?.title || "No role",
-              passportPhoto: u.profileImage,
             };
           });
-
+        ////////////////////////////
         setSelectedUsers(matched);
         setSelectedLoaded(true);
       } catch (err) {
