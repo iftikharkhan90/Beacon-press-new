@@ -31,7 +31,7 @@ const ManuscriptDetailsStep = ({
 
 const isAllDataComplete = () => {
   return (
-    hasContent(manuscript.journal) && 
+    hasContent(manuscript.journalsId) && 
     isStep2Valid()
   );
 };
@@ -79,7 +79,7 @@ const isAllDataComplete = () => {
             Select Journal{" "}
             <span
               className={
-                hasContent(manuscript.journal)
+                hasContent(manuscript.journalsId)
                   ? "text-green-600"
                   : "text-red-600"
               }
