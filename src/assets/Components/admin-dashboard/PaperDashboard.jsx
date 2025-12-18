@@ -65,10 +65,7 @@ const PaperDashboard = () => {
           }
         });
         setAssignmentMap(assignmentMap);
-
-        console.log("Assignments:", assigns);
-        console.log("AssignmentMap:", assignmentMap);
-
+       
         // 4) Merge assignments into papers
         const mergedPapers = papers.map((p) => ({
           ...p,
