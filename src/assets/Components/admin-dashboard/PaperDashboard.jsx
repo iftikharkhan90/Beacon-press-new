@@ -13,67 +13,73 @@ const PaperDashboard = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [editingPaperIndex, setEditingPaperIndex] = useState(null);
+  const [assignmentMap, setAssignmentMap] = useState({});
 
   // Load Papers
- useEffect(() => {
-  const loadData = async () => {
-    const token = localStorage.getItem("authToken");
-    const journalUserId = localStorage.getItem("journalUserId");
-    const journalId = localStorage.getItem("journalId");
-    if (!token || !journalId) return;
+  useEffect(() => {
+    const loadData = async () => {
+      const token = localStorage.getItem("authToken");
+      const journalId = localStorage.getItem("journalId");
+      if (!token || !journalId) return;
 
-    try {
-      // 1) Load all papers
-      const resPapers = await axios.get(
-        `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const papers = resPapers.data.manuscript || [];
+      try {
+        // 1) Load all papers
+        const resPapers = await axios.get(
+          `${config.BASE_API_URL}/scripts/get?journalId=${journalId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const papers = resPapers.data.manuscript || [];
 
-      // 2) Load all paper assignments
-      const resAssign = await axios.get(
-        `${config.BASE_API_URL}/paper-assigns/get`,
-        {
-          params: { journalUserId },
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+        // 2) Load all paper assignments
+        const resAssign = await axios.get(
+          `${config.BASE_API_URL}/paper-assigns/get`,
+          {
+            params: { journalId },
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-      const assigns = Array.isArray(resAssign.data?.data)
-        ? resAssign.data.data
-        : [];
+        const assigns = Array.isArray(resAssign.data?.data)
+          ? resAssign.data.data
+          : [];
 
-      // 3) Build assignment map: manuscriptId -> assigned user
-      const assignmentMap = {};
-      assigns.forEach((a) => {
-        const manuscriptId = a.manuscriptId?._id?.toString();
-        // Check both possible paths for assigned user
-        const user = a.assigneeId || a.journalUserId?.userId;
-        if (manuscriptId && user) {
-          assignmentMap[manuscriptId] = {
-            _id: user._id,
-            fullName: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-          };
-        }
-      });
+        // 3) Build assignment map: manuscriptId -> assigned user
+        const assignmentMap = {};
+        assigns.forEach((a) => {
+          const manuscriptId = a.manuscriptId?._id?.toString();
 
-      // 4) Merge assignments into papers
-      const mergedPapers = papers.map((p) => ({
-        ...p,
-        journalUserId: assignmentMap[p._id.toString()] || null,
-      }));
+          // Safely get user object
+          let user = null;
 
-      // 5) Update state
-      setPaperList(mergedPapers);
+          if (a.journalUserId && a.journalUserId.userId) {
+            user = a.journalUserId.userId; // nested user exists
+          } else if (a.assigneeId) {
+            user = a.assigneeId; // fallback if you store assignee differently
+          }
 
-      console.log("Merged Papers:", mergedPapers);
-    } catch (err) {
-      console.error("Failed to load papers or assignments:", err);
-    }
-  };
+          if (manuscriptId && user) {
+            assignmentMap[manuscriptId] = {
+              _id: user._id,
+              fullName: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+            };
+          }
+        });
+        setAssignmentMap(assignmentMap);
+       
+        // 4) Merge assignments into papers
+        const mergedPapers = papers.map((p) => ({
+          ...p,
+          journalUserId: assignmentMap[p._id.toString()] || null,
+        }));
 
-  loadData();
-}, []);
+        setPaperList(mergedPapers);
+      } catch (err) {
+        console.error("Failed to load papers or assignments:", err);
+      }
+    };
+
+    loadData();
+  }, []);
 
   // Open Modal and Load Users
   const openEditModal = async (index) => {
@@ -95,12 +101,11 @@ const PaperDashboard = () => {
         : [];
 
       const validUsers = assigned.map((a) => ({
-        _id: a.userId?._id,
+        journalUserId: a._id,
         fullName: `${a.userId?.firstName || ""} ${
           a.userId?.lastName || ""
         }`.trim(),
       }));
-
       setAllUsers(validUsers);
     } catch (error) {
       console.log("Failed to load editorial users:", error);
@@ -111,72 +116,61 @@ const PaperDashboard = () => {
 
   // Save Assigned User (updates UI only — add API call if needed)
   const handleSaveAssign = async () => {
-  if (!selectedUser) {
-    Swal.fire({
-      icon: "warning",
-      title: "Select a user",
-      text: "Please select a user before assigning.",
-    });
-    return;
-  }
+    if (editingPaperIndex === null) return;
 
-  const token = localStorage.getItem("authToken");
-  const journalUserId = localStorage.getItem("journalUserId");
-  const paper = paperList[editingPaperIndex];
+    const paper = paperList[editingPaperIndex];
 
-  if (!token || !journalUserId || !paper?._id) {
-    Swal.fire({
-      icon: "error",
-      title: "Missing data",
-      text: "Required data is missing.",
-    });
-    return;
-  }
+    if (!selectedUser) {
+      Swal.fire({ icon: "error", title: "Select a user first" });
+      return;
+    }
 
-  const payload = {
-    journalId,
-    journalUserId,
-    manuscriptId: paper._id,
-    assigneeId: selectedUser,
+    try {
+      const payload = {
+        manuscriptId: paper._id,
+        journalUserId: selectedUser,
+        status: "Pending",
+        feedBack: "",
+      };
+
+      const { data } = await axios.post(
+        `${config.BASE_API_URL}/paper-assigns/create`,
+        payload
+      );
+
+      if (data.success) {
+        Swal.fire("Success", "User assigned successfully", "success");
+
+        // Update assignmentMap
+        const selected = allUsers.find((u) => u.journalUserId === selectedUser);
+
+        setAssignmentMap((prev) => ({
+          ...prev,
+          [paper._id]: {
+            _id: selectedUser,
+            fullName: selected?.fullName || "Assigned",
+          },
+        }));
+
+        // Update paperList status only
+        setPaperList((prev) =>
+          prev.map((p, idx) =>
+            idx === editingPaperIndex
+              ? { ...p, journalUserId: { _id: selectedUser } }
+              : p
+          )
+        );
+
+        // ✅ CLOSE MODAL
+        setIsModalOpen(false);
+        setEditingPaperIndex(null);
+        setSelectedUser("");
+      }
+    } catch (error) {
+      console.error("Error assigning user:", error);
+      Swal.fire("Error", "Failed to assign user", "error");
+    }
   };
-
-  try {
-    const assignRes = await axios.post(
-      `${config.BASE_API_URL}/paper-assigns/create`,
-      payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    // Update UI
-    const updated = [...paperList];
-    const assignedUserObj = allUsers.find(u => u._id === selectedUser);
-
-    updated[editingPaperIndex].journalUserId = {
-      _id: assignedUserObj._id,
-      fullName: assignedUserObj.fullName,
-    };
-
-    setPaperList(updated);
-    setIsModalOpen(false);
-    setSelectedUser("");
-
-    Swal.fire({
-      icon: "success",
-      title: "Assigned",
-      text: assignRes.data.message || "User assigned successfully",
-      timer: 2000,
-      showConfirmButton: false,
-    });
-  } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Assignment Failed",
-      text: err.response?.data?.message || "Something went wrong",
-    });
-  }
-};
-
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/90 via-indigo-50/90 to-purple-50/90 py-8 px-4 sm:px-6 lg:px-8">
@@ -245,7 +239,7 @@ const PaperDashboard = () => {
                           {index + 1}
                         </td>
 
-                        {/* Paper Title */}
+                        {/* Paper Name */}
                         <td className="px-3 py-2 border-b text-gray-800 font-semibold">
                           {paper.manuscriptDetails?.title || "No Title"}
                         </td>
@@ -264,9 +258,9 @@ const PaperDashboard = () => {
                             : "No Date"}
                         </td>
 
-                        {/* Status Badge */}
+                        {/* Status  */}
                         <td className="px-3 py-2 border-b">
-                          {paper.journalUserId?.fullName ? (
+                          {assignmentMap[paper._id] ? (
                             <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
                               Assigned
                             </span>
@@ -277,16 +271,16 @@ const PaperDashboard = () => {
                           )}
                         </td>
 
-                        {/* Assigned User */}
+                        {/* Assigned */}
                         <td className="px-3 py-2 border-b text-gray-700 font-semibold">
-                          {paper.journalUserId?.fullName || (
+                          {assignmentMap[paper._id]?.fullName || (
                             <span className="text-gray-400 italic">
                               Not Assigned
                             </span>
                           )}
                         </td>
 
-                        {/* Action Button */}
+                        {/* Select Assigne */}
                         <td className="px-3 py-2 border-b">
                           <button
                             onClick={() => openEditModal(index)}
@@ -378,10 +372,11 @@ const PaperDashboard = () => {
                     className="w-full border rounded px-3 py-2"
                   >
                     <option value="">-- Select User --</option>
-                    {Array.from(
-                      new Map(allUsers.map((u) => [u._id, u])).values()
-                    ).map((user) => (
-                      <option key={user._id} value={user._id}>
+                    {allUsers.map((user) => (
+                      <option
+                        key={user.journalUserId}
+                        value={user.journalUserId}
+                      >
                         {user.fullName}
                       </option>
                     ))}
