@@ -36,6 +36,8 @@ const ReviewSubmitStep = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
+
+
   const getFileExtension = (filename) => {
     if (!filename) return "FILE";
     return filename.split(".").pop().toUpperCase();
@@ -202,9 +204,13 @@ const ReviewSubmitStep = ({
       <div className="border-gray-300 p-4 rounded space-y-4">
         {/* Manuscript Details Section */}
         <div className="bg-white p-4 rounded border border-gray-300">
-          {/* <div>
-              <strong>SelectJournals:</strong> {activeManuscript.journal || "—"}
-            </div> */}
+   <div className="text-center mt-2">
+  <strong>Select Journal:</strong>{" "}
+{activeManuscript?.journalTitle || "—"}
+
+</div>
+
+
           <div className="flex justify-between items-center mb-3">
             <h4 className="font-semibold text-lg">Manuscript Details</h4>
             <button
