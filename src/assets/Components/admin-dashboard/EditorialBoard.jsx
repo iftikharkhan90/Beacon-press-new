@@ -4,7 +4,7 @@ import axios from "axios";
 import config from "../../../common/config";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import mountainPlaceholder from "../../../../public/mountainPlaceholder.png";
+import mountainPlaceholder from "../../../../src/mountainPlaceholder.png";
 
 const Editorialboard = () => {
   const navigate = useNavigate();

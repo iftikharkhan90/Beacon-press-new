@@ -89,25 +89,34 @@ const isAllDataComplete = () => {
           </label>
 
           {/* Dropdown */}
-          <div className="md:col-span-2">
+          <div className=" md:col-span-2">
             <select
-             value={manuscript.journalsId || ""} 
-              onChange={(e) => updateManuscript("journalsId", e.target.value)}
-              className={`w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
-                step2Errors.journal ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Select Journal</option>
-              {journals.length > 0 ? (
-                journals.map((journal) => (
-                  <option key={journal._id} value={journal._id}>
-                    {journal.title}
-                  </option>
-                ))
-              ) : (
-                <option disabled>Loading journals...</option>
-              )}
-            </select>
+  value={manuscript.journalsId || ""}
+  onChange={(e) => {
+    const selectedJournal = journals.find(
+      (j) => j._id === e.target.value
+    );
+
+    updateManuscript("journalsId", e.target.value);
+    updateManuscript("journalTitle", selectedJournal?.title || "");
+  }}
+  className={`w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+    step2Errors.journal ? "border-red-500" : ""
+  }`}
+>
+  <option value="">Select Journal</option>
+
+  {journals.length > 0 ? (
+    journals.map((journal) => (
+      <option key={journal._id} value={journal._id}>
+        {journal.title}
+      </option>
+    ))
+  ) : (
+    <option disabled>Loading journals...</option>
+  )}
+</select>
+
 
             {step2Errors.journal && (
               <p className="text-red-500 text-sm mt-1">{step2Errors.journal}</p>

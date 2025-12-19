@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import mountainPlaceholder from "../../../../public/mountainPlaceholder.png";
+import mountainPlaceholder from "../../../../src/mountainPlaceholder.png";
 import {
   MdOutlineCancelPresentation,
   MdAddCircleOutline,
