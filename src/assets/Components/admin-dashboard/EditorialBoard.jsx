@@ -338,16 +338,16 @@ const Editorialboard = () => {
                   </svg>
                   Back to Journals
                 </button>
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                <h1 className="text-2xl font-sans font-bold text-gray-900 mb-1">
                   Editorial Board
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm font-sans text-gray-600">
                   Manage and assign roles for Editorial Board
                 </p>
               </div>
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
-                <p className="text-sm font-medium opacity-90">Total Users</p>
-                <p className="text-3xl text-center font-bold">
+                <p className="text-lg font-sans font-bold opacity-90">Total Users</p>
+                <p className="text-2xl text-center font-bold">
                   {userList.length}
                 </p>
               </div>
@@ -358,10 +358,10 @@ const Editorialboard = () => {
           {selectedUsers.length > 0 && (
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-lg font-sans font-bold text-gray-900">
                   Selected Users
                 </h2>
-                <span className="bg-indigo-100 text-indigo-700 text-sm font-semibold px-3 py-1 rounded-full">
+                <span className="bg-indigo-100 font-sans text-indigo-700 text-sm font-semibold px-3 py-1 rounded-full">
                   {selectedUsers.length}
                 </span>
               </div>
@@ -379,7 +379,7 @@ const Editorialboard = () => {
                       />
                     </div>
                     <div className="p-5 md:grid-cols-3">
-                      <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">
+                      <h3 className="font-bold font-sans text-lg text-gray-900 mb-2 truncate">
                         {`${user.firstName || ""} ${
                           user.lastName || ""
                         }`.trim() || "Unnamed User"}
@@ -403,7 +403,7 @@ const Editorialboard = () => {
                             {user.email || "N/A"}
                           </span>
                         </p>
-                        <p className="text-sm flex items-start gap-2">
+                        <p className="text-sm font-sans flex items-start gap-2">
                           <svg
                             className="w-4 h-4 text-gray-400 mt-0.5"
                             fill="none"
@@ -417,12 +417,12 @@ const Editorialboard = () => {
                               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                             />
                           </svg>
-                          <span className="font-semibold text-indigo-600">
+                          <span className="font-sans text-sm text-indigo-600">
                             {user.roleName || "No role assigned"}
                           </span>
                           <button
                             onClick={() => openEditModal(user)}
-                            className="text-blue-500 hover:text-blue-600 p-1 transition cursor-pointer"
+                            className="text-blue-500 text-sm font-sans hover:text-blue-600 p-1 transition cursor-pointer"
                             title="Edit User Role"
                           >
                             <svg
@@ -471,7 +471,7 @@ const Editorialboard = () => {
 
           {/* ALL USERS */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">All Users</h2>
+            <h2 className="text-lg font-sans font-bold text-gray-900 mb-4">All Users</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {userList.length > 0 ? (
                 userList.map((user) => (
@@ -487,7 +487,7 @@ const Editorialboard = () => {
                       />
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-lg text-gray-900 mb-2 truncate">
+                      <h3 className="font-bold text-lg font-sans text-gray-900 mb-2 truncate">
                         {`${user.firstName || ""} ${
                           user.lastName || ""
                         }`.trim() || "Unnamed User"}
@@ -507,7 +507,7 @@ const Editorialboard = () => {
                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                             />
                           </svg>
-                          <span className="truncate">
+                          <span className="font-sans text-sm truncate">
                             {user.email || "N/A"}
                           </span>
                         </p>
@@ -520,7 +520,7 @@ const Editorialboard = () => {
                             onChange={() => handleCheckboxChange(user)}
                             className="w-4 h-4 accent-indigo-500 cursor-pointer rounded border-2 border-white shadow-lg"
                           />
-                          <label className="text-sm ml-2">Assign Role</label>
+                          <label className="text-sm font-sans ml-2">Assign Role</label>
                         </div>
                       </div>
                     </div>
@@ -529,7 +529,7 @@ const Editorialboard = () => {
               ) : (
                 <div className="col-span-full flex flex-col items-center justify-center py-16">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mb-4"></div>
-                  <p className="text-gray-500 text-lg">Loading users...</p>
+                  <p className="text-gray-500 text-sm font-sans">Loading users...</p>
                 </div>
               )}
             </div>
@@ -564,33 +564,33 @@ const Editorialboard = () => {
                   />
                 </svg>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Assign Role</h1>
-              <p className="text-sm text-gray-500 mt-1">
+              <h1 className="text-lg font-bold text-gray-900">Assign Role</h1>
+              <p className="text-sm font-sans text-gray-500 mt-1">
                 Update user permissions and access
               </p>
             </div>
 
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold font-sans text-gray-700 mb-2">
                   User Name
                 </label>
                 <input
                   type="text"
                   value={userName}
                   readOnly
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:outline-none"
+                  className="w-full border-2 font-sans border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-sans font-semibold text-gray-700 mb-2">
                   Select Role
                 </label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                  className="w-full border-2 font-sans border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                 >
                   <option value="">-- Select Role --</option>
                   {roleList
@@ -607,13 +607,13 @@ const Editorialboard = () => {
             <div className="flex gap-3 mt-8">
               <button
                 onClick={closeModal}
-                className="flex-1 py-3 text-sm font-medium border-2 border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-all"
+                className="flex-1 py-3 text-sm font-sans font-medium border-2 border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="flex-1 py-3 text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg"
+                className="flex-1 py-3 text-sm font-sans font-medium bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg"
               >
                 Save Changes
               </button>

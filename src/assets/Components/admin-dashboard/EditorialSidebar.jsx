@@ -49,7 +49,7 @@ const EditorialSidebar = () => {
             </div>
             
             {/* Brand text */}
-            <h1 className="text-2xl font-bold mb-1 tracking-wide">Editorial Board</h1>
+            <h1 className="text-2xl font-sans font-bold mb-1 tracking-wide">Editorial Board</h1>
             <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-300 to-transparent"></div>
           </div>
           
@@ -58,7 +58,7 @@ const EditorialSidebar = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transform -translate-x-full group-hover:translate-x-full transition-all duration-700"></div>
             
             {/* Button text */}
-            <span className="relative z-10 flex items-center justify-center gap-2">
+            <span className="relative z-10 font-sans text-sm  flex items-center justify-center gap-2">
               <svg
                             className="w-5 h-5"
                             fill="none"

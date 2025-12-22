@@ -213,10 +213,10 @@ const AdminDashboard = () => {
           <div className="mb-6 md:mb-8">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
               <div>
-                <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">
+                <h1 className="text-2xl md:text-2xl font-sans font-bold text-gray-800 mb-2">
                   Admin Dashboard
                 </h1>
-                <p className="text-sm md:text-base text-gray-600">
+                <p className="text-sm font-sans md:text-base text-gray-600">
                   Manage your journals and content
                 </p>
               </div>
@@ -225,7 +225,7 @@ const AdminDashboard = () => {
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 font-semibold w-full md:w-auto"
               >
                 <MdAddCircleOutline className="text-xl md:text-2xl" />
-                <span className="text-sm md:text-base">Add New Journal</span>
+                <span className="text-sm font-sans md:text-base">Add New Journal</span>
               </button>
             </div>
           </div>
@@ -262,7 +262,7 @@ const AdminDashboard = () => {
         localStorage.setItem("journalId", journal._id);
         navigate(`/admin/dashboard/manage-editorial/${journal._id}`);
       }}
-      className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
+      className="text-blue-600 font-sans hover:text-blue-700 text-sm font-semibold underline"
     >
       Editorial Board
     </button>
@@ -272,7 +272,7 @@ const AdminDashboard = () => {
         localStorage.setItem("journalId", journal._id);
         navigate(`/admin/dashboard/Assign-papers/${journal._id}`);
       }}
-      className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline"
+      className="text-blue-600 font-sans hover:text-blue-700 text-sm font-semibold underline"
     >
       Papers
     </button>
@@ -285,7 +285,7 @@ const AdminDashboard = () => {
                     <div className="flex gap-2 mt-3">
                       <button
                         onClick={() => openEditModal(journal)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="flex items-center gap-1.5 px-4 py-2 font-sans text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
                         <svg
                           className="w-4 h-4"
@@ -304,7 +304,7 @@ const AdminDashboard = () => {
                       </button>
                       <button
                         onClick={() => handleDelete(journal._id)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="flex items-center font-sans gap-1.5 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md"
                       >
                         <svg
                           className="w-4 h-4"
@@ -327,13 +327,13 @@ const AdminDashboard = () => {
               ))
             ) : (
               <div className="col-span-full flex flex-col items-center justify-center py-12 md:py-16">
-                <div className="text-gray-400 text-4xl md:text-6xl mb-4">
+                <div className="text-gray-400  text-2xl font-sans md:text-6xl mb-4">
                   Book Icon
                 </div>
-                <p className="text-gray-500 text-lg md:text-xl font-medium">
+                <p className="text-gray-500 text-lg font-sans md:text-xl font-medium">
                   No journals found
                 </p>
-                <p className="text-gray-400 text-xs md:text-sm mt-2 text-center px-4">
+                <p className="text-gray-400 font-sans text-xs md:text-sm mt-2 text-center px-4">
                   Click "Add Journal" to create your first entry
                 </p>
               </div>
@@ -363,7 +363,7 @@ const AdminDashboard = () => {
             <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-5">
               {/* Image */}
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-sm font-sans md:text-sm font-semibold text-gray-700 mb-2 block">
                   Upload Image
                 </label>
                 <div className="relative">
@@ -376,7 +376,7 @@ const AdminDashboard = () => {
                   />
                   <label
                     htmlFor="image-upload"
-                    className="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
+                    className="border-2 border-dashed border-gray-300 font-sans text-lg hover:border-blue-500 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-blue-50"
                   >
                     {imagePreview ? (
                       <img
@@ -387,10 +387,10 @@ const AdminDashboard = () => {
                     ) : (
                       <>
                         <MdCloudUpload className="text-4xl md:text-5xl text-gray-400 mb-2" />
-                        <p className="text-sm md:text-base text-gray-600 font-medium">
+                        <p className="text-sm font-sans md:text-base text-gray-600 font-medium">
                           Click to upload image
                         </p>
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-gray-400 text-ms font-sans mt-1">
                           JPG, JPEG or PNG
                         </p>
                       </>
@@ -401,11 +401,11 @@ const AdminDashboard = () => {
 
               {/* Title */}
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-ms font-sans md:text-sm font-semibold text-gray-700 mb-2 block">
                   Title
                 </label>
                 <input
-                  className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none"
+                  className="border-2 border-gray-300 font-sans focus:border-blue-500 focus:ring-2 focus:ring-blue-200 w-full rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base text-gray-800 transition-all duration-200 outline-none"
                   type="text"
                   placeholder="Enter journal title"
                   value={title}
@@ -415,7 +415,7 @@ const AdminDashboard = () => {
 
               {/* Description */}
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-ms font-sans md:text-sm font-semibold text-gray-700 mb-2 block">
                   Description
                 </label>
                 <textarea
@@ -432,13 +432,13 @@ const AdminDashboard = () => {
             <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 md:gap-3 p-4 md:p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
               <button
                 onClick={closeModal}
-                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 text-sm md:text-base font-semibold hover:bg-gray-100 transition-all duration-200"
+                className="w-full sm:w-auto px-4 md:px-6 font-sans py-2 md:py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 text-sm md:text-base font-semibold hover:bg-gray-100 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm md:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full font-sans sm:w-auto px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm md:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 {editingJournal ? "Update Journal" : "Save Journal"}
               </button>
