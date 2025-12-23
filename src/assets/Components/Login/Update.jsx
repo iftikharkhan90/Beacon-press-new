@@ -123,8 +123,8 @@ const EditUser = ({ setCurrentPage }) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-3xl border border-gray-100">
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">Profile Settings</h2>
-          <h3 className="mt-2 text-sm font-medium text-blue-500">
+          <h2 className="text-2xl font-sans font-bold text-gray-900">Profile Settings</h2>
+          <h3 className="mt-2 text-sm font-sans font-medium text-blue-500">
             Update Your Profile
           </h3>
         </div>
@@ -133,7 +133,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* First + Last Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 First Name
               </label>
               <input
@@ -142,11 +142,11 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.firstName}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 text-sm font-sans py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Last Name
               </label>
               <input
@@ -155,7 +155,7 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.lastName}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full text-sm font-sans px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Email + Country */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Email Address
               </label>
               <input
@@ -172,11 +172,11 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 font-sans text-sm py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Country
               </label>
               <select
@@ -184,7 +184,7 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.country}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-2 border text-sm font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               >
                 <option value="">Select country</option>
                 {COUNTRIES.map((country) => (
@@ -199,7 +199,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Title + Specialization + Password */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Title
               </label>
               <select
@@ -207,7 +207,7 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.title}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-2 border text-sm font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               >
                 <option value="">Select Title</option>
                 <option>Mr.</option>
@@ -220,7 +220,7 @@ const EditUser = ({ setCurrentPage }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Specialization
               </label>
               <select
@@ -228,7 +228,7 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.specialization}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-2 border text-sm font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               >
                 <option value="">Select specialization</option>
                 <option>Computer Science</option>
@@ -245,7 +245,7 @@ const EditUser = ({ setCurrentPage }) => {
 
             {/* Password field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -255,8 +255,8 @@ const EditUser = ({ setCurrentPage }) => {
                   minLength="8"
                   value={user.password}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
-                  placeholder="New Password"
+                  className="w-full font-sans text-sm px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                  placeholder="Write to Change Password"
                 />
                 <span
                   className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
@@ -271,7 +271,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Confirm Password (only if new password given) */}
           {user.password && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
               </label>
               <div className="relative">
@@ -280,7 +280,7 @@ const EditUser = ({ setCurrentPage }) => {
                   type={showConfirmPassword ? "text" : "password"}
                   value={user.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                  className="w-full text-sm font-sans px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
                   placeholder="Confirm Password"
                 />
                 <span
@@ -296,7 +296,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Affiliation + Phone */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Affiliation
               </label>
               <input
@@ -305,12 +305,12 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.affiliation}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-2 border text-sm font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Phone Number
               </label>
               <input
@@ -319,7 +319,7 @@ const EditUser = ({ setCurrentPage }) => {
                 required
                 value={user.phone}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-2 text-sm font-sans border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -327,8 +327,8 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Reviewer Checkbox */}
           <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-100">
             <div>
-              <h3 className="font-medium text-gray-700">Become a Reviewer</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-medium font-sans font-sm text-gray-700">Become a Reviewer</h3>
+              <p className="text-sm font-sans text-gray-600">
                 Check this if you want to review papers
               </p>
             </div>
@@ -347,7 +347,7 @@ const EditUser = ({ setCurrentPage }) => {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+            className="w-full text-lg font-sans flex justify-center py-3 px-4 border border-transparent font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
           >
             Update Profile
           </button>
@@ -355,7 +355,7 @@ const EditUser = ({ setCurrentPage }) => {
           <div className="text-center mt-4">
             <Link
               to="/home"
-              className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+              className="font-medium text-sm font-sans text-blue-600 hover:text-blue-500 cursor-pointer"
             >
               Back to Home
             </Link>

@@ -102,11 +102,11 @@ const SignupPage = ({ setCurrentPage }) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-3xl border border-gray-100">
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">Create your account</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="text-2xl font-sans font-bold text-gray-900">Create your account</h2>
+          <p className="mt-2 text-sm font-sans text-gray-600">
             Or{" "}
             <Link to="/login">
-              <button className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">
+              <button className="font-medium text-sm font-sans text-blue-600 hover:text-blue-500 cursor-pointer">
                 sign in to your existing account
               </button>
             </Link>
@@ -117,13 +117,13 @@ const SignupPage = ({ setCurrentPage }) => {
           {/* First Name & Last Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 First Name
               </label>
               <input
                 name="firstName"
                 type="text"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full px-4 py-2 font-sans text-sm border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.firstName
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -138,13 +138,13 @@ const SignupPage = ({ setCurrentPage }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Last Name
               </label>
               <input
                 name="lastName"
                 type="text"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full text-sm font-sans px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.lastName
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -161,13 +161,13 @@ const SignupPage = ({ setCurrentPage }) => {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
               Email Address
             </label>
             <input
               name="email"
               type="email"
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+              className={`w-full text-sm font-sans px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                 errors.email
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -184,20 +184,20 @@ const SignupPage = ({ setCurrentPage }) => {
           {/* Title, Country, Specialization */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Title
               </label>
               <select
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full text-sm font-sans px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.title
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
                 }`}
               >
-                <option value="">Select Title</option>
+                <option className="font-sans text-sm" value="">Select Title</option>
                 <option>Mr.</option>
                 <option>Mrs.</option>
                 <option>Miss.</option>
@@ -206,19 +206,19 @@ const SignupPage = ({ setCurrentPage }) => {
                 <option>Prof. Dr.</option>
               </select>
               {errors.title && (
-                <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+                <p className="text-red-500 font-sans text-sm mt-1">{errors.title}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Country
               </label>
               <select
                 name="country"
                 value={formData.country}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full px-4 font-sans text-sm py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.country
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -232,19 +232,19 @@ const SignupPage = ({ setCurrentPage }) => {
                 ))}
               </select>
               {errors.country && (
-                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+                <p className="text-red-500 font-sans text-sm mt-1">{errors.country}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Specialization
               </label>
               <select
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full px-4 py-2 text-sm font-sans border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.specialization
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -262,7 +262,7 @@ const SignupPage = ({ setCurrentPage }) => {
                 <option>Other</option>
               </select>
               {errors.specialization && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 font-sans text-sm mt-1">
                   {errors.specialization}
                 </p>
               )}
@@ -272,13 +272,13 @@ const SignupPage = ({ setCurrentPage }) => {
           {/* Affiliation & Phone */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Affiliation
               </label>
               <input
                 name="affiliation"
                 type="text"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full px-4 text-sm font-sans py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.affiliation
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -295,13 +295,13 @@ const SignupPage = ({ setCurrentPage }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Phone Number
               </label>
               <input
                 name="phone"
                 type="tel"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
+                className={`w-full text-sm font-sans px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 ${
                   errors.phone
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500"
@@ -320,7 +320,7 @@ const SignupPage = ({ setCurrentPage }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-sans text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -328,7 +328,7 @@ const SignupPage = ({ setCurrentPage }) => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   minLength="8"
-                  className={`w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-1 ${
+                  className={`w-full text-sm font-sans px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-1 ${
                     errors.password
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 focus:ring-blue-500"
@@ -351,14 +351,14 @@ const SignupPage = ({ setCurrentPage }) => {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-sans font-medium text-gray-700 mb-1">
                 Confirm Password
               </label>
               <div className="relative">
                 <input
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  className={`w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-1 ${
+                  className={`w-full px-4 text-sm font-sans py-2 pr-10 border rounded-lg focus:outline-none focus:ring-1 ${
                     errors.confirmPassword
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 focus:ring-blue-500"
@@ -387,8 +387,8 @@ const SignupPage = ({ setCurrentPage }) => {
           {/* Reviewer Toggle */}
           <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-100 cursor-pointer">
             <div>
-              <h3 className="font-medium text-gray-700">Become a Reviewer</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-medium text-sm font-sans text-gray-700">Become a Reviewer</h3>
+              <p className="text-sm font-sans text-gray-600">
                 Check this if you want to review papers
               </p>
             </div>
@@ -408,7 +408,7 @@ const SignupPage = ({ setCurrentPage }) => {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 cursor-pointer"
+              className="w-full flex font-sans justify-center py-3 px-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 cursor-pointer"
             >
               Create Account
             </button>
@@ -418,7 +418,7 @@ const SignupPage = ({ setCurrentPage }) => {
             <Link to="/home">
               <button
                 type="button"
-                className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                className="font-medium text-sm font-sans text-blue-600 hover:text-blue-500 cursor-pointer"
               >
                 Back to Home
               </button>
