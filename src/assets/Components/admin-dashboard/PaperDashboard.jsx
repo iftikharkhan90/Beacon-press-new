@@ -200,10 +200,10 @@ const PaperDashboard = () => {
                 Back to Journals
               </button>
 
-              <h1 className="text-3xl font-bold text-gray-900 mb-1">
+              <h1 className="text-2xl font-sans font-bold text-gray-900 mb-1">
                 Assign Papers List
               </h1>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm font-sans text-gray-600">
                 Assign Papers Table in Journal
               </p>
             </div>
@@ -217,13 +217,13 @@ const PaperDashboard = () => {
               <table className="min-w-full text-sm">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-2 py-1 border-b">Sr</th>
-                    <th className="px-2 py-1 border-b">Paper Name</th>
-                    <th className="px-2 py-1 border-b">Author Name</th>
-                    <th className="px-2 py-1 border-b">Submission Date</th>
-                    <th className="px-2 py-1 border-b">Status</th>
-                    <th className="px-2 py-1 border-b">Assigne</th>
-                    <th className="px-2 py-1 border-b">Select Assigne</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Sr</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Paper Name</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Author Name</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Submission Date</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Status</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Assigne</th>
+                    <th className="px-2 font-sans text-sm py-1 border-b">Select Assigne</th>
                   </tr>
                 </thead>
 
@@ -235,24 +235,24 @@ const PaperDashboard = () => {
                         className="text-center hover:bg-gray-50 transition"
                       >
                         {/* Sr */}
-                        <td className="px-3 py-2 border-b text-gray-700 font-medium">
+                        <td className="px-3 text-sm font-sans py-2 border-b text-gray-700 font-medium">
                           {index + 1}
                         </td>
 
                         {/* Paper Name */}
-                        <td className="px-3 py-2 border-b text-gray-800 font-semibold">
+                        <td className="px-3 py-2 text-sm font-sans border-b text-gray-800 font-semibold">
                           {paper.manuscriptDetails?.title || "No Title"}
                         </td>
 
                         {/* Author Names */}
-                        <td className="px-3 py-2 border-b text-gray-600">
+                        <td className="px-3 py-2 text-sm font-sans border-b text-gray-600">
                           {paper.authors?.length > 0
                             ? paper.authors.map((a) => a.fullName).join(", ")
                             : "No Author"}
                         </td>
 
                         {/* Submission Date */}
-                        <td className="px-3 py-2 border-b text-gray-500">
+                        <td className="px-3 text-sm font-sans py-2 border-b text-gray-500">
                           {paper.createdAt
                             ? new Date(paper.createdAt).toLocaleDateString()
                             : "No Date"}
@@ -261,20 +261,20 @@ const PaperDashboard = () => {
                         {/* Status  */}
                         <td className="px-3 py-2 border-b">
                           {assignmentMap[paper._id] ? (
-                            <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
+                            <span className="inline-block font-sans text-sm px-3 py-1 font-semibold bg-green-100 text-green-700 rounded-full">
                               Assigned
                             </span>
                           ) : (
-                            <span className="inline-block px-3 py-1 text-xs font-semibold bg-red-100 text-red-600 rounded-full">
+                            <span className="inline-block px-3 py-1 text-ms font-sans font-semibold bg-red-100 text-red-600 rounded-full">
                               Not Assigned
                             </span>
                           )}
                         </td>
 
                         {/* Assigned */}
-                        <td className="px-3 py-2 border-b text-gray-700 font-semibold">
+                        <td className="px-3 py-2 font-sans text-sm border-b text-gray-700 font-semibold">
                           {assignmentMap[paper._id]?.fullName || (
-                            <span className="text-gray-400 italic">
+                            <span className="text-gray-400 text-sm font-sans">
                               Not Assigned
                             </span>
                           )}
@@ -309,7 +309,7 @@ const PaperDashboard = () => {
                     <tr>
                       <td
                         colSpan="7"
-                        className="px-4 py-6 text-center text-gray-500 italic"
+                        className="px-4 py-6 font-sans text-sm text-center text-gray-500"
                       >
                         No Papers Found
                       </td>
@@ -351,10 +351,10 @@ const PaperDashboard = () => {
                   </svg>
                 </div>
 
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-sans font-bold text-gray-900">
                   Assign User
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm font-sans text-gray-500 mt-1">
                   Select a user to assign this paper
                 </p>
               </div>
@@ -362,14 +362,14 @@ const PaperDashboard = () => {
               {/* Select User Dropdown */}
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-sans font-semibold text-gray-700 mb-2">
                     Select User
                   </label>
 
                   <select
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full font-sans text-sm  border rounded px-3 py-2"
                   >
                     <option value="">-- Select User --</option>
                     {allUsers.map((user) => (
@@ -388,14 +388,14 @@ const PaperDashboard = () => {
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 text-sm font-medium border-2 border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-all"
+                  className="flex-1 py-3 text-sm font-sans font-medium border-2 border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-all"
                 >
                   Cancel
                 </button>
 
                 <button
                   onClick={handleSaveAssign}
-                  className="flex-1 py-3 text-sm font-medium bg-gradient-to-r 
+                  className="flex-1 py-3 text-sm font-sans font-medium bg-gradient-to-r 
                      from-indigo-500 to-purple-600 text-white rounded-xl 
                      hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg"
                 >

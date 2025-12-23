@@ -17,8 +17,8 @@ const EmailVerificationModal = ({ isOpen, onClose, email, onVerify }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Verify Your Email</h2>
-        <p className="text-sm text-gray-600 mb-4">
+        <h2 className="text-xl font-sans font-bold text-gray-800 mb-2">Verify Your Email</h2>
+        <p className="text-sm font-sans text-gray-600 mb-4">
           A verification code has been sent to <b>{email}</b>. Please enter it below.
         </p>
 
@@ -35,13 +35,13 @@ const EmailVerificationModal = ({ isOpen, onClose, email, onVerify }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+              className="px-4 py-2 text-sm font-sans bg-gray-300 rounded-lg hover:bg-gray-400"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 text-sm font-sans py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Verify
             </button>

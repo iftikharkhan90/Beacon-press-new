@@ -50,7 +50,7 @@ const Sidebar = () => {
       {/* Mobile toggle */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed left-4 top-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg"
+        className="md:hidden fixed text-sm font-sans  left-4 top-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg"
       >
         {isSidebarOpen ? "✖️" : "☰"}
       </button>
