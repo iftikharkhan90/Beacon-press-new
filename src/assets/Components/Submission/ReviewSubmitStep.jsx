@@ -200,19 +200,19 @@ const ReviewSubmitStep = ({
 
   return (
     <>
-      <h3 className="text-lg font-semibold mb-3">Review & Submit</h3>
+      <h3 className="text-2xl font-semibold mb-3 font-sans">Review & Submit</h3>
       <div className="border-gray-300 p-4 rounded space-y-4">
         {/* Manuscript Details Section */}
         <div className="bg-white p-4 rounded border border-gray-300">
    <div className="text-center mt-2">
-  <strong>Select Journal:</strong>{" "}
+  <strong className="text-lg">Select Journal:</strong>{" "}
 {activeManuscript?.journalTitle || "—"}
 
 </div>
 
 
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-semibold text-lg">Manuscript Details</h4>
+            <h4 className="font-semibold font-sans text-lg">Manuscript Details:</h4>
             <button
               onClick={() => setStep(2)}
               className="px-3 py-1 text-sm text-white bg-blue-500 hover:bg-blue-600 rounded transition cursor-pointer"
@@ -223,40 +223,40 @@ const ReviewSubmitStep = ({
           <div className="gap-4">
             
             <div>
-              <strong>Title:</strong> {activeManuscript.title || "—"}
+              <strong className="font-sans text-lg">Title:</strong> {activeManuscript.title || "—"}
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
             <div>
-              <strong>Type:</strong> {activeManuscript.type || "—"}
+              <strong className="font-sans text-lg">Type:</strong> {activeManuscript.type || "—"}
             </div>
             <div>
-              <strong>Running Title:</strong>{" "}
+              <strong className="font-sans text-lg">Running Title:</strong>{" "}
               {activeManuscript.runningTitle || "—"}
             </div>
             <div>
-              <strong>Subject:</strong> {activeManuscript.subject || "—"}
+              <strong className="font-sans text-lg">Subject:</strong> {activeManuscript.subject || "—"}
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
             <div>
-              <strong>keyword:</strong> {activeManuscript.keyword || "—"}
+              <strong className="font-sans text-lg">keyword:</strong> {activeManuscript.keyword || "—"}
             </div>
             <div>
-              <strong>Corresponding Author:</strong>{" "}
+              <strong className="font-sans text-lg">Corresponding Author:</strong>{" "}
               {activeManuscript.correspondingName || "—"}
             </div>
             <div>
-              <strong>Email:</strong>{" "}
+              <strong className="font-sans text-lg">Email:</strong>{" "}
               {activeManuscript.correspondingEmail || "—"}
             </div>
           </div>
           <div className="mt-3">
-            <strong>Abstract:</strong>
+            <strong className="font-sans text-lg">Abstract:</strong>
             {activeManuscript.abstract || "—"}
           </div>
 
-          <h4 className="font-semibold text-lg mt-4">Authors</h4>
+          <h4 className="font-semibold text-lg font-sans mt-4">Authors:</h4>
           <div className="space-y-3">
             {activeAuthors.map((author, index) => (
               <div
@@ -264,16 +264,16 @@ const ReviewSubmitStep = ({
                 className="p-3 rounded grid grid-cols-1 md:grid-cols-3 gap-3"
               >
                 <div>
-                  <strong>Full Name:</strong> {author.fullName || "—"}
+                  <strong className="font-sans text-lg">Full Name:</strong> {author.fullName || "—"}
                 </div>
                 <div>
-                  <strong>Email:</strong> {author.email || "—"}
+                  <strong className="font-sans text-lg">Email:</strong> {author.email || "—"}
                 </div>
                 <div>
-                  <strong>Country:</strong> {author.country || "—"}
+                  <strong className="font-sans text-lg">Country:</strong> {author.country || "—"}
                 </div>
                 <div className="md:col-span-3">
-                  <strong>Affiliation:</strong> {author.affiliation || "—"}
+                  <strong className="font-sans text-lg">Affiliation:</strong> {author.affiliation || "—"}
                 </div>
               </div>
             ))}
@@ -282,7 +282,7 @@ const ReviewSubmitStep = ({
 
         <div className="bg-white p-4 rounded border-gray-200 border-1">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-semibold text-lg">Reviewers</h4>
+            <h4 className="font-semibold text-2xl">Reviewers:</h4>
             <button
               onClick={() => setStep(3)}
               className="px-3 py-1 text-sm text-white bg-blue-500 hover:bg-blue-600 rounded transition cursor-pointer"
@@ -294,19 +294,19 @@ const ReviewSubmitStep = ({
             <table className="w-full text-sm">
               <thead className="">
                 <tr>
-                  <th className="p-2 text-center">Full Name</th>
-                  <th className="p-2 text-center">Email</th>
-                  <th className="p-2 text-center">Country</th>
-                  <th className="p-2 text-center">Affiliation</th>
+                  <th className="p-2 text-center font-sans text-lg">Full Name</th>
+                  <th className="p-2 text-center font-sans text-lg">Email</th>
+                  <th className="p-2 text-center font-sans text-lg">Country</th>
+                  <th className="p-2 text-center font-sans text-lg">Affiliation</th>
                 </tr>
               </thead>
               <tbody>
                 {activeReviewers.map((r, i) => (
                   <tr key={i}>
-                    <td className="p-2 text-center">{r.fullName || "—"}</td>
-                    <td className="p-2 text-center">{r.email || "—"}</td>
-                    <td className="p-2 text-center">{r.country || "—"}</td>
-                    <td className="p-2 text-center">{r.affiliation || "—"}</td>
+                    <td className="p-2 text-center font-sans text-sm">{r.fullName || "—"}</td>
+                    <td className="p-2 text-center font-sans text-sm">{r.email || "—"}</td>
+                    <td className="p-2 text-center font-sans text-sm">{r.country || "—"}</td>
+                    <td className="p-2 text-center font-sans text-sm">{r.affiliation || "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -336,7 +336,7 @@ const ReviewSubmitStep = ({
 
         <div className="bg-white p-4 rounded border-gray-300 border-1">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-semibold text-lg">Files</h4>
+            <h4 className="font-semibold text-2xl font-sans">Files</h4>
             <button
               onClick={() => setStep(4)}
               className="px-3 py-1 text-sm text-white bg-blue-500 hover:bg-blue-600 rounded transition cursor-pointer"
@@ -346,59 +346,59 @@ const ReviewSubmitStep = ({
           </div>
 
           <div className="mb-6">
-            <h5 className="font-medium text-base mb-3 flex items-center">
+            <h5 className="font-medium text-lg mb-1 flex items-center font-sans ">
               📄 Manuscript File
             </h5>
             {manuscriptFile ? (
               <FileCard file={manuscriptFile} index={0} />
             ) : (
-              <div className="p-3 border-1 border-gray-300 rounded text-center text-gray-500">
+              <div className="p-3 border-1 border-gray-300 font-sans text-sm rounded text-center text-gray-500">
                 No manuscript file uploaded
               </div>
             )}
           </div>
 
           <div className="mb-6">
-            <h5 className="font-medium text-base mb-3 flex items-center">
+            <h5 className="font-medium text-lg mb-1 flex items-center font-sans ">
               📊 Figures/Tables
             </h5>
             {figuresFiles ? (
               <FileCard file={figuresFiles} index={0} />
             ) : (
-              <div className="p-3 border-1 border-gray-300 rounded text-center text-gray-500">
+              <div className="p-3 border-1 border-gray-300 rounded text-sm text-center text-gray-500">
                 No figures or tables uploaded
               </div>
             )}
           </div>
 
           <div>
-            <h5 className="font-medium text-base mb-3 flex items-center">
+            <h5 className="font-medium text-lg font-sans mb-1 flex items-center">
               📎 Supplementary Files
             </h5>
             {supplementaryFiles ? (
               <FileCard file={supplementaryFiles} index={0} />
             ) : (
-              <div className="p-3 border-1 border-gray-300 rounded text-center text-gray-500">
+              <div className="p-3 border-1 text-sm border-gray-300 rounded text-center text-gray-500">
                 No supplementary files uploaded
               </div>
             )}
           </div>
 
           <div className="mt-4 p-3 bg-blue-50 rounded">
-            <h6 className="font-medium text-blue-900 mb-2">Files Summary</h6>
+            <h6 className="font-medium text-blue-900 mb-2 text-lg">Files Summary:</h6>
             <div className="text-sm text-blue-800 space-y-1">
-              <div>
+              <div className="text-sm font-sans">
                 • Manuscript: {manuscriptFile ? "✅ Uploaded" : "❌ Required"}
               </div>
-              <div>
+              <div className="text-sm font-sans">
                 • Figures/Tables:{" "}
                 {figuresFiles ? "✅ Uploaded" : "❌ Not uploaded"}
               </div>
-              <div>
+              <div className="text-sm font-sans">
                 • Supplementary:{" "}
                 {supplementaryFiles ? "✅ Uploaded" : "❌ Not uploaded"}
               </div>
-              <div className="pt-2 font-medium">
+              <div className="pt-2 font-sans text-sm">
                 Total files:{" "}
                 {(manuscriptFile ? 1 : 0) +
                   (figuresFiles ? 1 : 0) +
@@ -417,14 +417,14 @@ const ReviewSubmitStep = ({
             checked={confirmationChecked}
             onChange={(e) => setConfirmationChecked(e.target.checked)}
           />
-          <span>
+          <span className="text-sm font-sans">
             I confirm that all information provided is accurate and complete. I
             understand that submitting false information may result in rejection
             of my submission.
           </span>
         </label>
         {!confirmationChecked && (
-          <div className="text-red-500 text-sm mt-2">
+          <div className="text-red-500 text-sm font-sans mt-2">
             Please confirm the accuracy of your submission
           </div>
         )}

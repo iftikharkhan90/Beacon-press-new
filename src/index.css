@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+@layer base {
+  /* Default text */
+  body {
+    @apply font-sans text-sm;
+  }
+
+  /* Headings */
+  h1 {
+    @apply font-sans text-2xl font-semibold;
+  }
+
+  h2 {
+    @apply font-sans text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply font-sans text-lg font-semibold;
+  }
+
+  h4 {
+    @apply font-sans text-lg font-medium;
+  }
+
+  h5 {
+    @apply font-sans text-lg font-medium;
+  }
+
+  h6 {
+    @apply font-sans text-lg font-medium;
+  }
+
+  /* Paragraphs */
+  p {
+    @apply font-sans text-sm;
+  }
+}

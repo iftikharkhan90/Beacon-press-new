@@ -23,7 +23,7 @@ const ReviewersStep = ({
   console.log("yesss", setReviewers)
   return (
     <>
-      <h3 className="text-lg font-semibold mb-3">
+      <h3 className="text-lg font-sans font-semibold mb-3">
         Reviewers Details
         <span className="text-sm font-normal ml-2 text-red-600">
           (At least 3 reviewers are required)
@@ -47,7 +47,7 @@ const ReviewersStep = ({
         <div className="space-y-6">
           {/* --- Conflict of Interest --- */}
           <div className="rounded-lg p-4">
-            <h4 className="font-semibold mb-3">
+            <h4 className="font-semibold mb-3 font-sans text-lg">
               Conflict of Interest{" "}
               <span
                 className={`${
@@ -95,7 +95,7 @@ const ReviewersStep = ({
 
             {conflictOfInterest === true && (
               <div>
-                <label className="block mb-1 ">Conflict Description:</label>
+                <label className="block mb-1 font-sans text-lg ">Conflict Description:</label>
                 <textarea
                   value={conflictDescription}
                   onChange={(e) => setConflictDescription(e.target.value)}
@@ -109,9 +109,9 @@ const ReviewersStep = ({
 
           {/* --- Data Availability --- */}
           <div className="rounded-lg p-4">
-            <h4 className="font-semibold mb-3">Data Availability Statement</h4>
+            <h4 className="font-semibold mb-3 font-sans text-lg">Data Availability Statement</h4>
 
-            <p className="text-sm mb-2">
+            <p className="text-sm mb-2 font-sans">
               Please describe where the underlying data supporting the results
               of your study can be found.
             </p>

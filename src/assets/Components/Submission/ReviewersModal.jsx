@@ -179,14 +179,14 @@ function ReviewersModal({
                 </span>
               </div>
               <p className="text-gray-600 mb-1">
-                <span className="font-medium">Email:</span> {rev.email}
+                <span className="font-medium font-sans">Email:</span> {rev.email}
               </p>
               <p className="text-gray-600 mb-1">
-                <span className="font-medium">Affiliation:</span>{" "}
+                <span className="font-medium font-sans">Affiliation:</span>{" "}
                 {rev.affiliation}
               </p>
               <p className="text-gray-600">
-                <span className="font-medium">Country:</span> {rev.country}
+                <span className="font-medium font-sans">Country:</span> {rev.country}
               </p>
             </div>
           ))}
@@ -199,7 +199,7 @@ function ReviewersModal({
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className="text-2xl font-semibold font-sans text-gray-800">
                 {editingIndex >= 0 ? "Edit Reviewer" : "Add New Reviewer"}
               </h3>
               <button
@@ -233,7 +233,7 @@ function ReviewersModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 flex-grow">
               {/* Full Name */}
               <div>
-                <label className="block font-medium text-gray-700">
+                <label className="block font-medium font-sans text-lg text-gray-700">
                   Full Name{" "}
                   <span
                     className={
@@ -262,7 +262,7 @@ function ReviewersModal({
 
               {/* Email */}
               <div>
-                <label className="block font-medium text-gray-700">
+                <label className=" font-sans text-lg block font-medium text-gray-700">
                   Email{" "}
                   <span
                     className={
@@ -291,7 +291,7 @@ function ReviewersModal({
 
               {/* Country */}
               <div>
-                <label className="block font-medium text-gray-700">
+                <label className="font-sans text-lg block font-medium text-gray-700">
                   Country{" "}
                   <span
                     className={
@@ -325,7 +325,7 @@ function ReviewersModal({
 
               {/* Affiliation */}
               <div>
-                <label className="block font-medium text-gray-700">
+                <label className="text-lg font-sans block font-medium text-gray-700">
                   Affiliation{" "}
                   <span
                     className={
@@ -415,7 +415,7 @@ function ReviewersModal({
 
             {/* Reviewer list inside modal */}
             <div className="px-6 pb-6 border-t border-gray-300 mt-4">
-              <h4 className="font-medium text-gray-800 mt-2">Reviewer List</h4>
+              <h4 className="font-medium text-gray-800 mt-2 font-sans text-lg">Reviewer List</h4>
               {reviewers.length === 0 ? (
                 <p className="text-center text-gray-600">
                   No reviewers added yet.
@@ -427,10 +427,10 @@ function ReviewersModal({
                     className="flex justify-between items-center border p-3 border-gray-300 rounded mb-2"
                   >
                     <div>
-                      <h5 className="font-medium">{rev.fullName}</h5>
-                      <p className="text-sm text-gray-600">{rev.email}</p>
-                      <p className="text-sm text-gray-600">{rev.country}</p>
-                      <p className="text-sm text-gray-600">{rev.affiliation}</p>
+                      <h5 className="font-medium font-sans text-sm">{rev.fullName}</h5>
+                      <p className="text-gray-600 font-sans text-sm">{rev.email}</p>
+                      <p className="text-gray-600 font-sans text-sm">{rev.country}</p>
+                      <p className="text-gray-600 font-sans text-sm">{rev.affiliation}</p>
                     </div>
                     <div className="flex space-x-2">
                       <button

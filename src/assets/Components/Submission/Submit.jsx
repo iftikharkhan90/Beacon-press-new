@@ -447,8 +447,8 @@ const SubmissionDashboard = () => {
       </div>
 
       {/* Success message */}
-      <h2 className="text-2xl font-bold text-green-600">Submission Successful!</h2>
-      <p className="mt-3 text-gray-700">
+      <h2 className="text-2xl font-sans font-bold text-green-600">Submission Successful!</h2>
+      <p className="mt-3 text-gray-700 text-sm font-sans">
         Thank you for submitting your manuscript. You can start a new submission anytime.
       </p>
 
@@ -487,8 +487,8 @@ const SubmissionDashboard = () => {
           <div className="lg:col-span-4">
             {view === "online" ? (
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="border-b p-4 bg-gray-50">
-                  <h2 className="text-xl font-semibold text-gray-800">
+                <div className="border-b p-3 bg-gray-50">
+                  <h2 className="text-lg font-semibold font-sans text-gray-800">
                     Online Submission
                   </h2>
                 </div>
