@@ -72,14 +72,14 @@ const UploadFilesStep = ({
 
   return (
     <>
-      <h3 className="text-lg font-bold mb-3">Upload Files</h3>
+      <h3 className="text-lg font-bold mb-3 font-sans ">Upload Files:</h3>
       <div className="space-y-4">
         {!previewSubmission ? (
           <>
             <div className="rounded p-4 ">
               {/* Manuscript File Upload */}
               <div className="mb-4">
-                <label className="block font-medium mb-2">
+                <label className="block font-sans text-lg">
                   Upload Manuscript File{" "}
                   <span className={manuscriptFile ? "text-green-600" : "text-red-600"}>
                     *
@@ -109,7 +109,7 @@ const UploadFilesStep = ({
                 )}
 
                 {step4Error && (
-                  <div className="text-red-500 text-sm mt-2">
+                  <div className="text-red-500 text-sm mt-2 font-sans">
                     Manuscript file is required
                   </div>
                 )}
@@ -117,7 +117,7 @@ const UploadFilesStep = ({
 
               {/* Figures/Tables File Upload */}
               <div className="mb-4">
-                <label className="block font-medium mb-2">
+                <label className="block  font-sans text-lg">
                   Upload Figures/Tables (Optional)
                 </label>
                 
@@ -143,7 +143,7 @@ const UploadFilesStep = ({
 
               {/* Supplementary Files Upload */}
               <div>
-                <label className="block font-medium mb-2">
+                <label className="block font-sans text-lg">
                   Supplementary Files (Optional)
                 </label>
                 

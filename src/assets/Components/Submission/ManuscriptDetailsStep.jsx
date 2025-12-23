@@ -75,7 +75,7 @@ const isAllDataComplete = () => {
     <>
     <div className="grid grid-cols-1 md:grid-cols-4 mb-3 gap-4 items-center">
           {/* Label */}
-          <label className="block font-medium text-xl">
+          <label className="block font-sans font-bold text-lg">
             Select Journal{" "}
             <span
               className={
@@ -104,7 +104,7 @@ const isAllDataComplete = () => {
     step2Errors.journal ? "border-red-500" : ""
   }`}
 >
-  <option value="">Select Journal</option>
+  <option className="text-2xl font-sans" value="">Select Journal</option>
 
   {journals.length > 0 ? (
     journals.map((journal) => (
@@ -124,7 +124,7 @@ const isAllDataComplete = () => {
           </div>
         </div>
       <div className="bg-white rounded-lg mb-4">
-        <h1 className="text-xl font-semibold text-gray-800 mb-4">
+        <h1 className="text-lg  font-sans font-semibold text-gray-800 mb-4">
           Manuscript Details
         </h1>
 
@@ -135,7 +135,7 @@ const isAllDataComplete = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Manuscript Title{" "}
                 <span
                   className={
@@ -165,7 +165,7 @@ const isAllDataComplete = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Manuscript Type{" "}
                 <span
                   className={
@@ -184,11 +184,11 @@ const isAllDataComplete = () => {
                   step2Errors.type ? "border-red-500" : ""
                 }`}
               >
-                <option value="">Select Type</option>
-                <option>Review Article</option>
-                <option>Research Article</option>
-                <option>Short Communication</option>
-                <option>Case Study</option>
+                <option   className=" font-sans text-sm"  value="">Select Type</option>
+                <option  className=" font-sans text-sm" >Review Article</option>
+                <option  className=" font-sans text-sm" >Research Article</option>
+                <option  className=" font-sans text-sm" >Short Communication</option>
+                <option  className=" font-sans text-sm" >Case Study</option>
               </select>
               {step2Errors.type && (
                 <div className="text-red-500 text-sm mt-1">
@@ -197,7 +197,7 @@ const isAllDataComplete = () => {
               )}
             </div>
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Running Title{" "}
                 <span
                   className={
@@ -215,7 +215,7 @@ const isAllDataComplete = () => {
                 onChange={(e) =>
                   updateManuscript("runningTitle", e.target.value)
                 }
-                className={`w-full border p-2 border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full border p-2 border-gray-300  rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
                   step2Errors.runningTitle ? "border-red-500" : ""
                 }`}
               />
@@ -226,7 +226,7 @@ const isAllDataComplete = () => {
               )}
             </div>
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Subject{" "}
                 <span
                   className={
@@ -245,9 +245,9 @@ const isAllDataComplete = () => {
                   step2Errors.subject ? "border-red-500" : ""
                 }`}
               >
-                <option value="">Select Subject</option>
-                <option>Agriculture</option>
-                <option>Science</option>
+                <option className=" font-sans text-sm" value="">Select Subject</option>
+                <option  className=" font-sans text-sm" >Agriculture</option>
+                <option  className=" font-sans text-sm" >Science</option>
               </select>
               {step2Errors.subject && (
                 <div className="text-red-500 text-sm mt-1">
@@ -259,7 +259,7 @@ const isAllDataComplete = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 keyword{" "}
                 <span
                   className={
@@ -287,7 +287,7 @@ const isAllDataComplete = () => {
               )}
             </div>
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Corresponding Author Name{" "}
                 <span
                   className={
@@ -316,7 +316,7 @@ const isAllDataComplete = () => {
               )}
             </div>
             <div>
-              <label className="block font-medium">
+              <label className="block font-medium font-sans text-lg">
                 Corresponding Author Email{" "}
                 <span className={emailStarColor(manuscript.correspondingEmail)}>
                   *
@@ -347,7 +347,7 @@ const isAllDataComplete = () => {
           </div>
 
           <div>
-            <label className="block font-medium">
+            <label className="block font-medium font-sans text-lg">
               Abstract{" "}
               <span
                 className={
@@ -377,9 +377,9 @@ const isAllDataComplete = () => {
 
           <div>
             <div className="flex justify-between items-center mb-2">
-              <h4 className="font-semibold">Authors Information</h4>
+              <h4 className="font-semibold font-sans text-lg">Authors Information</h4>
             </div>
-            <p>
+            <p className="text-sm font-sans">
               Provide the details of all the authors of this manuscript, in the
               order that they appear on the manuscript. Your details have been
               prefilled as the submitting author.
