@@ -19,7 +19,7 @@ const QuickLinks = ({
 
   return (
     <div className="bg-white rounded shadow p-4">
-      <h3 className="font-semibold mb-4 text-lg border-b pb-2">Quick Links</h3>
+      <h3 className="font-semibold font-sans mb-4 text-lg border-b pb-1">Quick Links</h3>
       
       {/* Main Navigation */}
       <ul className="text-sm space-y-2 mb-6">
@@ -29,7 +29,7 @@ const QuickLinks = ({
               setView("all");
               setPreviewSubmission(null);
             }}
-            className={`text-left w-full p-2 rounded transition ${
+            className={`text-left w-full p-2 font-sans text-sm rounded transition ${
               view === "all"
                 ? "bg-blue-100 text-blue-600 font-medium border-l-4 border-blue-600"
                 : "text-gray-700 hover:bg-gray-100"
@@ -46,7 +46,7 @@ const QuickLinks = ({
             }}
             className={`text-left w-full p-2 rounded transition ${
               view === "online"
-                ? "bg-blue-100 text-blue-600 font-medium border-l-4 border-blue-600"
+                ? "bg-blue-100 font-sans text-sm  text-blue-600 font-medium border-l-4 border-blue-600"
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
@@ -58,7 +58,7 @@ const QuickLinks = ({
       {/* Progress Steps - Only show when in online submission view */}
       {view === "online" && (
         <div>
-          <h4 className="font-semibold mb-3 text-gray-700">Submission Progress</h4>
+          <h4 className="font-semibold font-sans text-sm  mb-3 text-gray-700">Submission Progress</h4>
           <ul className="space-y-2">
             {steps.map((step) => {
               const isCompleted = completedSteps.includes(step.id);
@@ -68,7 +68,7 @@ const QuickLinks = ({
                 <li key={step.id} className="flex items-center">
                   {/* Step indicator */}
                   <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs mr-3 ${
+                    className={`w-6 h-6  rounded-full flex items-center justify-center text-sm mr-3 ${
                       isCompleted 
                         ? "bg-green-500 text-white" 
                         : isCurrent 

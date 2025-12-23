@@ -27,7 +27,7 @@ const FeaturedJournals = () => {
   return (
     <section className="py-16 bg-white text-center">
       <div className="container mx-auto max-w-6xl px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-slate-800">
+        <h2 className="text-2xl md:text-2xl font-bold mb-12 text-slate-800">
           Explore Our Leading Journals
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -37,7 +37,7 @@ const FeaturedJournals = () => {
               className="bg-gray-100 border border-gray-200 rounded-lg p-6 shadow-lg hover:transform hover:-translate-y-2 transition-all duration-300"
             >
               <div className="text-6xl mb-4">{journal.image}</div>
-              <h3 className="text-xl font-bold mb-3 text-slate-800">{journal.title}</h3>
+              <h3 className="text-lg font-bold mb-3 text-slate-800">{journal.title}</h3>
               <p className="text-sm text-gray-600 mb-4">{journal.description}</p>
               <p className="text-sm font-bold text-slate-800 mb-4">
                 <strong>Impact Factor:</strong> {journal.impactFactor}

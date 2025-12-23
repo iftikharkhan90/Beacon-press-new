@@ -58,14 +58,14 @@ const Navbar = () => {
   }, [isDropdownOpen]);
 
   return (
-    <header className="bg-slate-800 text-white py-3 sm:py-4 sticky top-0 z-50 shadow-lg">
+    <header className="bg-slate-800 text-white text-2xl font-sans py-3 sm:py-4.5 sticky top-0 z-50 shadow-lg">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="logo flex-shrink-0 cursor-pointer">
             <h1
               onClick={() => navigate(ROUTES.HOME)}
-              className="text-xl sm:text-2xl lg:text-3xl font-bold"
+              className="text-2xl sm:text-2xl lg:text-3xl font-bold"
             >
               <span className="text-blue-500">Beacons</span> Press
             </h1>
