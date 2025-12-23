@@ -134,7 +134,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
-              <h3 className="text-xl font-semibold text-gray-800">{editingIndex >= 0 ? "Edit Author" : "Add New Author"}</h3>
+              <h3 className="text-2xl font-sans font-semibold text-gray-800">{editingIndex >= 0 ? "Edit Author" : "Add New Author"}</h3>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -143,7 +143,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Full Name <span className={hasContent(formData.fullName) ? "text-green-600" : "text-red-600"}>*</span></label>
+                  <label className="text-lg font-medium text-gray-700 block">Full Name <span className={hasContent(formData.fullName) ? "text-green-600" : "text-red-600"}>*</span></label>
                   <input
                     type="text"
                     name="fullName"
@@ -156,7 +156,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Email <span className={emailStarColor(formData.email)}>*</span></label>
+                  <label className="text-lg font-sans font-medium text-gray-700 block">Email <span className={emailStarColor(formData.email)}>*</span></label>
                   <input
                     type="email"
                     name="email"
@@ -172,7 +172,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Country <span className={hasContent(formData.country) ? "text-green-600" : "text-red-600"}>*</span></label>
+                  <label className="text-lg font-sans font-medium text-gray-700 block">Country <span className={hasContent(formData.country) ? "text-green-600" : "text-red-600"}>*</span></label>
                   <select
                     name="country"
                     value={formData.country}
@@ -188,7 +188,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Affiliation <span className={hasContent(formData.affiliation) ? "text-green-600" : "text-red-600"}>*</span></label>
+                  <label className="text-lg font-sans font-medium text-gray-700 block ">Affiliation <span className={hasContent(formData.affiliation) ? "text-green-600" : "text-red-600"}>*</span></label>
                   <input
                     type="text"
                     name="affiliation"
@@ -224,7 +224,7 @@ function Modal({ setIsModalDataComplete, modalAuthor = [], setModalAuthor }) {
               </div>
 
               <div className="border-t border-gray-200 pt-4">
-                <h4 className="font-medium text-gray-800 mb-3">Author List</h4>
+                <h4 className="font-medium text-gray-800  font-sans text-2xl">Author List</h4>
                 {authors.length === 0 ? (
                   <div className="text-center py-4 bg-gray-50 rounded-lg">
                     <p className="text-gray-600">No authors added yet.</p>

@@ -20,9 +20,9 @@ const Home = ({ setCurrentPage }) => {
   className="bg-[url('/hero-bg.jpg')] bg-cover bg-center bg-gray-100 text-white py-[100px] text-center"
 >
       <div className="container mx-auto max-w-6xl px-4">
-<h2 className="text-[36px] mb-5 text-black font-bold" >         Advancing Knowledge Through Open Access Research
+<h2 className="text-2xl font-sans mb-5 text-black font-bold" >         Advancing Knowledge Through Open Access Research
         </h2>
- <p className="text-[18px] text-black mb-7">          Beacons Press is a leading publisher of high-quality, peer-reviewed research across diverse disciplines. 
+ <p className="text-lg font-sans text-black mb-7 ">          Beacons Press is a leading publisher of high-quality, peer-reviewed research across diverse disciplines. 
           Explore our journals, submit your work, and join a global community of researchers.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-5">

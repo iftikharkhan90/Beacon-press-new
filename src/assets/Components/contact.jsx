@@ -48,10 +48,10 @@ const handleSubmit = async (e) => {
             <div className='inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4 backdrop-blur-sm'>
               <RiContactsLine className='text-3xl text-white' />
             </div>
-            <h2 className='text-3xl font-bold text-white mb-2'>
+            <h2 className='text-2xl font-bold text-white mb-2'>
               Get In Touch
             </h2>
-            <p className='text-blue-100 text-lg'>
+            <p className='text-blue-100 text-lg '>
               We'd love to hear from you. Send us a message!
             </p>
           </div>
@@ -61,7 +61,7 @@ const handleSubmit = async (e) => {
             
             {/* Full Name */}
             <div className='relative'>
-              <label className='block text-sm font-semibold text-gray-700 mb-2'>
+              <label className='block text-lg font-semibold text-gray-700 '>
                 Full Name *
               </label>
               <div className='relative'>
@@ -83,7 +83,7 @@ const handleSubmit = async (e) => {
 
             {/* Email */}
             <div className='relative'>
-              <label className='block text-sm font-semibold text-gray-700 mb-2'>
+              <label className='block text-lg font-semibold text-gray-700'>
                 Email Address *
               </label>
               <div className='relative'>
@@ -105,7 +105,7 @@ const handleSubmit = async (e) => {
 
             {/* Message */}
             <div className='relative'>
-              <label className='block text-sm font-semibold text-gray-700 mb-2'>
+              <label className='block text-lg font-semibold text-gray-700 '>
                 Message *
               </label>
               <div className='relative'>
