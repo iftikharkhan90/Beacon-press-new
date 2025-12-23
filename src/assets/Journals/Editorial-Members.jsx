@@ -177,16 +177,16 @@ const Editorialmembers = () => {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                <h1 className="text-2xl font-sans font-bold text-gray-900 mb-1">
                   Editorial Board
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm font-sans text-gray-600">
                   Journal editorial members
                 </p>
               </div>
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl shadow-md">
-                <p className="text-sm font-medium opacity-90">Total Members</p>
-                <p className="text-3xl text-center font-bold">
+                <p className="text-sm font-sans font-bold opacity-90">Total Members</p>
+                <p className="text-lg font-sans text-center font-bold">
                   {selectedUsers.length}
                 </p>
               </div>
@@ -196,11 +196,11 @@ const Editorialmembers = () => {
           {/* ------- EDITOR-IN-CHIEF ------- */}
           {editorInChief.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 ml-80 mb-4 pb-2">
+              <h2 className="text-lg font-sans font-bold text-gray-800 ml-80 mb-4 pb-2">
                 Editor-in-Chief
               </h2>
 
-              <div className="grid grid-cols-1 ml-80 mr-60 gap-5">
+              <div className="grid text-sm font-sans grid-cols-1 ml-80 mr-60 gap-5">
                 {editorInChief.map((user) => (
                   <UserCard key={user._id} user={user} />
                 ))}
@@ -211,11 +211,11 @@ const Editorialmembers = () => {
           {/* ------- ASSOCIATE EDITORS ------- */}
           {associateEditors.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 ml-80 mb-4 pb-2">
+              <h2 className="text-lg font-sans font-bold text-gray-800 ml-80 mb-4 pb-2">
                 Associate Editors
               </h2>
 
-              <div className="grid grid-cols-1 ml-80 mr-60 gap-5">
+              <div className="grid text-sm font-sans grid-cols-1 ml-80 mr-60 gap-5">
                 {associateEditors.map((user) => (
                   <UserCard key={user._id} user={user} />
                 ))}
@@ -226,11 +226,11 @@ const Editorialmembers = () => {
           {/* ------- EDITORIAL BOARD MEMBERS ------- */}
           {editorialMembers.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 ml-80 pb-2">
+              <h2 className="text-lg font-sans font-bold text-gray-800 mb-4 ml-80 pb-2">
                 Editorial Board Members
               </h2>
 
-              <div className="grid grid-cols-1 ml-80 mr-60 gap-5">
+              <div className="grid text-sm font-sans grid-cols-1 ml-80 mr-60 gap-5">
                 {editorialMembers.map((user) => (
                   <UserCard key={user._id} user={user} />
                 ))}

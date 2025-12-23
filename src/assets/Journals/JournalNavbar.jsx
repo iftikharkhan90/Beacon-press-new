@@ -46,12 +46,12 @@ const AcademicJournalNav = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <h2 className="text-3xl text-center md:text-4xl font-bold mb-12 text-slate-800">
+          <h2 className="text-2xl font-sans text-center md:text-2xl font-bold mb-12 text-slate-800">
             Our Rececent Journals
           </h2>
 
           {/* Journals Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mr-60 ml-60 gap-4 md:gap-6">
+          <div className="grid text-sm font-sans grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mr-60 ml-60 gap-4 md:gap-6">
             {journals.length > 0 ? (
               journals.map((journal, index) => (
                 <div
@@ -74,31 +74,31 @@ const AcademicJournalNav = () => {
                   </div>
                   <div className="p-4 md:p-5">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                      <h3 className="text-lg font-sans md:text-lg font-bold text-gray-800 mb-2 line-clamp-1">
                         {journal.title}
                       </h3>
                        <div> 
                        <button
                         onClick={() => {localStorage.setItem("journalId", journal._id)
                      navigate(`/journals/${journal._id}`)}}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold underline cursor-pointer"
+                        className="text-blue-600 text-sm  hover:text-blue-700 font-sans font-semibold underline cursor-pointer"
                       >
                         View Details
                       </button>
                       </div>
                     </div>
-                    <p className="text-gray-600 text-xs md:text-sm line-clamp-3">
+                    <p className="text-gray-600 text-sm font-sans md:text-sm line-clamp-3">
                       {journal.description}
                     </p>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-12 md:py-16">
-                <div className="text-gray-400 text-4xl md:text-6xl mb-4">
+              <div className="col-span-full text-lg font-sans flex flex-col items-center justify-center py-12 md:py-16">
+                <div className="text-gray-400 text-lg font-sans md:text-lg mb-4">
                   Book Icon
                 </div>
-                <p className="text-gray-500 text-lg md:text-xl font-medium">
+                <p className="text-gray-500 text-lg font-sans md:text-lg font-medium">
                   No journals found
                 </p>
               </div>

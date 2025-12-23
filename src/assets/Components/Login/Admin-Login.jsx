@@ -114,54 +114,54 @@ const AdminLoginPage = ({ setCurrentPage }) => {
     }
   };
 
-//   const handleForgotPassword = async () => {
-//     const { value: email } = await Swal.fire({
-//       title: "Reset Password",
-//       input: "email",
-//       inputLabel: "Enter your registered email address",
-//       inputPlaceholder: "example@email.com",
-//       showCancelButton: true,
-//       confirmButtonText: "Send Reset Link",
-//     });
+  const handleForgotPassword = async () => {
+    const { value: email } = await Swal.fire({
+      title: "Reset Password",
+      input: "email",
+      inputLabel: "Enter your registered email address",
+      inputPlaceholder: "example@email.com",
+      showCancelButton: true,
+      confirmButtonText: "Send Reset Link",
+    });
 
-//     if (email) {
-//       try {
-//         const res = await axios.post(
-//           `${config.USER_API_URL}/users/forgot-password`,
-//           { email }
-//         );
+    if (email) {
+      try {
+        const res = await axios.post(
+          `${config.USER_API_URL}/users/forgot-password`,
+          { email }
+        );
 
-//         if (res.data.success) {
-//           Swal.fire(
-//             "Email Sent!",
-//             "Password reset link has been sent to your email.",
-//             "success"
-//           );
-//         } else {
-//           Swal.fire("Error", "Email not found in our records.", "error");
-//         }
-//       } catch (error) {
-//         Swal.fire("Error", "Failed to send reset email.", "error");
-//         console.error("Forgot password error:", error);
-//       }
-//     }
-//   };
+        if (res.data.success) {
+          Swal.fire(
+            "Email Sent!",
+            "Password reset link has been sent to your email.",
+            "success"
+          );
+        } else {
+          Swal.fire("Error", "Email not found in our records.", "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", "Failed to send reset email.", "error");
+        console.error("Forgot password error:", error);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-gray-100">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+          <h2 className="mt-6 text-center text-2xl font-sans font-bold text-gray-900">
             Sign in to your account
           </h2>
-          {/* <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 font-sans text-center text-sm text-gray-600">
             Or{" "}
             <Link to="/signup">
-              <button className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer">
+              <button className="font-medium font-sans text-sm text-blue-600 hover:text-blue-400 cursor-pointer">
                 Create a new account
               </button>
             </Link>
-          </p> */}
+          </p>
         </div>
 
         {/* Saved Accounts Dropdown
@@ -185,7 +185,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
         )} */}
 
         <form className="mt-6 space-y-6" onSubmit={onSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="rounded-md shadow-sm text-sm font-sans -space-y-px">
             {/* Email input */}
             <input
               name="email"
@@ -203,7 +203,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 required
-                className="relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="relative text-sm font-sans block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleInputChange}
@@ -223,7 +223,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
 
           {/* Remember + Forgot password */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex text-sm font-sans items-center">
               <input
                 id="remember-me"
                 name="remember-me"
@@ -232,28 +232,28 @@ const AdminLoginPage = ({ setCurrentPage }) => {
               />
               <label
                 htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900 cursor-pointer"
+                className="ml-2 block text-sm font-sans text-gray-900 cursor-pointer"
               >
                 Remember me
               </label>
             </div>
-{/* 
+
             <div className="text-sm">
               <button
                 type="button"
                 onClick={handleForgotPassword}
-                className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer"
+                className="font-medium text-blue-600 text-sm font-sans hover:text-blue-400 cursor-pointer"
               >
                 Forgot your password?
               </button>
-            </div> */}
+            </div>
           </div>
 
           {/* Sign in */}
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+              className="group relative w-full flex justify-center py-2 px-4 text-lg font-sans font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
             >
               Sign in
             </button>
@@ -264,7 +264,7 @@ const AdminLoginPage = ({ setCurrentPage }) => {
             <Link to="/home">
               <button
                 type="button"
-                className="font-medium text-blue-600 hover:text-blue-400 cursor-pointer"
+                className="font-medium text-lg font-sans text-blue-600 hover:text-blue-400 cursor-pointer"
               >
                 Back to Home
               </button>
